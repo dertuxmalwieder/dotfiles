@@ -1,0 +1,2 @@
+== What is this? ==
+Here I store my Vim configuration files, irregularly updated in order to match my [https://tuxproject.de/projects/vim/ self-compiled Vim] builds for Windows. :)
