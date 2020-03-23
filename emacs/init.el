@@ -94,7 +94,7 @@
   :defer 0.1
   :diminish
   :bind (("C-c C-r" . ivy-resume)
-	 ("C-x B" . ivy-switch-buffer-other-window))
+         ("C-x B" . ivy-switch-buffer-other-window))
   :custom
   (ivy-count-format "(%d/%d) ")
   (ivy-use-virtual-buffers t)
@@ -103,13 +103,9 @@
 (use-package ivy-rich
   :ensure t
   :after ivy
-  :custom
-  (ivy-virtual-abbreviate 'full
-			  ivy-rich-switch-buffer-align-virtual-buffer t
-			  ivy-rich-path-style 'abbrev)
   :config
-  (ivy-set-display-transformer 'ivy-switch-buffer
-			       'ivy-rich-switch-buffer-transformer))
+  (ivy-rich-mode 1)
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 ;; Swiper for searching:
 (use-package swiper
@@ -133,6 +129,12 @@
   :config
   (add-to-list 'vc-handled-backends 'Fossil t))
 
+;; Nicer theme:
+(use-package nofrils-acme-theme
+  :ensure t
+  :init
+  (load-theme 'nofrils-acme t))
+
 
 
 (custom-set-variables
@@ -140,7 +142,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (auto-package-update use-package))))
+ '(custom-safe-themes
+    (nofrils-acme-theme auto-package-update use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
