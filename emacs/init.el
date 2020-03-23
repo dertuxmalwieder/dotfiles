@@ -16,6 +16,12 @@
 
 (setq gc-cons-threshold 100000000)
 
+(when (eq system-type 'darwin)
+  ;; Let's disable the right "Alt" key so I can still
+  ;; use my German keyboard for entering German letters
+  ;; on a Mac.
+  (setq ns-right-alternate-modifier nil))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; PACKAGES:
@@ -36,6 +42,7 @@
 
 ;; Keep my packages up-to-date:
 (use-package auto-package-update
+  :ensure t
   :config
   (setq auto-package-update-delete-old-versions t)
   (setq auto-package-update-hide-results t)
