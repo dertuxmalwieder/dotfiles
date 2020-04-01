@@ -123,7 +123,11 @@
 
 ;; Lisp programming:
 (use-package sly
-  :ensure t)
+  :ensure t
+  :config
+  (when (eq system-type 'darwin)
+    ;; Requires SBCL from MacPorts.
+    (setq inferior-lisp-program "/opt/local/bin/sbcl")))
 
 ;; Go programming:
 (use-package go-mode
@@ -143,6 +147,7 @@
 	 (perl-mode . lsp-deferred)))
 
 (defun lsp-go-install-save-hooks ()
+  "Install LSP hooks."
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
