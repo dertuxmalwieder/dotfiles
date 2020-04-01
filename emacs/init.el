@@ -1,9 +1,17 @@
+;;; init.el --- Emacs configuration
+
+;;; Commentary:
+
+;; Making Emacs relatively usable on a MacBook.
+
+;;; Code:
+
 (tool-bar-mode -1)
 (toggle-scroll-bar -1)
 
-(setq c-basic-offset 4)
 (setq tab-width 4)
 (setq indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 
 (turn-on-font-lock)
 
@@ -16,11 +24,20 @@
 
 (setq gc-cons-threshold 100000000)
 
+;; Nicer font:
+(set-face-attribute 'default nil :family "Hack")
+
 (when (eq system-type 'darwin)
   ;; Let's disable the right "Alt" key so I can still
   ;; use my German keyboard for entering German letters
   ;; on a Mac.
   (setq ns-right-alternate-modifier nil))
+
+;; Remember where we are:
+(desktop-save-mode t)
+
+;; Don't keep open buffers though:
+(add-hook 'kill-emacs-hook (lambda () (desktop-clear)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -44,6 +61,7 @@
 (use-package auto-package-update
   :ensure t
   :config
+  (setq auto-package-update-interval 4) ;; ... days
   (setq auto-package-update-delete-old-versions t)
   (setq auto-package-update-hide-results t)
   (auto-package-update-maybe))
@@ -62,6 +80,47 @@
   :config
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines))
 
+;; Asynchronous Emacs:
+(use-package async
+  :ensure t)
+
+;; Gopher:
+(use-package gopher
+  :ensure t)
+
+;; A less shitty modeline:
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+
+;; A less shitty package manager:
+(use-package paradox
+  :ensure t
+  :init
+  (paradox-enable))
+
+;; Syntax checking:
+(use-package flycheck
+  :ensure t
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode))
+
+;; Enable some icons throughout Emacs:
+(use-package all-the-icons
+  :ensure t)
+
+;; Better regexp search&replace:
+(use-package visual-regexp
+  :ensure t)
+
+(use-package visual-regexp-steroids
+  :ensure t
+  :after visual-regexp
+  :config
+  (define-key global-map (kbd "C-c r") 'vr/replace)
+  (define-key global-map (kbd "C-c q") 'vr/query-replace)
+  (define-key global-map (kbd "C-c m") 'vr/mc-mark))
+
 ;; Go programming:
 (use-package go-mode
   :ensure t
@@ -70,19 +129,37 @@
     (unless (member "/opt/local/go/bin" (split-string (getenv "PATH") ":"))
       (setenv "PATH" (concat "/opt/local/go/bin:" (getenv "PATH"))))
     (setenv "GOPATH" (concat (getenv "HOME") "/go"))
-    (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports"))
-    (add-hook 'before-save-hook 'gofmt-before-save)))
+    (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports"))))
 
 ;; Language Server Protocol:
-(use-package lsp-mode :ensure t)
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook ((go-mode . lsp-deferred)
+	 (perl-mode . lsp-deferred)))
 
-(use-package lsp
-  :commands 'lsp
-  :ensure nil
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+(add-hook 'perl-mode-hook #'lsp-go-install-save-hooks)
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+;; Company auto-completion for code:
+(use-package company
+  :ensure t
   :config
-  (add-hook 'go-mode-hook #'lsp))
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1))
 
-;; Counsel auto-completion:
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
+
+;; Counsel auto-completion for commands:
 (use-package counsel
   :ensure t
   :after ivy
@@ -98,6 +175,7 @@
   :custom
   (ivy-count-format "(%d/%d) ")
   (ivy-use-virtual-buffers t)
+  (ivy-virtual-abbreviate (quote full))
   :config (ivy-mode))
 
 (use-package ivy-rich
@@ -106,6 +184,13 @@
   :config
   (ivy-rich-mode 1)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+
+;; With icons:
+(use-package all-the-icons-ivy-rich
+  :ensure t
+  :after ivy-rich
+  :init
+  (all-the-icons-ivy-rich-mode t))
 
 ;; Swiper for searching:
 (use-package swiper
@@ -118,7 +203,9 @@
 (use-package smartparens
   :ensure t
   :config
-  (require 'smartparens-config))
+  (require 'smartparens-config)
+  :init
+  (smartparens-global-mode t))
 
 ;; Version Control enhancements:
 (use-package darcsum
@@ -143,10 +230,20 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-    (nofrils-acme-theme auto-package-update use-package)))
+   (quote
+    ("5a45c8bf60607dfa077b3e23edfb8df0f37c4759356682adf7ab762ba6b10600" default)))
+ '(ivy-count-format "(%d/%d) " t)
+ '(ivy-use-virtual-buffers t t)
+ '(ivy-virtual-abbreviate (quote full) t)
+ '(package-selected-packages
+   (quote
+    (all-the-icons-ivy-rich all-the-icons nofrils-acme-theme auto-package-update use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(provide 'init)
+;;; init.el ends here
