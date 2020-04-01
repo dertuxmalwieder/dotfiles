@@ -121,6 +121,10 @@
   (define-key global-map (kbd "C-c q") 'vr/query-replace)
   (define-key global-map (kbd "C-c m") 'vr/mc-mark))
 
+;; Lisp programming:
+(use-package sly
+  :ensure t)
+
 ;; Go programming:
 (use-package go-mode
   :ensure t
