@@ -72,6 +72,7 @@
   (use-package exec-path-from-shell
     :ensure t
     :init
+    (setq exec-path-from-shell-check-startup-files nil)
     (exec-path-from-shell-initialize)))
 
 ;; Multiple cursors:
@@ -122,6 +123,7 @@
   (define-key global-map (kbd "C-c m") 'vr/mc-mark))
 
 ;; Lisp programming:
+;; Use SLY as a CL subsystem.
 (use-package sly
   :ensure t
   :config
@@ -129,7 +131,12 @@
     ;; Requires SBCL from MacPorts.
     (setq inferior-lisp-program "/opt/local/bin/sbcl")))
 
+;; Perl programming:
+;; Use the C Perl mode (may be better than the default one).
+(defalias 'perl-mode 'cperl-mode)
+
 ;; Go programming:
+;; Install and set up the Go mode.
 (use-package go-mode
   :ensure t
   :config
@@ -143,6 +150,8 @@
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
+  :config
+  (setq lsp-enable-snippet nil)
   :hook ((go-mode . lsp-deferred)
 	 (perl-mode . lsp-deferred)))
 
@@ -166,7 +175,14 @@
 
 (use-package company-lsp
   :ensure t
-  :commands company-lsp)
+  :commands company-lsp
+  :after company
+  :config
+  (setq company-backends
+        ;; Let's keep company-mode unobtrusive in most cases.
+        (quote
+         (company-lsp company-bbdb company-xcode company-cmake company-capf company-files
+                      (company-dabbrev-code company-gtags company-etags company-keywords)))))
 
 ;; Counsel auto-completion for commands:
 (use-package counsel
@@ -238,12 +254,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("5a45c8bf60607dfa077b3e23edfb8df0f37c4759356682adf7ab762ba6b10600" default)))
- '(ivy-count-format "(%d/%d) " t)
- '(ivy-use-virtual-buffers t t)
- '(ivy-virtual-abbreviate (quote full) t)
  '(package-selected-packages
    (quote
     (all-the-icons-ivy-rich all-the-icons nofrils-acme-theme auto-package-update use-package))))
