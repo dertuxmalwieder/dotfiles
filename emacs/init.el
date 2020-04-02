@@ -39,23 +39,61 @@
 ;; Don't keep open buffers though:
 (add-hook 'kill-emacs-hook (lambda () (desktop-clear)))
 
+;; Stop chatting:
+(defalias 'yes-or-no-p 'y-or-n-p)
 
-;;;;;;;;;;;;;;;;;;;;;;;
-;;;; PACKAGES:
-;;;;;;;;;;;;;;;;;;;;;;;
+;; Show the current line:
+(global-hl-line-mode t)
+
+;; Make window resizes undoable:
+(when (fboundp 'winner-mode)
+  (winner-mode 1))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; PACKAGE PREPARATION:
+;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'package)
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/") t)
 
 ;; Initialize MELPA packages:
-(package-initialize)
+(when (< emacs-major-version 27)
+  (package-initialize))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
 (require 'use-package)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; BUILT-IN PACKAGES:
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Perl programming:
+;; Use the C Perl mode (may be better than the default one).
+(defalias 'perl-mode 'cperl-mode)
+
+;; Gnus preparation: Make it faster.
+;; (Let's keep the account configuration in .gnus.el though.)
+(use-package gnus
+  :config
+  (setq gnus-read-active-file nil)
+  (gnus-add-configuration '(article (vertical 1.0 (summary .35 point) (article 1.0)))))
+
+(use-package gnus-async
+  :after gnus
+  :config
+  (setq gnus-asynchronous t)
+  (setq gnus-use-article-prefetch 15))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; 3rd PARTY PACKAGES:
+;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Keep my packages up-to-date:
 (use-package auto-package-update
@@ -100,6 +138,15 @@
   :init
   (paradox-enable))
 
+;; Markdown support:
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
 ;; Syntax checking:
 (use-package flycheck
   :ensure t
@@ -109,6 +156,16 @@
 ;; Enable some icons throughout Emacs:
 (use-package all-the-icons
   :ensure t)
+
+(use-package all-the-icons-dired
+  :after all-the-icons
+  :config
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
+(use-package all-the-icons-gnus
+  :after all-the-icons
+  :init
+  (all-the-icons-gnus-setup))
 
 ;; Better regexp search&replace:
 (use-package visual-regexp
@@ -130,10 +187,6 @@
   (when (eq system-type 'darwin)
     ;; Requires SBCL from MacPorts.
     (setq inferior-lisp-program "/opt/local/bin/sbcl")))
-
-;; Perl programming:
-;; Use the C Perl mode (may be better than the default one).
-(defalias 'perl-mode 'cperl-mode)
 
 ;; Go programming:
 ;; Install and set up the Go mode.
@@ -254,9 +307,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ivy-count-format "(%d/%d) " t)
+ '(ivy-use-virtual-buffers t t)
+ '(ivy-virtual-abbreviate (quote full) t)
  '(package-selected-packages
    (quote
-    (all-the-icons-ivy-rich all-the-icons nofrils-acme-theme auto-package-update use-package))))
+    (all-the-icons-gnus wanderlust all-the-icons-ivy-rich all-the-icons nofrils-acme-theme auto-package-update use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
