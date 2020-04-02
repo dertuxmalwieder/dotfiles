@@ -145,7 +145,8 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  :init
+  (when (executable-find "multimarkdown") (setq markdown-command "multimarkdown")))
 
 ;; Syntax checking:
 (use-package flycheck
