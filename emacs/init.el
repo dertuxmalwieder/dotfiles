@@ -77,11 +77,11 @@
 ;; Use the C Perl mode (may be better than the default one).
 (defalias 'perl-mode 'cperl-mode)
 
-;; Gnus preparation: Make it faster.
+;; Gnus preparation: Make it faster and nicer looking.
 ;; (Let's keep the account configuration in .gnus.el though.)
 (use-package gnus
   :config
-  (setq gnus-read-active-file nil)
+  (setq gnus-read-active-file t)
   (gnus-add-configuration '(article (vertical 1.0 (summary .35 point) (article 1.0)))))
 
 (use-package gnus-async
@@ -89,6 +89,16 @@
   :config
   (setq gnus-asynchronous t)
   (setq gnus-use-article-prefetch 15))
+
+;; org-mode improvements:
+(use-package org
+  :config
+  ;; Better HTML export.
+  (setq org-html-coding-system 'utf-8-unix)
+  
+  ;; Better inline code blocks.
+  (setq org-src-fontify-natively t)
+  (setq org-src-tab-acts-natively t))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -127,6 +137,16 @@
 (use-package gopher
   :ensure t)
 
+;; Support org-mode import from a website.
+(use-package org-web-tools
+  :ensure t)
+
+;; Support my blog as well
+(use-package org2blog
+  :ensure t
+  :init
+  (load-file "~/.emacs.d/org2blog-config.el"))
+
 ;; A less shitty modeline:
 (use-package doom-modeline
   :ensure t
@@ -135,6 +155,8 @@
 ;; A less shitty package manager:
 (use-package paradox
   :ensure t
+  :config
+  (setq paradox-execute-asynchronously t)
   :init
   (paradox-enable))
 
@@ -313,7 +335,7 @@
  '(ivy-virtual-abbreviate (quote full) t)
  '(package-selected-packages
    (quote
-    (all-the-icons-gnus wanderlust all-the-icons-ivy-rich all-the-icons nofrils-acme-theme auto-package-update use-package))))
+    (org-web-tools all-the-icons-gnus wanderlust all-the-icons-ivy-rich all-the-icons nofrils-acme-theme auto-package-update use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
