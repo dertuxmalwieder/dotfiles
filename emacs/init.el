@@ -22,6 +22,9 @@
 
 (setq make-backup-files nil)
 
+;; Automatically reload files edited elsewhere:
+(setq global-auto-revert-mode t)
+
 (setq gc-cons-threshold 100000000)
 
 ;; Nicer font:
@@ -81,6 +84,7 @@
 ;; (Let's keep the account configuration in .gnus.el though.)
 (use-package gnus
   :config
+  (setq gnus-always-read-dribble-file t)
   (setq gnus-read-active-file t)
   (gnus-add-configuration '(article (vertical 1.0 (summary .35 point) (article 1.0)))))
 
@@ -144,8 +148,30 @@
 ;; Support my blog as well
 (use-package org2blog
   :ensure t
+  :config
+  (setq org2blog/wp-show-post-in-browser t)
   :init
+  ;; Keep the log-in data out of the public eye:
   (load-file "~/.emacs.d/org2blog-config.el"))
+
+;; RSS feed reader with some extras:
+(use-package elfeed
+  :ensure t)
+
+(use-package elfeed-goodies
+  :ensure t
+  :after elfeed
+  :init
+  (elfeed-goodies/setup))
+
+;; Hook elfeed into Newsblur:
+(use-package elfeed-protocol
+  :ensure t
+  :after elfeed
+  :init
+  ;; Keep the log-in data out of the public eye:
+  (elfeed-protocol-enable)
+  (load-file "~/.emacs.d/elfeed-config.el"))
 
 ;; A less shitty modeline:
 (use-package doom-modeline
@@ -330,6 +356,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(canlock-password "5e5c6fd080d6c0bce2d09b8ec6e3693c1a63c654")
  '(ivy-count-format "(%d/%d) " t)
  '(ivy-use-virtual-buffers t t)
  '(ivy-virtual-abbreviate (quote full) t)
