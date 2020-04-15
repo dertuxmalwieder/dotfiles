@@ -142,11 +142,11 @@
 (use-package gopher
   :ensure t)
 
-;; Support org-mode import from a website.
+;; Support org-mode import from a website:
 (use-package org-web-tools
   :ensure t)
 
-;; Support my blog as well
+;; Support my blog as well:
 (use-package org2blog
   :ensure t
   :config
@@ -154,6 +154,13 @@
   :init
   ;; Keep the log-in data out of the public eye:
   (load-file "~/.emacs.d/org2blog-config.el"))
+
+;; Preview HTML:
+(use-package org-preview-html
+  :ensure t
+  :after org
+  :init
+  (add-hook 'org-mode-hook #'org-preview-html-mode))
 
 ;; RSS feed reader with some extras:
 (use-package elfeed
@@ -374,12 +381,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(canlock-password "5e5c6fd080d6c0bce2d09b8ec6e3693c1a63c654")
- '(ivy-count-format "(%d/%d) " t)
- '(ivy-use-virtual-buffers t t)
- '(ivy-virtual-abbreviate (quote full) t)
+ '(ivy-count-format "(%d/%d) ")
+ '(ivy-use-virtual-buffers t)
+ '(ivy-virtual-abbreviate (quote full))
  '(package-selected-packages
    (quote
-    (org-web-tools all-the-icons-gnus wanderlust all-the-icons-ivy-rich all-the-icons nofrils-acme-theme auto-package-update use-package))))
+    (org-preview-html org-web-tools all-the-icons-gnus wanderlust all-the-icons-ivy-rich all-the-icons nofrils-acme-theme auto-package-update use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
