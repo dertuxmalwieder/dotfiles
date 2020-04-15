@@ -40,7 +40,8 @@
 (desktop-save-mode t)
 
 ;; Don't keep open buffers though:
-(add-hook 'kill-emacs-hook (lambda () (desktop-clear)))
+;; -- This will break Circe - disable for now.
+;;(add-hook 'kill-emacs-hook (lambda () (desktop-clear)))
 
 ;; Stop chatting:
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -342,6 +343,22 @@
   :ensure t
   :config
   (add-to-list 'vc-handled-backends 'Fossil t))
+
+;; IRC:
+(use-package circe
+  :ensure t
+  :commands (circe circe-set-display-handler)
+  :config
+  (enable-circe-color-nicks)
+  (setq circe-reduce-lurker-spam t
+        lui-time-stamp-position 'right-margin
+        lui-time-stamp-format "%H:%M"
+        circe-format-say "{nick:-16s} {body}"
+        circe-format-self-say "<{nick:-16s}> {body}")
+  :init
+  ;; Again, keeo the log-in data private:
+  (load-file "~/.emacs.d/circe-config.el"))
+
 
 ;; Nicer theme:
 (use-package nofrils-acme-theme
