@@ -25,6 +25,9 @@
 ;; Automatically reload files edited elsewhere:
 (setq global-auto-revert-mode t)
 
+;; Wrap lines please:
+(global-visual-line-mode t)
+
 (setq gc-cons-threshold 100000000)
 
 ;; Nicer font:
@@ -363,7 +366,7 @@
         circe-format-say "{nick:-16s} {body}"
         circe-format-self-say "<{nick:-16s}> {body}")
   :init
-  ;; Again, keeo the log-in data private:
+  ;; Again, keep the log-in data private:
   (load-file "~/.emacs.d/circe-config.el"))
 
 
@@ -383,10 +386,7 @@
  '(canlock-password "5e5c6fd080d6c0bce2d09b8ec6e3693c1a63c654")
  '(ivy-count-format "(%d/%d) ")
  '(ivy-use-virtual-buffers t)
- '(ivy-virtual-abbreviate (quote full))
- '(package-selected-packages
-   (quote
-    (org-preview-html org-web-tools all-the-icons-gnus wanderlust all-the-icons-ivy-rich all-the-icons nofrils-acme-theme auto-package-update use-package))))
+ '(ivy-virtual-abbreviate (quote full)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
