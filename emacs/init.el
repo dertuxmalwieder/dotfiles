@@ -207,6 +207,14 @@
   :init
   (when (executable-find "multimarkdown") (setq markdown-command "multimarkdown")))
 
+;; Project-related functionalities:
+(use-package projectile
+  :ensure t
+  :init
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
 ;; Syntax checking:
 (use-package flycheck
   :ensure t
@@ -384,9 +392,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(canlock-password "5e5c6fd080d6c0bce2d09b8ec6e3693c1a63c654")
- '(ivy-count-format "(%d/%d) ")
- '(ivy-use-virtual-buffers t)
- '(ivy-virtual-abbreviate (quote full)))
+ '(ivy-count-format "(%d/%d) " t)
+ '(ivy-use-virtual-buffers t t)
+ '(ivy-virtual-abbreviate (quote full) t)
+ '(package-selected-packages
+   (quote
+    (lsp-mode visual-regexp-steroids vc-fossil use-package smartparens sly semi paradox org2blog org-web-tools org-preview-html nofrils-acme-theme nadvice multiple-cursors mood-line lsp-ui gopher go-mode gh flycheck exec-path-from-shell elfeed-protocol elfeed-goodies doom-modeline darcsum counsel company-lsp circe auto-package-update async all-the-icons-ivy-rich all-the-icons-gnus all-the-icons-dired))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
