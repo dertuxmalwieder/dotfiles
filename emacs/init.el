@@ -207,6 +207,13 @@
   :init
   (when (executable-find "multimarkdown") (setq markdown-command "multimarkdown")))
 
+;; Use ripgrep instead of grep (if applicable).
+(when (executable-find "rg")
+  (use-package rg
+    :ensure t
+    :init
+    (rg-enable-default-bindings)))
+  
 ;; Project-related functionalities:
 (use-package projectile
   :ensure t
