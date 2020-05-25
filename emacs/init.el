@@ -69,11 +69,23 @@
 (when (< emacs-major-version 27)
   (package-initialize))
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; Initialize Straight.el:
+(setq straight-use-package-by-default t)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(require 'use-package)
+;; Initialize use-package:
+(straight-use-package 'use-package)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -87,12 +99,14 @@
 ;; Gnus preparation: Make it faster and nicer looking.
 ;; (Let's keep the account configuration in .gnus.el though.)
 (use-package gnus
+  :straight nil
   :config
   (setq gnus-always-read-dribble-file t)
   (setq gnus-read-active-file t)
   (gnus-add-configuration '(article (vertical 1.0 (summary .35 point) (article 1.0)))))
 
 (use-package gnus-async
+  :straight nil
   :after gnus
   :config
   (setq gnus-asynchronous t)
@@ -100,6 +114,7 @@
 
 ;; org-mode improvements:
 (use-package org
+  :straight nil
   :config
   ;; Better HTML export.
   (setq org-html-coding-system 'utf-8-unix)
@@ -114,13 +129,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Keep my packages up-to-date:
-(use-package auto-package-update
-  :ensure t
-  :config
-  (setq auto-package-update-interval 4) ;; ... days
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t)
-  (auto-package-update-maybe))
+;; Commented out. straight.el will do that for a while.
+;;(use-package auto-package-update
+;;  :ensure t
+;;  :config
+;;  (setq auto-package-update-interval 4) ;; ... days
+;;  (setq auto-package-update-delete-old-versions t)
+;;  (setq auto-package-update-hide-results t)
+;;  (auto-package-update-maybe))
 
 ;; Some platforms (cough) don't update Emacs's path.
 ;; Make them.
@@ -195,14 +211,6 @@
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1))
-
-;; A less shitty package manager:
-(use-package paradox
-  :ensure t
-  :config
-  (setq paradox-execute-asynchronously t)
-  :init
-  (paradox-enable))
 
 ;; Markdown support:
 (use-package markdown-mode
@@ -329,7 +337,6 @@
 (use-package ivy
   :ensure t
   :defer 0.1
-  :diminish
   :bind (("C-c C-r" . ivy-resume)
          ("C-x B" . ivy-switch-buffer-other-window))
   :custom
@@ -349,7 +356,7 @@
 (use-package all-the-icons-ivy-rich
   :ensure t
   :after ivy-rich
-  :init
+  :config
   (all-the-icons-ivy-rich-mode t))
 
 ;; Swiper for searching:
@@ -406,12 +413,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(canlock-password "5e5c6fd080d6c0bce2d09b8ec6e3693c1a63c654")
- '(ivy-count-format "(%d/%d) ")
- '(ivy-use-virtual-buffers t)
- '(ivy-virtual-abbreviate (quote full))
- '(package-selected-packages
-   (quote
-    (web-mode lsp-mode visual-regexp-steroids vc-fossil use-package smartparens sly semi paradox org2blog org-web-tools org-preview-html nofrils-acme-theme nadvice multiple-cursors mood-line lsp-ui gopher go-mode gh flycheck exec-path-from-shell elfeed-protocol elfeed-goodies doom-modeline darcsum counsel company-lsp circe auto-package-update async all-the-icons-ivy-rich all-the-icons-gnus all-the-icons-dired))))
+ '(ivy-count-format "(%d/%d) " t)
+ '(ivy-use-virtual-buffers t t)
+ '(ivy-virtual-abbreviate (quote full) t))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
