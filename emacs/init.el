@@ -143,7 +143,7 @@
   :ensure t
   :config
   (setq exec-path-from-shell-check-startup-files nil)
-  (exec-path-from-shell-initialize)))
+  (exec-path-from-shell-initialize))
 
 ;; Multiple cursors:
 (use-package multiple-cursors
@@ -226,7 +226,7 @@
   :if (executable-find "rg")
   :ensure t
   :config
-  (rg-enable-default-bindings)))
+  (rg-enable-default-bindings))
   
 ;; Project-related functionalities:
 (use-package projectile
