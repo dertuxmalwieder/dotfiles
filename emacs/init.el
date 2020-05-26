@@ -61,17 +61,15 @@
 ;;;; PACKAGE PREPARATION:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
-
-;; Initialize MELPA packages:
-(when (< emacs-major-version 27)
-  (package-initialize))
-
-;; Initialize Straight.el:
-(setq straight-use-package-by-default t)
+;; Use straight.el instead of Emacs's default package.el for
+;; managing installed packages. This might or might not be a
+;; good idea.
 (defvar bootstrap-version)
+
+;; Enable ":ensure t"-like behavior:
+(setq straight-use-package-by-default t)
+
+;; Load (or download) straight.el:
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
@@ -84,7 +82,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; Initialize use-package:
+;; Install use-package:
 (straight-use-package 'use-package)
 
 
