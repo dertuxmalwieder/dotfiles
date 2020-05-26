@@ -138,12 +138,12 @@
 
 ;; Some platforms (cough) don't update Emacs's path.
 ;; Make them.
-(when (eq system-type 'darwin)
-  (use-package exec-path-from-shell
-    :ensure t
-    :init
-    (setq exec-path-from-shell-check-startup-files nil)
-    (exec-path-from-shell-initialize)))
+(use-package exec-path-from-shell
+  :if (eq system-type 'darwin)
+  :ensure t
+  :config
+  (setq exec-path-from-shell-check-startup-files nil)
+  (exec-path-from-shell-initialize)))
 
 ;; Multiple cursors:
 (use-package multiple-cursors
@@ -168,7 +168,6 @@
   :ensure t
   :config
   (setq org2blog/wp-show-post-in-browser t)
-  :init
   ;; Keep the log-in data out of the public eye:
   (load-file "~/.emacs.d/org2blog-config.el"))
 
@@ -176,13 +175,13 @@
 (use-package org-preview-html
   :ensure t
   :after org
-  :init
+  :config
   (add-hook 'org-mode-hook #'org-preview-html-mode))
 
 ;; Web development:
 (use-package web-mode
   :ensure t
-  :init
+  :config
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode)))
 
@@ -193,44 +192,46 @@
 (use-package elfeed-goodies
   :ensure t
   :after elfeed
-  :init
+  :config
   (elfeed-goodies/setup))
 
 ;; Hook elfeed into Newsblur:
 (use-package elfeed-protocol
   :ensure t
   :after elfeed
-  :init
-  ;; Keep the log-in data out of the public eye:
+  :config
   (elfeed-protocol-enable)
+  ;; Keep the log-in data out of the public eye:
   (load-file "~/.emacs.d/elfeed-config.el"))
 
 ;; A less shitty modeline:
 (use-package doom-modeline
   :ensure t
-  :init (doom-modeline-mode 1))
+  :config
+  (doom-modeline-mode 1))
 
 ;; Markdown support:
 (use-package markdown-mode
+  :if (executable-find "multimarkdown")
   :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init
-  (when (executable-find "multimarkdown") (setq markdown-command "multimarkdown")))
+  :config
+  (setq markdown-command "multimarkdown"))
 
-;; Use ripgrep instead of grep (if applicable).
-(when (executable-find "rg")
-  (use-package rg
-    :ensure t
-    :init
-    (rg-enable-default-bindings)))
+;; Use ripgrep instead of grep (if applicable):
+(use-package rg
+  :if (executable-find "rg")
+  :ensure t
+  :config
+  (rg-enable-default-bindings)))
   
 ;; Project-related functionalities:
 (use-package projectile
   :ensure t
-  :init
+  :config
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
@@ -252,7 +253,7 @@
 
 (use-package all-the-icons-gnus
   :after all-the-icons
-  :init
+  :config
   (all-the-icons-gnus-setup))
 
 ;; Better regexp search&replace:
@@ -369,7 +370,6 @@
   :ensure t
   :config
   (require 'smartparens-config)
-  :init
   (smartparens-global-mode t))
 
 ;; Version Control enhancements:
@@ -392,7 +392,6 @@
         lui-time-stamp-format "%H:%M"
         circe-format-say "{nick:-16s} {body}"
         circe-format-self-say "<{nick:-16s}> {body}")
-  :init
   ;; Again, keep the log-in data private:
   (load-file "~/.emacs.d/circe-config.el"))
 
