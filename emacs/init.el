@@ -111,8 +111,10 @@
   (setq gnus-use-article-prefetch 15))
 
 ;; org-mode improvements:
+;; Hint: We use the upstream version instead of Emacs's own one
+;;       so addins from Git won't fail us.
 (use-package org
-  :straight nil
+  ;; :straight nil
   :config
   ;; Better HTML export.
   (setq org-html-coding-system 'utf-8-unix)
@@ -377,7 +379,7 @@
   :ensure t)
 
 (use-package vc-fossil
-  :ensure t
+  :straight (:host github :branch "trunk")
   :config
   (add-to-list 'vc-handled-backends 'Fossil t))
 
