@@ -161,6 +161,32 @@
 (use-package gopher
   :ensure t)
 
+;; File tree:
+(use-package neotree
+  :ensure t
+  :config
+  (global-set-key [f8] 'neotree-toggle))
+
+;; Switch and split windows visually:
+(use-package switch-window
+  :ensure t
+  :config
+  (global-set-key (kbd "C-x o") 'switch-window)
+  (global-set-key (kbd "C-x 1") 'switch-window-then-maximize)
+  (global-set-key (kbd "C-x 2") 'switch-window-then-split-below)
+  (global-set-key (kbd "C-x 3") 'switch-window-then-split-right)
+  (global-set-key (kbd "C-x 0") 'switch-window-then-delete)
+
+  (global-set-key (kbd "C-x 4 d") 'switch-window-then-dired)
+  (global-set-key (kbd "C-x 4 f") 'switch-window-then-find-file)
+  (global-set-key (kbd "C-x 4 m") 'switch-window-then-compose-mail)
+  (global-set-key (kbd "C-x 4 r") 'switch-window-then-find-file-read-only)
+
+  (global-set-key (kbd "C-x 4 C-f") 'switch-window-then-find-file)
+  (global-set-key (kbd "C-x 4 C-o") 'switch-window-then-display-buffer)
+
+  (global-set-key (kbd "C-x 4 0") 'switch-window-then-kill-buffer))
+
 ;; Support org-mode import from a website:
 (use-package org-web-tools
   :ensure t)
@@ -242,7 +268,9 @@
 (use-package flycheck
   :ensure t
   :config
-  (add-hook 'after-init-hook #'global-flycheck-mode))
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  ;; We use ccls instead, so we won't need this:
+  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
 
 ;; Enable some icons throughout Emacs:
 (use-package all-the-icons
@@ -279,6 +307,13 @@
     ;; Requires SBCL from MacPorts.
     (setq inferior-lisp-program "/opt/local/bin/sbcl")))
 
+;; JS programming:
+;; Use a less bad JavaScript mode.
+(use-package js2-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
 ;; Go programming:
 ;; Install and set up the Go mode.
 (use-package go-mode
@@ -309,6 +344,17 @@
 (use-package lsp-ui
   :ensure t
   :commands lsp-ui-mode)
+
+;; C/C++ programming:
+(use-package ccls
+  :ensure t
+  :hook ((c-mode c++-mode objc-mode cuda-mode) .
+         (lambda () (require 'ccls) (lsp)))
+  :config
+  (setq lsp-prefer-flymake nil)
+  (when (eq system-type 'darwin)
+    ;; Requires ccls-clang-9.0 from MacPorts.
+    (setq ccls-executable "/opt/local/bin/ccls-clang-9.0")))
 
 ;; Company auto-completion for code:
 (use-package company
@@ -373,6 +419,10 @@
   :config
   (require 'smartparens-config)
   (smartparens-global-mode t))
+
+;; vterm instead of Emacs's terminal:
+(use-package vterm
+  :ensure t)
 
 ;; Version Control enhancements:
 (use-package darcsum
