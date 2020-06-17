@@ -196,6 +196,7 @@
   :ensure t
   :config
   (setq org2blog/wp-show-post-in-browser t)
+  (setq org2blog/wp-image-upload t)
   ;; Keep the log-in data out of the public eye:
   (load-file "~/.emacs.d/org2blog-config.el"))
 
@@ -304,8 +305,8 @@
   :ensure t
   :config
   (when (eq system-type 'darwin)
-    ;; Requires SBCL from MacPorts.
-    (setq inferior-lisp-program "/opt/local/bin/sbcl")))
+    ;; Requires SBCL from pkgsrc.
+    (setq inferior-lisp-program "/opt/pkg/bin/sbcl")))
 
 ;; JS programming:
 ;; Use a less bad JavaScript mode.
@@ -320,8 +321,8 @@
   :ensure t
   :config
   (progn
-    (unless (member "/opt/local/go/bin" (split-string (getenv "PATH") ":"))
-      (setenv "PATH" (concat "/opt/local/go/bin:" (getenv "PATH"))))
+    (unless (member "/opt/pkg/go114/bin" (split-string (getenv "PATH") ":"))
+      (setenv "PATH" (concat "/opt/pkg/go114/bin:" (getenv "PATH"))))
     (setenv "GOPATH" (concat (getenv "HOME") "/go"))
     (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports"))))
 
@@ -351,10 +352,7 @@
   :hook ((c-mode c++-mode objc-mode cuda-mode) .
          (lambda () (require 'ccls) (lsp)))
   :config
-  (setq lsp-prefer-flymake nil)
-  (when (eq system-type 'darwin)
-    ;; Requires ccls-clang-9.0 from MacPorts.
-    (setq ccls-executable "/opt/local/bin/ccls-clang-9.0")))
+  (setq lsp-prefer-flymake nil))
 
 ;; Company auto-completion for code:
 (use-package company
@@ -422,7 +420,11 @@
 
 ;; vterm instead of Emacs's terminal:
 (use-package vterm
-  :ensure t)
+  :ensure t
+  :config
+  ;; Disable the highlighting of the current line
+  ;; for the virtual terminal:
+  (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil))))
 
 ;; Version Control enhancements:
 (use-package darcsum
