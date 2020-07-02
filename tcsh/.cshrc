@@ -3,9 +3,17 @@ set history = 2000          # Should be enough for the time being
 set savehist = (2000 merge) # Save and merge with existing saved 
 set histfile = ~/.tcsh_history
 set prompt = '[%n@%m:%~]%# '
+
+# Completion:
+set autoexpand              # Tab completion expansion
 set autolist                # Tab completion list
 set complete = enhance      # Case-insensitivity for the latter
+complete cd 'C/*/d/'        # "cd" should only expand directories
+complete chown 'p/1/u/'     # "chown" should only expand users
+complete which 'p/1/c/'     # "which" should only expand commands
+complete where 'p/1/c/'     # ... so should "where"
 
+# Key bindings:
 bindkey "^R" i-search-back
 
 # Import paths etc.:
