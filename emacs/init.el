@@ -443,9 +443,10 @@
   (enable-circe-color-nicks)
   (setq circe-reduce-lurker-spam t
         lui-time-stamp-position 'right-margin
+        lui-fill-type nil
         lui-time-stamp-format "%H:%M"
-        circe-format-say "{nick:-16s} {body}"
-        circe-format-self-say "<{nick:-16s}> {body}")
+        circe-format-say "[{nick}] {body}"
+        circe-format-self-say "<{nick}> {body}")
   ;; Again, keep the log-in data private:
   (load-file "~/.emacs.d/circe-config.el"))
 
