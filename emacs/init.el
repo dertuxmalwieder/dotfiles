@@ -416,7 +416,7 @@
   :ensure t
   :config
   (require 'smartparens-config)
-  (smartparens-global-mode t))
+  (smartparens-mode '(not circe-mode)))
 
 ;; vterm instead of Emacs's terminal:
 (use-package vterm
@@ -441,14 +441,9 @@
   :commands (circe circe-set-display-handler)
   :config
   (enable-circe-color-nicks)
-  (setq circe-reduce-lurker-spam t
-        lui-time-stamp-position 'right-margin
-        lui-fill-type nil
-        lui-time-stamp-format "%H:%M"
-        circe-format-say "[{nick}] {body}"
-        circe-format-self-say "<{nick}> {body}")
   ;; Again, keep the log-in data private:
-  (load-file "~/.emacs.d/circe-config.el"))
+  (load-file "~/.emacs.d/circe-config.el")
+  (add-hook 'lui-mode-hook 'circe-setup))
 
 
 ;; Nicer theme:
