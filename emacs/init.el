@@ -244,11 +244,10 @@
   :if (executable-find "multimarkdown")
   :ensure t
   :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
   :config
-  (setq markdown-command "multimarkdown"))
+  (setq markdown-command "multimarkdown")
+  (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
 ;; Use ripgrep instead of grep (if applicable):
 (use-package rg
@@ -416,7 +415,7 @@
   :ensure t
   :config
   (require 'smartparens-config)
-  (smartparens-mode '(not circe-mode)))
+  (smartparens-global-mode t)
 
 ;; vterm instead of Emacs's terminal:
 (use-package vterm
