@@ -30,9 +30,6 @@
 
 (setq gc-cons-threshold 100000000)
 
-;; Nicer font:
-(set-face-attribute 'default nil :family "Hack")
-
 (when (eq system-type 'darwin)
   ;; Let's disable the right "Alt" key so I can still
   ;; use my German keyboard for entering German letters
@@ -303,9 +300,10 @@
 (use-package sly
   :ensure t
   :config
-  (when (eq system-type 'darwin)
-    ;; Requires SBCL from pkgsrc.
-    (setq inferior-lisp-program "/opt/pkg/bin/sbcl")))
+  (if (executable-find "ros")
+      (setq inferior-lisp-program "ros -Q run")
+    (when (eq system-type 'darwin)
+      (setq inferior-lisp-program "/opt/pkg/bin/sbcl"))))
 
 ;; JS programming:
 ;; Use a less bad JavaScript mode.
@@ -331,8 +329,8 @@
   :commands (lsp lsp-deferred)
   :config
   (setq lsp-enable-snippet nil)
-  :hook ((go-mode . lsp-deferred)
-	 (perl-mode . lsp-deferred)))
+  (add-hook 'go-mode-hook #'lsp-deferred)
+  (add-hook 'perl-mode-hook #'lsp-deferred))
 
 (defun lsp-go-install-save-hooks ()
   "Install LSP hooks."
@@ -381,8 +379,7 @@
 (use-package ivy
   :ensure t
   :defer 0.1
-  :bind (("C-c C-r" . ivy-resume)
-         ("C-x B" . ivy-switch-buffer-other-window))
+  :bind (("C-x B" . ivy-switch-buffer-other-window))
   :custom
   (ivy-count-format "(%d/%d) ")
   (ivy-use-virtual-buffers t)
@@ -407,15 +404,14 @@
 (use-package swiper
   :ensure t
   :after ivy
-  :bind (("C-s" . swiper)
-	 ("C-r" . swiper)))
+  :bind (("C-s" . swiper)))
 
 ;; Smart parentheses:
 (use-package smartparens
   :ensure t
   :config
   (require 'smartparens-config)
-  (smartparens-global-mode t)
+  (smartparens-global-mode t))
 
 ;; vterm instead of Emacs's terminal:
 (use-package vterm
@@ -443,6 +439,45 @@
   ;; Again, keep the log-in data private:
   (load-file "~/.emacs.d/circe-config.el")
   (add-hook 'lui-mode-hook 'circe-setup))
+
+
+;; Use ligatures if possible:
+(if (>= emacs-major-version 27)
+  (let ((ligatures `((?-  ,(regexp-opt '("-|" "-~" "---" "-<<" "-<" "--" "->" "->>" "-->")))
+                     (?/  ,(regexp-opt '("/**" "/*" "///" "/=" "/==" "/>" "//")))
+                     (?*  ,(regexp-opt '("*>" "***" "*/")))
+                     (?<  ,(regexp-opt '("<-" "<<-" "<=>" "<=" "<|" "<||" "<|||" "<|>" "<:" "<>" "<-<"
+                                           "<<<" "<==" "<<=" "<=<" "<==>" "<-|" "<<" "<~>" "<=|" "<~~" "<~"
+                                           "<$>" "<$" "<+>" "<+" "</>" "</" "<*" "<*>" "<->" "<!--")))
+                     (?:  ,(regexp-opt '(":>" ":<" ":::" "::" ":?" ":?>" ":=" "::=")))
+                     (?=  ,(regexp-opt '("=>>" "==>" "=/=" "=!=" "=>" "===" "=:=" "==")))
+                     (?!  ,(regexp-opt '("!==" "!!" "!=")))
+                     (?>  ,(regexp-opt '(">]" ">:" ">>-" ">>=" ">=>" ">>>" ">-" ">=")))
+                     (?&  ,(regexp-opt '("&&&" "&&")))
+                     (?|  ,(regexp-opt '("|||>" "||>" "|>" "|]" "|}" "|=>" "|->" "|=" "||-" "|-" "||=" "||")))
+                     (?.  ,(regexp-opt '(".." ".?" ".=" ".-" "..<" "...")))
+                     (?+  ,(regexp-opt '("+++" "+>" "++")))
+                     (?\[ ,(regexp-opt '("[||]" "[<" "[|")))
+                     (?\{ ,(regexp-opt '("{|")))
+                     (?\? ,(regexp-opt '("??" "?." "?=" "?:")))
+                     (?#  ,(regexp-opt '("####" "###" "#[" "#{" "#=" "#!" "#:" "#_(" "#_" "#?" "#(" "##")))
+                     (?\; ,(regexp-opt '(";;")))
+                     (?_  ,(regexp-opt '("_|_" "__")))
+                     (?\\ ,(regexp-opt '("\\" "\\/")))
+                     (?~  ,(regexp-opt '("~~" "~~>" "~>" "~=" "~-" "~@")))
+                     (?$  ,(regexp-opt '("$>")))
+                     (?^  ,(regexp-opt '("^=")))
+                     (?\] ,(regexp-opt '("]#"))))))
+    (dolist (char-regexp ligatures)
+      (apply (lambda (char regexp) (set-char-table-range
+                                    composition-function-table
+                                    char `([,regexp 0 font-shape-gstring])))
+             char-regexp))
+    ;; Nicer font that actually uses the ligatures:
+    (set-face-attribute 'default nil :family "JetBrains Mono"))
+
+  ;; Pre-27. Use a different font.
+  (set-face-attribute 'default nil :family "Hack"))
 
 
 ;; Nicer theme:
