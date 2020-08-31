@@ -474,7 +474,7 @@
                                     char `([,regexp 0 font-shape-gstring])))
              char-regexp))
     ;; Nicer font that actually uses the ligatures:
-    (set-face-attribute 'default nil :family "JetBrains Mono"))
+    (set-face-attribute 'default nil :family "Fira Code"))
 
   ;; Pre-27. Use a different font.
   (set-face-attribute 'default nil :family "Hack"))
