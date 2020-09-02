@@ -18,3 +18,9 @@ bindkey "^R" i-search-back
 
 # Import paths etc.:
 source $HOME/.cshenv
+
+# Directory-local environment variables:
+# (Requires direnv.)
+if (`where direnv` != "") then
+  eval `direnv hook tcsh`
+endif
