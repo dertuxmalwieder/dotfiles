@@ -419,7 +419,7 @@
 (use-package vterm
   :ensure t
   ;; Update the module automatically:
-  :post-build-hook (vterm-module-compile)
+  ;; :post-build-hook (vterm-module-compile)
   :config
   ;; Disable the highlighting of the current line
   ;; for the virtual terminal:
