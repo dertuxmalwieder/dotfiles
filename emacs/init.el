@@ -234,7 +234,14 @@
 (use-package doom-modeline
   :ensure t
   :config
-  (doom-modeline-mode 1))
+  (doom-modeline-mode 1)
+  (setq doom-modeline-minor-modes t))
+
+;; ... with less minor mode cruft:
+(use-package minions
+  :ensure t
+  :config
+  (minions-mode 1))
 
 ;; Markdown support:
 (use-package markdown-mode
