@@ -411,11 +411,15 @@
   :ensure t
   :config
   (require 'smartparens-config)
-  (smartparens-global-mode t))
+  (add-hook 'js-mode-hook #'smartparens-mode)
+  (add-hook 'perl-mode-hook #'smartparens-mode)
+  (add-hook 'go-mode-hook #'smartparens-mode))
 
 ;; vterm instead of Emacs's terminal:
 (use-package vterm
   :ensure t
+  ;; Update the module automatically:
+  :post-build-hook (vterm-module-compile)
   :config
   ;; Disable the highlighting of the current line
   ;; for the virtual terminal:
