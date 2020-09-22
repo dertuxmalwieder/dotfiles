@@ -235,6 +235,8 @@
   :ensure t
   :config
   (doom-modeline-mode 1)
+  (when (daemonp)
+    (setq doom-modeline-icon t))
   (setq doom-modeline-minor-modes t))
 
 ;; ... with less minor mode cruft:
@@ -504,10 +506,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(canlock-password "5e5c6fd080d6c0bce2d09b8ec6e3693c1a63c654")
- '(ivy-count-format "(%d/%d) " t)
- '(ivy-use-virtual-buffers t t)
- '(ivy-virtual-abbreviate (quote full) t))
+ )
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
