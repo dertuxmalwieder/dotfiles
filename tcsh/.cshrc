@@ -4,8 +4,10 @@ set savehist = (2000 merge) # Save and merge with existing saved
 set histfile = ~/.tcsh_history
 set prompt = '[%n@%m:%~]%# '
 set backslash_quote         # Enable quoting with a backslash
+set globdot                 # Wildcards shall match .<something>
 
 # Completion:
+set autorehash              # Always find new commands immediately
 set autoexpand              # Tab completion expansion
 set autolist                # Tab completion list
 set complete = enhance      # Case-insensitivity for the latter
