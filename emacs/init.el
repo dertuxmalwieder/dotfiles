@@ -327,10 +327,14 @@
   :ensure t
   :config
   (progn
-    (unless (member "/opt/pkg/go114/bin" (split-string (getenv "PATH") ":"))
-      (setenv "PATH" (concat "/opt/pkg/go114/bin:" (getenv "PATH"))))
+    (unless (member "/opt/pkg/go115/bin" (split-string (getenv "PATH") ":"))
+      (setenv "PATH" (concat "/opt/pkg/go115/bin:" (getenv "PATH"))))
     (setenv "GOPATH" (concat (getenv "HOME") "/go"))
     (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports"))))
+
+;; Rust programming:
+(use-package rustic
+  :ensure t)
 
 ;; Language Server Protocol:
 (use-package lsp-mode
