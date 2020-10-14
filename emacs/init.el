@@ -158,12 +158,6 @@
 (use-package gopher
   :ensure t)
 
-;; File tree:
-(use-package neotree
-  :ensure t
-  :config
-  (global-set-key [f8] 'neotree-toggle))
-
 ;; Switch and split windows visually:
 (use-package switch-window
   :ensure t
