@@ -255,7 +255,7 @@
   :ensure t
   :config
   (rg-enable-default-bindings))
-  
+
 ;; Project-related functionalities:
 (use-package projectile
   :ensure t
@@ -298,6 +298,12 @@
   (define-key global-map (kbd "C-c q") 'vr/query-replace)
   (define-key global-map (kbd "C-c m") 'vr/mc-mark))
 
+;; Expand selections:
+(use-package expand-region
+  :ensure t
+  :config
+  (global-set-key (kbd "C-=") 'er/expand-region))
+
 ;; Lisp programming:
 ;; Use SLY as a CL subsystem.
 (use-package sly
@@ -337,14 +343,16 @@
   :config
   (setq lsp-enable-snippet nil)
   (add-hook 'go-mode-hook #'lsp-deferred)
+  (add-hook 'python-mode-hook #'lsp-deferred)
   (add-hook 'perl-mode-hook #'lsp-deferred))
 
-(defun lsp-go-install-save-hooks ()
+(defun lsp-install-save-hooks ()
   "Install LSP hooks."
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-(add-hook 'perl-mode-hook #'lsp-go-install-save-hooks)
+(add-hook 'go-mode-hook #'lsp-install-save-hooks)
+(add-hook 'python-mode-hook #'lsp-install-save-hooks)
+(add-hook 'perl-mode-hook #'lsp-install-save-hooks)
 
 (use-package lsp-ui
   :ensure t
@@ -433,8 +441,8 @@
   (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil))))
 
 ;; Version Control enhancements:
-(use-package darcsum
-  :ensure t)
+;;(use-package darcsum
+;;  :ensure t)
 
 (use-package vc-fossil
   :straight (:host github :branch "trunk")
@@ -453,42 +461,38 @@
 
 
 ;; Use ligatures if possible:
-(if (>= emacs-major-version 27)
-  (let ((ligatures `((?-  ,(regexp-opt '("-|" "-~" "---" "-<<" "-<" "--" "->" "->>" "-->")))
-                     (?/  ,(regexp-opt '("/**" "/*" "///" "/=" "/==" "/>" "//")))
-                     (?*  ,(regexp-opt '("*>" "***" "*/")))
-                     (?<  ,(regexp-opt '("<-" "<<-" "<=>" "<=" "<|" "<||" "<|||" "<|>" "<:" "<>" "<-<"
-                                           "<<<" "<==" "<<=" "<=<" "<==>" "<-|" "<<" "<~>" "<=|" "<~~" "<~"
-                                           "<$>" "<$" "<+>" "<+" "</>" "</" "<*" "<*>" "<->" "<!--")))
-                     (?:  ,(regexp-opt '(":>" ":<" ":::" "::" ":?" ":?>" ":=" "::=")))
-                     (?=  ,(regexp-opt '("=>>" "==>" "=/=" "=!=" "=>" "===" "=:=" "==")))
-                     (?!  ,(regexp-opt '("!==" "!!" "!=")))
-                     (?>  ,(regexp-opt '(">]" ">:" ">>-" ">>=" ">=>" ">>>" ">-" ">=")))
-                     (?&  ,(regexp-opt '("&&&" "&&")))
-                     (?|  ,(regexp-opt '("|||>" "||>" "|>" "|]" "|}" "|=>" "|->" "|=" "||-" "|-" "||=" "||")))
-                     (?.  ,(regexp-opt '(".." ".?" ".=" ".-" "..<" "...")))
-                     (?+  ,(regexp-opt '("+++" "+>" "++")))
-                     (?\[ ,(regexp-opt '("[||]" "[<" "[|")))
-                     (?\{ ,(regexp-opt '("{|")))
-                     (?\? ,(regexp-opt '("??" "?." "?=" "?:")))
-                     (?#  ,(regexp-opt '("####" "###" "#[" "#{" "#=" "#!" "#:" "#_(" "#_" "#?" "#(" "##")))
-                     (?\; ,(regexp-opt '(";;")))
-                     (?_  ,(regexp-opt '("_|_" "__")))
-                     (?\\ ,(regexp-opt '("\\" "\\/")))
-                     (?~  ,(regexp-opt '("~~" "~~>" "~>" "~=" "~-" "~@")))
-                     (?$  ,(regexp-opt '("$>")))
-                     (?^  ,(regexp-opt '("^=")))
-                     (?\] ,(regexp-opt '("]#"))))))
-    (dolist (char-regexp ligatures)
-      (apply (lambda (char regexp) (set-char-table-range
-                                    composition-function-table
-                                    char `([,regexp 0 font-shape-gstring])))
-             char-regexp))
-    ;; Nicer font that actually uses the ligatures:
-    (set-face-attribute 'default nil :family "Fira Code"))
-
-  ;; Pre-27. Use a different font.
-  (set-face-attribute 'default nil :family "Hack"))
+(let ((ligatures `((?-  ,(regexp-opt '("-|" "-~" "---" "-<<" "-<" "--" "->" "->>" "-->")))
+                   (?/  ,(regexp-opt '("/**" "/*" "///" "/=" "/==" "/>" "//")))
+                   (?*  ,(regexp-opt '("*>" "***" "*/")))
+                   (?<  ,(regexp-opt '("<-" "<<-" "<=>" "<=" "<|" "<||" "<|||" "<|>" "<:" "<>" "<-<"
+                                       "<<<" "<==" "<<=" "<=<" "<==>" "<-|" "<<" "<~>" "<=|" "<~~" "<~"
+                                       "<$>" "<$" "<+>" "<+" "</>" "</" "<*" "<*>" "<->" "<!--")))
+                   (?:  ,(regexp-opt '(":>" ":<" ":::" "::" ":?" ":?>" ":=" "::=")))
+                   (?=  ,(regexp-opt '("=>>" "==>" "=/=" "=!=" "=>" "===" "=:=" "==")))
+                   (?!  ,(regexp-opt '("!==" "!!" "!=")))
+                   (?>  ,(regexp-opt '(">]" ">:" ">>-" ">>=" ">=>" ">>>" ">-" ">=")))
+                   (?&  ,(regexp-opt '("&&&" "&&")))
+                   (?|  ,(regexp-opt '("|||>" "||>" "|>" "|]" "|}" "|=>" "|->" "|=" "||-" "|-" "||=" "||")))
+                   (?.  ,(regexp-opt '(".." ".?" ".=" ".-" "..<" "...")))
+                   (?+  ,(regexp-opt '("+++" "+>" "++")))
+                   (?\[ ,(regexp-opt '("[||]" "[<" "[|")))
+                   (?\{ ,(regexp-opt '("{|")))
+                   (?\? ,(regexp-opt '("??" "?." "?=" "?:")))
+                   (?#  ,(regexp-opt '("####" "###" "#[" "#{" "#=" "#!" "#:" "#_(" "#_" "#?" "#(" "##")))
+                   (?\; ,(regexp-opt '(";;")))
+                   (?_  ,(regexp-opt '("_|_" "__")))
+                   (?\\ ,(regexp-opt '("\\" "\\/")))
+                   (?~  ,(regexp-opt '("~~" "~~>" "~>" "~=" "~-" "~@")))
+                   (?$  ,(regexp-opt '("$>")))
+                   (?^  ,(regexp-opt '("^=")))
+                   (?\] ,(regexp-opt '("]#"))))))
+  (dolist (char-regexp ligatures)
+    (apply (lambda (char regexp) (set-char-table-range
+                                  composition-function-table
+                                  char `([,regexp 0 font-shape-gstring])))
+           char-regexp))
+  ;; Nicer font that actually uses the ligatures:
+  (set-face-attribute 'default nil :family "Fira Code"))
 
 
 ;; Nicer theme:
