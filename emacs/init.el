@@ -66,6 +66,9 @@
 ;; Enable ":ensure t"-like behavior:
 (setq straight-use-package-by-default t)
 
+;; Use the "develop" branch:
+(setq straight-repository-branch "develop")
+
 ;; Load (or download) straight.el:
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -432,9 +435,9 @@
 
 ;; vterm instead of Emacs's terminal:
 (use-package vterm
-  :ensure t
   ;; Update the module automatically:
-  ;; :post-build-hook (vterm-module-compile)
+  :straight (:post-build ((let ((vterm-always-compile-module t))
+                            (require 'vterm))))
   :config
   ;; Disable the highlighting of the current line
   ;; for the virtual terminal:
