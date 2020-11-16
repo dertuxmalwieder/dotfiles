@@ -337,7 +337,14 @@
 
 ;; Rust programming:
 (use-package rustic
-  :ensure t)
+  :ensure t
+  :after flycheck
+  :config
+  (setq lsp-rust-server 'rust-analyzer)
+  (setq rustic-lsp-server 'rust-analyzer)
+  (setq rustic-format-on-save nil)
+  (push 'rustic-clippy flycheck-checkers)
+  (remove-hook 'rustic-mode-hook 'flycheck-mode))
 
 ;; Language Server Protocol:
 (use-package lsp-mode
