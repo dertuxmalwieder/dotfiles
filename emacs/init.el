@@ -31,6 +31,9 @@
 (setq gc-cons-threshold 100000000)
 
 (when (eq system-type 'darwin)
+  ;; Disable "ls --dired" (macOS cannot do that).
+  (setq dired-use-ls-dired nil)
+  
   ;; Let's disable the right "Alt" key so I can still
   ;; use my German keyboard for entering German letters
   ;; on a Mac.
