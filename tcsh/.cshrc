@@ -2,6 +2,7 @@
 set history = 2000          # Should be enough for the time being
 set savehist = (2000 merge) # Save and merge with existing saved 
 set histfile = ~/.tcsh_history
+set histlit = 1             # Enable the literal use of "!" in strings
 set prompt = '[%n@%m:%~]%# '
 set backslash_quote         # Enable quoting with a backslash
 set globdot                 # Wildcards shall match .<something>
