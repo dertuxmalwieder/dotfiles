@@ -124,22 +124,15 @@
   
   ;; Better inline code blocks.
   (setq org-src-fontify-natively t)
-  (setq org-src-tab-acts-natively t))
+  (setq org-src-tab-acts-natively t)
+
+  ;; Enable Markdown export.
+  (require 'ox-md))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; 3rd PARTY PACKAGES:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Keep my packages up-to-date:
-;; Commented out. straight.el will do that for a while.
-;;(use-package auto-package-update
-;;  :ensure t
-;;  :config
-;;  (setq auto-package-update-interval 4) ;; ... days
-;;  (setq auto-package-update-delete-old-versions t)
-;;  (setq auto-package-update-hide-results t)
-;;  (auto-package-update-maybe))
 
 ;; Some platforms (cough) don't update Emacs's path.
 ;; Make them.
