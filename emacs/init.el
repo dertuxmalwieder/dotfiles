@@ -223,6 +223,17 @@
   ;; Keep the log-in data out of the public eye:
   (load-file "~/.emacs.d/elfeed-config.el"))
 
+;; A working music player:
+(use-package bongo
+  :ensure t
+  :config
+  ;; Try to have a sane configuration:
+  (setq bongo-insert-whole-directory-trees t)
+  (setq bongo-logo nil)
+  (setq bongo-mark-played-tracks t)
+  ;; We assume mpg123 and mplayer to be installed.
+  (setq bongo-enabled-backends '(mpg123 mplayer)))
+
 ;; A less shitty modeline:
 (use-package doom-modeline
   :ensure t
@@ -368,7 +379,7 @@
 ;; C/C++ programming:
 (use-package ccls
   :ensure t
-  :hook ((c-mode c++-mode objc-mode cuda-mode) .
+  :hook ((c-mode cpp-mode objc-mode cuda-mode) .
          (lambda () (require 'ccls) (lsp)))
   :config
   (setq lsp-prefer-flymake nil))
