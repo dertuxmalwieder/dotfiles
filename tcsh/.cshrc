@@ -7,6 +7,11 @@ set prompt = '[%n@%m:%~]%# '
 set backslash_quote         # Enable quoting with a backslash
 set globdot                 # Wildcards shall match .<something>
 
+# UTF-8:
+setenv LANG de_DE
+setenv LC_ALL de_DE.utf-8
+setenv LC_CTYPE de_DE.utf-8
+
 # Completion:
 set autorehash              # Always find new commands immediately
 set autoexpand              # Tab completion expansion
