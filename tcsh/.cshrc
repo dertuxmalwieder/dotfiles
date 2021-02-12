@@ -1,11 +1,19 @@
-# tcsh settings:
+# tcsh configuration file.
+set prompt = '[%n@%m:%~]%# '
+set symlinks = ignore       # Don't be confused when following links
+
+# History:
 set history = 2000          # Should be enough for the time being
 set savehist = (2000 merge) # Save and merge with existing saved 
 set histfile = ~/.tcsh_history
-set histlit = 1             # Enable the literal use of "!" in strings
-set prompt = '[%n@%m:%~]%# '
+set histlit                 # Enable the literal use of "!" in strings
+set histdup = all           # Keep the history free of duplicates
+
+# Command input:
+set autorehash              # Always find new commands immediately
 set backslash_quote         # Enable quoting with a backslash
 set globdot                 # Wildcards shall match .<something>
+set globstar                # Double wildcards will match in subdirs
 
 # UTF-8:
 setenv LANG de_DE
@@ -13,7 +21,6 @@ setenv LC_ALL de_DE.utf-8
 setenv LC_CTYPE de_DE.utf-8
 
 # Completion:
-set autorehash              # Always find new commands immediately
 set autoexpand              # Tab completion expansion
 set autolist                # Tab completion list
 set complete = enhance      # Case-insensitivity for the latter
