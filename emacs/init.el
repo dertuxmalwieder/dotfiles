@@ -23,7 +23,8 @@
 (setq make-backup-files nil)
 
 ;; Automatically reload files edited elsewhere:
-(setq global-auto-revert-mode t)
+;; (Commented out for battery reduction.)
+;; (setq global-auto-revert-mode t)
 
 ;; Wrap lines please:
 (global-visual-line-mode t)
@@ -55,6 +56,11 @@
 ;; Make window resizes undoable:
 (when (fboundp 'winner-mode)
   (winner-mode 1))
+
+;; Don't warn about parenthesis mismatch in non-
+;; programming modes:
+(setq blink-matching-paren nil)
+(add-hook 'prog-mode-hook (lambda () (setq-local blink-matching-paren t)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -152,6 +158,12 @@
 ;; Asynchronous Emacs:
 (use-package async
   :ensure t)
+
+;; Undo trees:
+(use-package undo-tree
+  :ensure t
+  :config
+  (global-undo-tree-mode))
 
 ;; Gopher:
 (use-package gopher
@@ -259,6 +271,13 @@
   (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
+;; Writing mode:
+(use-package olivetti
+  :ensure t
+  :after markdown-mode
+  :config
+  (add-hook 'markdown-mode-hook 'olivetti-mode))
+
 ;; Use ripgrep instead of grep (if applicable):
 (use-package rg
   :if (executable-find "rg")
@@ -315,10 +334,16 @@
   (global-set-key (kbd "C-=") 'er/expand-region))
 
 ;; Lisp programming:
-;; Use SLY as a CL subsystem.
-(use-package sly
+;; Use SLIME as a CL subsystem.
+(use-package slime
   :ensure t
   :config
+  (require 'slime-autoloads)
+  (slime-setup '(slime-fancy))
+  (eval-after-load "auto-complete"
+    '(add-to-list 'ac-modes 'slime-repl-mode))
+  (eval-after-load "auto-complete"
+    '(add-to-list 'ac-modes 'slime-repl-mode))
   (if (executable-find "ros")
       (setq inferior-lisp-program "ros -Q run")
     (when (eq system-type 'darwin)
@@ -353,7 +378,7 @@
   (add-hook 'rust-mode-hook 'lsp)
   (add-hook 'rust-mode-hook 'company-mode)
   (remove-hook 'rustic-mode-hook 'flycheck-mode))
-
+  
 ;; Language Server Protocol:
 (use-package lsp-mode
   :ensure t
@@ -390,17 +415,6 @@
   :config
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1))
-
-(use-package company-lsp
-  :ensure t
-  :commands company-lsp
-  :after company
-  :config
-  (setq company-backends
-        ;; Let's keep company-mode unobtrusive in most cases.
-        (quote
-         (company-lsp company-bbdb company-xcode company-cmake company-capf company-files
-                      (company-dabbrev-code company-gtags company-etags company-keywords)))))
 
 ;; Counsel auto-completion for commands:
 (use-package counsel
@@ -472,6 +486,7 @@
   :ensure t
   :commands (circe circe-set-display-handler)
   :config
+  (add-to-list 'desktop-modes-not-to-save 'circe-mode)
   (enable-circe-color-nicks)
   ;; Again, keep the log-in data private:
   (load-file "~/.emacs.d/circe-config.el")
