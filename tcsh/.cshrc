@@ -7,7 +7,7 @@ set history = 2000          # Should be enough for the time being
 set savehist = (2000 merge) # Save and merge with existing saved 
 set histfile = ~/.tcsh_history
 set histlit                 # Enable the literal use of "!" in strings
-set histdup = all           # Keep the history free of duplicates
+set histdup = prev          # Keep the history free of duplicates
 
 # Command input:
 set autorehash              # Always find new commands immediately
@@ -16,9 +16,9 @@ set globdot                 # Wildcards shall match .<something>
 set globstar                # Double wildcards will match in subdirs
 
 # UTF-8:
-setenv LANG de_DE
-setenv LC_ALL de_DE.utf-8
-setenv LC_CTYPE de_DE.utf-8
+setenv LANG de_DE.UTF-8
+setenv LC_ALL de_DE.UTF-8
+setenv LC_CTYPE de_DE.UTF-8
 
 # Completion:
 set autoexpand              # Tab completion expansion
@@ -40,3 +40,7 @@ source $HOME/.cshenv
 if (`where direnv` != "") then
   eval `direnv hook tcsh`
 endif
+
+# Starship:
+# (Requires starship.)
+eval "`starship init tcsh`"
