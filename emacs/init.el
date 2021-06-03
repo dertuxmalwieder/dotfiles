@@ -159,6 +159,14 @@
 (use-package async
   :ensure t)
 
+;; Emojis:
+(use-package emojify
+  :ensure t
+  :after circe
+  :commands emojify-mode
+  :config
+  (add-hook 'circe-mode-hook 'emojify-mode))
+
 ;; Undo trees:
 (use-package undo-tree
   :ensure t
@@ -215,36 +223,6 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode)))
-
-;; RSS feed reader with some extras:
-(use-package elfeed
-  :ensure t)
-
-(use-package elfeed-goodies
-  :ensure t
-  :after elfeed
-  :config
-  (elfeed-goodies/setup))
-
-;; Hook elfeed into Newsblur:
-(use-package elfeed-protocol
-  :ensure t
-  :after elfeed
-  :config
-  (elfeed-protocol-enable)
-  ;; Keep the log-in data out of the public eye:
-  (load-file "~/.emacs.d/elfeed-config.el"))
-
-;; A working music player:
-(use-package bongo
-  :ensure t
-  :config
-  ;; Try to have a sane configuration:
-  (setq bongo-insert-whole-directory-trees t)
-  (setq bongo-logo nil)
-  (setq bongo-mark-played-tracks t)
-  ;; We assume mpg123 and mplayer to be installed.
-  (setq bongo-enabled-backends '(mpg123 mplayer)))
 
 ;; A less shitty modeline:
 (use-package doom-modeline
