@@ -43,4 +43,6 @@ endif
 
 # Starship:
 # (Requires starship.)
-eval "`starship init tcsh`"
+if (`where starship` != "") then
+  eval "`starship init tcsh`"
+endif
