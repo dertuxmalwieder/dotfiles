@@ -1,5 +1,4 @@
 # tcsh configuration file.
-set prompt = '[%n@%m:%~]%# '
 set symlinks = ignore       # Don't be confused when following links
 
 # History:
@@ -45,4 +44,13 @@ endif
 # (Requires starship.)
 if (`where starship` != "") then
   eval "`starship init tcsh`"
+endif
+
+# zoxide:
+# (Requires zoxide and zoxide.tcsh.)
+if (`where zoxide` != "") then
+  source $HOME/zoxide.tcsh
+  alias precmd '__zoxide_hook;set prompt = "[%n@%m:%~]%# "'
+else
+  set prompt = '[%n@%m:%~]%# '
 endif
