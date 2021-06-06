@@ -43,10 +43,6 @@
 ;; Remember where we are:
 (desktop-save-mode t)
 
-;; Don't keep open buffers though:
-;; -- This will break Circe - disable for now.
-;;(add-hook 'kill-emacs-hook (lambda () (desktop-clear)))
-
 ;; Stop chatting:
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -102,6 +98,14 @@
 ;; Perl programming:
 ;; Use the C Perl mode (may be better than the default one).
 (defalias 'perl-mode 'cperl-mode)
+
+;; IRC:
+(use-package erc
+  :straight nil
+  :config
+  (add-to-list 'desktop-modes-not-to-save 'erc-mode)
+  ;; Again, keep the log-in data private:
+  (load-file "~/.emacs.d/erc-config.el"))
 
 ;; Gnus preparation: Make it faster and nicer looking.
 ;; (Let's keep the account configuration in .gnus.el though.)
@@ -162,10 +166,9 @@
 ;; Emojis:
 (use-package emojify
   :ensure t
-  :after circe
   :commands emojify-mode
   :config
-  (add-hook 'circe-mode-hook 'emojify-mode))
+  (add-hook 'erc-mode-hook 'emojify-mode))
 
 ;; Undo trees:
 (use-package undo-tree
@@ -458,18 +461,6 @@
   :straight (:host github :branch "trunk")
   :config
   (add-to-list 'vc-handled-backends 'Fossil t))
-
-;; IRC:
-(use-package circe
-  :ensure t
-  :commands (circe circe-set-display-handler)
-  :config
-  (add-to-list 'desktop-modes-not-to-save 'circe-mode)
-  (enable-circe-color-nicks)
-  ;; Again, keep the log-in data private:
-  (load-file "~/.emacs.d/circe-config.el")
-  (add-hook 'lui-mode-hook 'circe-setup))
-
 
 ;; Use ligatures if possible:
 (let ((ligatures `((?-  ,(regexp-opt '("-|" "-~" "---" "-<<" "-<" "--" "->" "->>" "-->")))
