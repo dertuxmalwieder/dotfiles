@@ -353,7 +353,6 @@
   :ensure t
   :after flycheck
   :config
-  (setq lsp-rust-server 'rust-analyzer)
   (setq rustic-format-on-save t)
   (push 'rustic-clippy flycheck-checkers)
   (add-hook 'rust-mode-hook 'lsp)
