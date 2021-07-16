@@ -266,6 +266,10 @@
   :config
   (rg-enable-default-bindings))
 
+;; Matrix client:
+(use-package matrix-client
+  :ensure t)
+
 ;; Project-related functionalities:
 (use-package projectile
   :ensure t
@@ -396,41 +400,54 @@
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1))
 
-;; Counsel auto-completion for commands:
-(use-package counsel
+;; Vertico for most interactive stuff:
+(use-package vertico
   :ensure t
-  :after ivy
-  :config (counsel-mode))
-
-;; Ivy for most interactive stuff:
-(use-package ivy
-  :ensure t
-  :defer 0.1
-  :bind (("C-x B" . ivy-switch-buffer-other-window))
+  :bind (:map vertico-map
+         ("C-j" . vertico-next)
+         ("C-k" . vertico-previous)
+         ("C-f" . vertico-exit)
+         :map minibuffer-local-map
+         ("M-h" . backward-kill-word))
   :custom
-  (ivy-count-format "(%d/%d) ")
-  (ivy-use-virtual-buffers t)
-  (ivy-virtual-abbreviate (quote full))
-  :config (ivy-mode))
+  (vertico-cycle t)
+  :init
+  (vertico-mode))
 
-(use-package ivy-rich
+;; Minibuffer improvements:
+(use-package marginalia
+  :after vertico
   :ensure t
-  :after ivy
-  :config
-  (ivy-rich-mode 1)
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
 
-;; With icons:
-(use-package all-the-icons-ivy-rich
+;; Orderless search:
+(use-package orderless
+  :after vertico
+  :ensure t)
+
+;; Completion via consult:
+(use-package consult
+  :after orderless
   :ensure t
-  :after ivy-rich
   :config
-  (all-the-icons-ivy-rich-mode t))
+  (setq completion-styles '(orderless))
+  (setq completion-category-defaults nil)
+  (setq completion-category-overrides '((file (styles partial-completion))))
+  (add-hook 'vertico-mode-hook (lambda ()
+                                 (setq completion-in-region-function
+                                       (if vertico-mode
+                                           #'consult-completion-in-region
+                                         #'completion--in-region))))
+  (advice-add #'completing-read-multiple
+              :override #'consult-completing-read-multiple))
 
 ;; Swiper for searching:
 (use-package swiper
   :ensure t
-  :after ivy
+  :after vertico
   :bind (("C-s" . swiper)))
 
 ;; Smart parentheses:
