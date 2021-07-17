@@ -433,6 +433,7 @@
   :after orderless
   :ensure t
   :config
+  (define-key global-map (kbd "C-s") 'consult-line)
   (setq completion-styles '(orderless))
   (setq completion-category-defaults nil)
   (setq completion-category-overrides '((file (styles partial-completion))))
@@ -443,12 +444,6 @@
                                          #'completion--in-region))))
   (advice-add #'completing-read-multiple
               :override #'consult-completing-read-multiple))
-
-;; Swiper for searching:
-(use-package swiper
-  :ensure t
-  :after vertico
-  :bind (("C-s" . swiper)))
 
 ;; Smart parentheses:
 (use-package smartparens
