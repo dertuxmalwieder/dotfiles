@@ -21,6 +21,7 @@
 (setq initial-major-mode 'text-mode)
 
 (setq make-backup-files nil)
+(setq create-lockfiles nil)
 
 ;; Automatically reload files edited elsewhere:
 ;; (Commented out for battery reduction.)
