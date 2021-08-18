@@ -415,13 +415,19 @@
   :init
   (vertico-mode))
 
+;; Icons for the minibuffer:
+(use-package all-the-icons-completion
+  :after vertico
+  :ensure t)
+
 ;; Minibuffer improvements:
 (use-package marginalia
-  :after vertico
+  :after all-the-icons-completion
   :ensure t
   :custom
   (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
   :init
+  (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
   (marginalia-mode))
 
 ;; Orderless search:
