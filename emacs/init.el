@@ -339,7 +339,9 @@
 ;; Use a less bad JavaScript mode.
 (use-package js2-mode
   :ensure t
+  :after lsp-mode
   :config
+  (add-hook 'js2-mode-hook #'lsp-deferred)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 ;; Go programming:
