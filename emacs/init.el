@@ -371,6 +371,7 @@
   :ensure t
   :commands (lsp lsp-deferred)
   :config
+  (setq lsp-disabled-clients '(eslint jsts-ls))
   (setq lsp-enable-snippet nil)
   (add-hook 'go-mode-hook #'lsp-deferred)
   (add-hook 'python-mode-hook #'lsp-deferred)
