@@ -350,8 +350,8 @@
   :ensure t
   :config
   (progn
-    (unless (member "/opt/pkg/go115/bin" (split-string (getenv "PATH") ":"))
-      (setenv "PATH" (concat "/opt/pkg/go115/bin:" (getenv "PATH"))))
+    (unless (member "/opt/pkg/go117/bin" (split-string (getenv "PATH") ":"))
+      (setenv "PATH" (concat "/opt/pkg/go117/bin:" (getenv "PATH"))))
     (setenv "GOPATH" (concat (getenv "HOME") "/go"))
     (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports"))))
 
