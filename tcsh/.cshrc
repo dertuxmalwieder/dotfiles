@@ -54,3 +54,9 @@ if (`where zoxide` != "") then
 else
   set prompt = '[%n@%m:%~]%# '
 endif
+
+# thefuck:
+# (Requires thefuck.)
+if (`where thefuck` != "") then
+  alias fuck 'set fucked_cmd=`history -h 2 | head -n 1` && eval `thefuck ${fucked_cmd}`'
+endif
