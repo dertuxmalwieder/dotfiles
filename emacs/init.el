@@ -177,10 +177,6 @@
   :config
   (global-undo-tree-mode))
 
-;; Gopher:
-(use-package gopher
-  :ensure t)
-
 ;; Switch and split windows visually:
 (use-package switch-window
   :ensure t
