@@ -1,0 +1,35 @@
+directory: \\Datengrab\Musik
+
+plugins: bpd embedart fetchart ftintitle chroma discogs zero importadded inline rewrite
+threaded: yes
+
+paths:
+  default: $albumartist/$album/%if{$multidisc,CD $disc/}$track. $title
+  singleton: $artist/$title
+  comp: $artist/$album/$track. $title
+
+import:
+  move: yes
+  resume: yes
+  autotag: yes
+  incremental: yes
+
+embedart:
+  remove_art_file: yes
+
+zero:
+  fields: month day genre comments
+  comments: [EAC, LAME, from.+collection, 'ripped by', 'bandcamp.com']
+  update_database: true
+
+importadded:
+  preserve_mtimes: yes
+  preserve_write_mtimes: yes
+
+item_fields:
+  multidisc: 1 if disctotal > 1 else 0
+
+rewrite:
+  artist 잠비나이: Jambinai
+  artist Ciolkowska: Циолковская
+  artist Koenjihyakkei: Kōenji Hyakkei
