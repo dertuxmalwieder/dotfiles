@@ -1,6 +1,6 @@
 directory: \\Datengrab\Musik
 
-plugins: bpd embedart fetchart ftintitle chroma discogs zero importadded inline rewrite
+plugins: embedart fetchart ftintitle chroma discogs zero importadded inline rewrite spotify deezer
 threaded: yes
 
 paths:
@@ -13,11 +13,17 @@ import:
   resume: yes
   autotag: yes
   incremental: yes
+  languages: en jp ru de
+
+# -----------------------
+# General plugins:
 
 embedart:
+  # Don't keep cover.jpeg
   remove_art_file: yes
 
 zero:
+  # Clean the tags from nonsense cruft
   fields: month day genre comments
   comments: [EAC, LAME, from.+collection, 'ripped by', 'bandcamp.com']
   update_database: true
@@ -27,9 +33,25 @@ importadded:
   preserve_write_mtimes: yes
 
 item_fields:
+  # We only use "CD <n>" when there is actually a CD 2.
   multidisc: 1 if disctotal > 1 else 0
 
 rewrite:
+  # Unify artist names.
   artist 잠비나이: Jambinai
   artist Ciolkowska: Циолковская
   artist Koenjihyakkei: Kōenji Hyakkei
+
+# -----------------------
+# Source plugins (with Spotify having less priority because it is not quite
+# as good as Deezer in my tests):
+
+discogs:
+   source_weight: 0.0
+
+deezer:
+   source_weight: 0.0
+
+spotify:
+   source_weight: 0.5
+   mode: open
