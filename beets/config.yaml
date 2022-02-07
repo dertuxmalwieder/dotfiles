@@ -1,5 +1,7 @@
 directory: \\Datengrab\Musik
 
+# Required Python modules (pip install):
+# pyacoustid python3-discogs-client requests
 plugins: embedart fetchart ftintitle chroma discogs zero importadded inline rewrite spotify deezer
 threaded: yes
 
