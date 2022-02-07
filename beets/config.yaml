@@ -5,6 +5,11 @@ directory: \\Datengrab\Musik
 plugins: embedart fetchart ftintitle chroma discogs zero importadded inline rewrite spotify deezer
 threaded: yes
 
+# Clean up: We won't need READMEs, cover files et cetera anymore.
+clutter: ["Thumbs.DB", ".DS_Store", ".m3u", ".png",
+          ".jpg", ".nfo", ".txt", ".log", ".gif", ".url",
+         ]
+
 paths:
   default: $albumartist/$album/%if{$multidisc,CD $disc/}$track. $title
   singleton: $artist/$title
