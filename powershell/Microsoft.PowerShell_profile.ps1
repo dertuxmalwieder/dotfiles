@@ -10,6 +10,8 @@ $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 if (Test-Path($ChocolateyProfile)) {
   Import-Module "$ChocolateyProfile"
 }
+
+# posh-git:
 Import-Module posh-git
 
 # Simulate the "su" command:
