@@ -20,7 +20,7 @@ import:
   resume: yes
   autotag: yes
   incremental: yes
-  languages: en jp ru de
+  languages: en de jp ru
 
 # -----------------------
 # General plugins:
