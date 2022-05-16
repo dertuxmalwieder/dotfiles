@@ -2,7 +2,7 @@
 
 ;;; Commentary:
 
-;; Making Emacs relatively usable on a MacBook.
+;; Making Emacs relatively usable.
 
 ;;; Code:
 
@@ -346,15 +346,13 @@
   :ensure t
   :config
   (progn
-    (unless (member "/opt/pkg/go117/bin" (split-string (getenv "PATH") ":"))
-      (setenv "PATH" (concat "/opt/pkg/go117/bin:" (getenv "PATH"))))
     (setenv "GOPATH" (concat (getenv "HOME") "/go"))
     (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports"))))
 
 ;; Rust programming:
 (use-package rustic
   :ensure t
-  :after flycheck
+  :after (flycheck lsp-mode)
   :config
   (setq rustic-format-on-save t)
   (push 'rustic-clippy flycheck-checkers)

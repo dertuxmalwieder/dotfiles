@@ -28,3 +28,9 @@ function su {
 function tail-f([string]$filename) {
 	Get-Content "$filename" -Tail 10 -Wait
 }
+
+# which:
+New-Alias which get-command
+
+# vi:
+New-Alias vi nvim
