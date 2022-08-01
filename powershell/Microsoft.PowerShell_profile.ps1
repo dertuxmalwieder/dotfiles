@@ -8,7 +8,7 @@ Set-PSReadlineOption -EditMode Emacs
 # Chocolatey:
 $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 if (Test-Path($ChocolateyProfile)) {
-  Import-Module "$ChocolateyProfile"
+	Import-Module "$ChocolateyProfile"
 }
 
 # posh-git:
@@ -18,8 +18,20 @@ Import-Module posh-git
 function su {
 	If (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
 	{
-		Start-Process wt -Verb RunAs
-		# Optionally close the non-elevated Windows Terminal:
+		If ($env:TERM_PROGRAM = "Tabby") {
+			# Tabby can't do that just as easily.
+			echo "Please just open a new admin tab in Tabby. :-)"
+		}
+		Elseif ($env:ALACRITTY_LOG -ne $null) {
+			# Alacritty:
+			Start-Process C:\Users\knurr.BITLOGIC\scoop\apps\alacritty\current\alacritty -Verb RunAs
+		}
+		Else {
+			# Probably, Windows Terminal (at least on my computers):
+			Start-Process wt -Verb RunAs
+		}
+
+		# Optionally close the non-elevated terminal:
 		# exit
 	}
 }
@@ -30,7 +42,7 @@ function tail-f([string]$filename) {
 }
 
 # which:
-New-Alias which get-command
+New-Alias which Get-Command
 
 # vi:
 New-Alias vi nvim
