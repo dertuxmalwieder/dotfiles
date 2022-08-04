@@ -1,4 +1,4 @@
-﻿# Improving PowerShell on Windows Terminal.
+# Improving PowerShell on Windows Terminal.
 # ------------------------------------------
 
 # ReadLine -> Emacs:
@@ -18,7 +18,7 @@ Import-Module posh-git
 function su {
 	If (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
 	{
-		If ($env:TERM_PROGRAM = "Tabby") {
+		If ($env:TERM_PROGRAM -eq "Tabby") {
 			# Tabby can't do that just as easily.
 			echo "Please just open a new admin tab in Tabby. :-)"
 		}
