@@ -346,13 +346,15 @@
   :ensure t
   :config
   (progn
+    (unless (member "/opt/pkg/go118/bin" (split-string (getenv "PATH") ":"))
+      (setenv "PATH" (concat "/opt/pkg/go118/bin:" (getenv "PATH"))))
     (setenv "GOPATH" (concat (getenv "HOME") "/go"))
     (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports"))))
 
 ;; Rust programming:
 (use-package rustic
   :ensure t
-  :after (flycheck lsp-mode)
+  :after flycheck
   :config
   (setq rustic-format-on-save t)
   (push 'rustic-clippy flycheck-checkers)
@@ -397,6 +399,10 @@
   :config
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1))
+
+;; Gopher:
+(use-package elpher
+  :ensure t)
 
 ;; Vertico for most interactive stuff:
 (use-package vertico
