@@ -24,7 +24,7 @@ function su {
 		}
 		Elseif ($env:ALACRITTY_LOG -ne $null) {
 			# Alacritty:
-			Start-Process C:\Users\knurr.BITLOGIC\scoop\apps\alacritty\current\alacritty -Verb RunAs
+			Start-Process alacritty -Verb RunAs
 		}
 		Else {
 			# Probably, Windows Terminal (at least on my computers):
