@@ -1,0 +1,27 @@
+LANG=(de_DE.UTF-8)
+TERM=(xterm-256color)
+path=(/bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /opt/local/bin $home/bin)
+
+EDITOR=(ed)
+if (test -x `(which nvim)) {
+	VISUAL=(nvim)
+} else {
+	VISUAL=(vim)
+}
+
+## Define the $prompt
+prompt=('
+'$USER'@'`hostname':'`pwd'
+; ' '')
+
+## Function definitions
+## Reload the config file:
+fn reload {
+	. $home/.rcrc
+}
+
+## Update the prompt while cd:
+fn cd {
+	builtin cd $*
+	&& reload
+}
