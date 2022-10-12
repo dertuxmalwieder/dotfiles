@@ -6,31 +6,8 @@
 
 ;;; Code:
 
-(tool-bar-mode -1)
-(toggle-scroll-bar -1)
-
-(setq tab-width 4)
-(setq indent-tabs-mode nil)
-(setq-default indent-tabs-mode nil)
-
-(turn-on-font-lock)
-
-(setq inhibit-splash-screen t)
-(setq inhibit-startup-screen t)
-(setq initial-scratch-message nil)
-(setq initial-major-mode 'text-mode)
-
-(setq make-backup-files nil)
-(setq create-lockfiles nil)
-
-;; Automatically reload files edited elsewhere:
-;; (Commented out for battery reduction.)
-;; (setq global-auto-revert-mode t)
-
 ;; Wrap lines please:
 (global-visual-line-mode t)
-
-(setq gc-cons-threshold 100000000)
 
 (when (eq system-type 'darwin)
   ;; Disable "ls --dired" (macOS cannot do that).
