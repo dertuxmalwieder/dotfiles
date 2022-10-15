@@ -16,7 +16,13 @@
   ;; Let's disable the right "Alt" key so I can still
   ;; use my German keyboard for entering German letters
   ;; on a Mac.
-  (setq ns-right-alternate-modifier nil))
+  (setq ns-right-alternate-modifier nil)
+
+  ;; Enable right-clicks for Flyspell:
+  (eval-after-load "flyspell"
+    '(progn
+       (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
+       (define-key flyspell-mouse-map [mouse-3] #'undefined))))
 
 ;; Remember where we are:
 (desktop-save-mode t)
@@ -244,6 +250,23 @@
 (use-package matrix-client
   :ensure t)
 
+;; Paste online:
+(use-package dpaste
+  :ensure t
+  :config
+  (setq dpaste-poster "tux0r")
+  ;; Paste with C-c p:
+  (global-set-key (kbd "C-c p") 'dpaste-region-or-buffer))
+
+;; Spell checking:
+(use-package guess-language
+  :ensure t
+  :if (executable-find "ispell")
+  :config
+  (add-hook 'text-mode-hook (lambda () (flyspell-mode 1)))
+  (setq guess-language-languages '(de en))
+  (setq guess-language-min-paragraph-length 50))
+
 ;; Project-related functionalities:
 (use-package projectile
   :ensure t
@@ -323,8 +346,6 @@
   :ensure t
   :config
   (progn
-    (unless (member "/opt/pkg/go118/bin" (split-string (getenv "PATH") ":"))
-      (setenv "PATH" (concat "/opt/pkg/go118/bin:" (getenv "PATH"))))
     (setenv "GOPATH" (concat (getenv "HOME") "/go"))
     (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports"))))
 
