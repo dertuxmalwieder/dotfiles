@@ -61,11 +61,11 @@
 ;; Load (or download) straight.el:
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
+      (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
@@ -132,7 +132,6 @@
 ;; Make them.
 (use-package exec-path-from-shell
   :if (eq system-type 'darwin)
-  :ensure t
   :config
   (setq exec-path-from-shell-check-startup-files nil)
   (exec-path-from-shell-initialize))
@@ -466,6 +465,7 @@
 (use-package vterm
   ;; Update the module automatically:
   :unless (eq system-type 'windows-nt)
+  :ensure t
   :straight (:post-build ((let ((vterm-always-compile-module t))
                             (require 'vterm))))
   :config
