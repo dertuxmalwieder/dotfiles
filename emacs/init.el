@@ -465,6 +465,7 @@
 ;; vterm instead of Emacs's terminal:
 (use-package vterm
   ;; Update the module automatically:
+  :unless (eq system-type 'windows-nt)
   :straight (:post-build ((let ((vterm-always-compile-module t))
                             (require 'vterm))))
   :config
