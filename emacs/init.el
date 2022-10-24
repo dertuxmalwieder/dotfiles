@@ -245,10 +245,6 @@
   :config
   (rg-enable-default-bindings))
 
-;; Matrix client:
-(use-package matrix-client
-  :ensure t)
-
 ;; Paste online:
 (use-package dpaste
   :ensure t
@@ -465,9 +461,9 @@
 (use-package vterm
   ;; Update the module automatically:
   :unless (eq system-type 'windows-nt)
-  :ensure t
-  :straight (:post-build ((let ((vterm-always-compile-module t))
-                            (require 'vterm))))
+  :straight (:post-build ((unless (eq system-type 'windows-nt)
+                            (let ((vterm-always-compile-module t))
+                              (require 'vterm)))))
   :config
   ;; Disable the highlighting of the current line
   ;; for the virtual terminal:
