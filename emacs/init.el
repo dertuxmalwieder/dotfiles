@@ -107,6 +107,19 @@
   (setq gnus-asynchronous t)
   (setq gnus-use-article-prefetch 15))
 
+;; LSP:
+(use-package eglot
+  :ensure t ;; TODO: This can be dropped with Emacs >= 29.
+  ;; :straight nil
+  :hook ((js-mode-hook . eglot-ensure)
+         (typescript-mode-hook . eglot-ensure)
+         (python-mode-hook . eglot-ensure)
+         (go-mode-hook . eglot-ensure)
+         (perl-mode-hook . eglot-ensure)
+         (c-mode-hook . eglot-ensure))
+  :custom
+  (eglot-autoshutdown t))
+  
 ;; org-mode improvements:
 ;; Hint: We use the upstream version instead of Emacs's own one
 ;;       so addins from Git won't fail us.
@@ -270,14 +283,6 @@
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
-;; Syntax checking:
-(use-package flycheck
-  :ensure t
-  :config
-  (add-hook 'after-init-hook #'global-flycheck-mode)
-  ;; We use ccls instead, so we won't need this:
-  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
-
 ;; Enable some icons throughout Emacs:
 (use-package all-the-icons
   :ensure t)
@@ -330,9 +335,7 @@
 ;; Use a less bad JavaScript mode.
 (use-package js2-mode
   :ensure t
-  :after lsp-mode
   :config
-  (add-hook 'js2-mode-hook #'lsp-deferred)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 ;; Go programming:
@@ -347,43 +350,16 @@
 ;; Rust programming:
 (use-package rustic
   :ensure t
-  :after flycheck
   :config
+  (setq rustic-lsp-client 'eglot)
   (setq rustic-format-on-save t)
-  (push 'rustic-clippy flycheck-checkers)
-  (add-hook 'rust-mode-hook 'lsp)
   (remove-hook 'rustic-mode-hook 'flycheck-mode))
   
-;; Language Server Protocol:
-(use-package lsp-mode
-  :ensure t
-  :commands (lsp lsp-deferred)
-  :config
-  (setq lsp-disabled-clients '(eslint jsts-ls))
-  (setq lsp-enable-snippet nil)
-  (add-hook 'go-mode-hook #'lsp-deferred)
-  (add-hook 'python-mode-hook #'lsp-deferred)
-  (add-hook 'perl-mode-hook #'lsp-deferred))
-
-(defun lsp-install-save-hooks ()
-  "Install LSP hooks."
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
-(add-hook 'go-mode-hook #'lsp-install-save-hooks)
-(add-hook 'python-mode-hook #'lsp-install-save-hooks)
-(add-hook 'perl-mode-hook #'lsp-install-save-hooks)
-
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode)
-
 ;; C/C++ programming:
 (use-package ccls
   :ensure t
-  :hook ((c-mode cpp-mode objc-mode cuda-mode) .
-         (lambda () (require 'ccls) (lsp)))
   :config
-  (setq lsp-prefer-flymake nil))
+  (setq lsp-prefer-flymake t))
 
 ;; Corfu auto-completion for code:
 (use-package corfu
