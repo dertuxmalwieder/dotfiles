@@ -356,7 +356,6 @@
   (setq rustic-format-on-save t)
   (push 'rustic-clippy flycheck-checkers)
   (add-hook 'rust-mode-hook 'lsp)
-  (add-hook 'rust-mode-hook 'company-mode)
   (remove-hook 'rustic-mode-hook 'flycheck-mode))
   
 ;; Language Server Protocol:
@@ -390,12 +389,13 @@
   :config
   (setq lsp-prefer-flymake nil))
 
-;; Company auto-completion for code:
-(use-package company
+;; Corfu auto-completion for code:
+(use-package corfu
   :ensure t
-  :config
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 1))
+  :custom
+  (corfu-auto t)
+  (corfu-separator ?\s)
+  :hook ((prog-mode . corfu-mode)))
 
 ;; Gopher:
 (use-package elpher
@@ -441,9 +441,9 @@
   :ensure t
   :config
   (define-key global-map (kbd "C-s") 'consult-line)
-  (setq completion-styles '(orderless))
+  (setq completion-styles '(orderless flex))
   (setq completion-category-defaults nil)
-  (setq completion-category-overrides '((file (styles partial-completion))))
+  (setq completion-category-overrides '((eglot (styles . (orderless flex)))))
   (add-hook 'vertico-mode-hook (lambda ()
                                  (setq completion-in-region-function
                                        (if vertico-mode

@@ -15,6 +15,13 @@
 (setq indent-tabs-mode nil)
 (setq-default indent-tabs-mode nil)
 
+;; Add completion when tab'ing:
+(setq tab-always-indent 'complete)
+
+;; Hide "invalid" commands in M-x:
+(setq read-extended-command-predicate
+      #'command-completion-default-include-p)
+
 ;; Disable package.el initialization:
 (setq package-enable-at-startup nil)
 
