@@ -166,11 +166,12 @@
   :config
   (add-hook 'erc-mode-hook 'emojify-mode))
 
-;; Undo trees:
-(use-package undo-tree
-  :ensure t
+;; Undo/redo:
+(use-package undo-fu
   :config
-  (global-undo-tree-mode))
+  (global-unset-key (kbd "C-z"))
+  (global-set-key (kbd "C-z")   'undo-fu-only-undo)
+  (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
 
 ;; Switch and split windows visually:
 (use-package switch-window
