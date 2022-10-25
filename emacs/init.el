@@ -356,12 +356,6 @@
   (setq rustic-format-on-save t)
   (remove-hook 'rustic-mode-hook 'flycheck-mode))
   
-;; C/C++ programming:
-(use-package ccls
-  :ensure t
-  :config
-  (setq lsp-prefer-flymake t))
-
 ;; Corfu auto-completion for code:
 (use-package corfu
   :ensure t
