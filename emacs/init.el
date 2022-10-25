@@ -115,7 +115,7 @@
          (typescript-mode-hook . eglot-ensure)
          (python-mode-hook . eglot-ensure)
          (go-mode-hook . eglot-ensure)
-         (perl-mode-hook . eglot-ensure)
+         (cperl-mode-hook . eglot-ensure)
          (c-mode-hook . eglot-ensure))
   :custom
   (eglot-autoshutdown t))
