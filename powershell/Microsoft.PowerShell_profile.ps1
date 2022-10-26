@@ -18,11 +18,7 @@ Import-Module posh-git
 function su {
 	If (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
 	{
-		If ($env:TERM_PROGRAM -eq "Tabby") {
-			# Tabby can't do that just as easily.
-			echo "Please just open a new admin tab in Tabby. :-)"
-		}
-		Elseif ($env:ALACRITTY_LOG -ne $null) {
+		If ($env:ALACRITTY_LOG -ne $null) {
 			# Alacritty:
 			Start-Process alacritty -Verb RunAs
 		}
@@ -46,3 +42,8 @@ New-Alias which Get-Command
 
 # vi:
 New-Alias vi nvim
+
+# find:
+function find([string]$file) {
+	gci -r -fi $file
+}
