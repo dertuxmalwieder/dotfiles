@@ -15,6 +15,9 @@
 (setq indent-tabs-mode nil)
 (setq-default indent-tabs-mode nil)
 
+;; Default to utf-8:
+(set-language-environment "UTF-8")
+
 ;; Add completion when tab'ing:
 (setq tab-always-indent 'complete)
 
