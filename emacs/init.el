@@ -88,7 +88,7 @@
   :straight nil
   :config
   (add-to-list 'desktop-modes-not-to-save 'erc-mode)
-  ;; Again, keep the log-in data private:
+  ;; Keep the log-in data out of the public eye:
   (load-file "~/.emacs.d/erc-config.el"))
 
 ;; Gnus preparation: Make it faster and nicer looking.
@@ -205,6 +205,14 @@
   (setq org2blog/wp-image-upload t)
   ;; Keep the log-in data out of the public eye:
   (load-file "~/.emacs.d/org2blog-config.el"))
+
+;; Mastodon:
+(use-package mastodon
+  :ensure t
+  :config
+  (setq mastodon-toot--enable-custom-instance-emoji t)
+  ;; Keep the log-in data out of the public eye:
+  (load-file "~/.emacs.d/mastodon-config.el"))
 
 ;; Preview HTML:
 (use-package org-preview-html
