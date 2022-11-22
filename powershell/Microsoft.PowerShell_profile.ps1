@@ -47,3 +47,14 @@ New-Alias vi nvim
 function find([string]$file) {
 	gci -r -fi $file
 }
+
+# Celsius <-> Fahrenheit:
+function FtoC([double]$fahrenheit) {
+	$celsius = ($fahrenheit - 32) * (5/9)
+	'{0} °F = {1} °C' -f $fahrenheit,[math]::Round($celsius,3)
+}
+
+function CtoF([double]$celsius) {
+	$fahrenheit = ($celsius * (9/5)) + 32
+	'{0} °C = {1} °F' -f $celsius,[math]::Round($fahrenheit,3)
+}
