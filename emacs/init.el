@@ -107,10 +107,10 @@
   (setq gnus-asynchronous t)
   (setq gnus-use-article-prefetch 15))
 
-;; LSP:
+;; LSP (requires Emacs 29, eglot is NOT in older versions!):
 (use-package eglot
-  :ensure t ;; TODO: This can be dropped with Emacs >= 29.
-  ;; :straight nil
+  :unless (version< emacs-version "29.1")
+  :straight nil
   :hook ((js-mode-hook . eglot-ensure)
          (typescript-mode-hook . eglot-ensure)
          (python-mode-hook . eglot-ensure)
