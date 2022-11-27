@@ -37,6 +37,9 @@
 ;; font changed:
 (setq frame-inhibit-implied-resize t)
 
+;; Smoothness:
+(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
+
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 
