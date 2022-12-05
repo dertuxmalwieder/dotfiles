@@ -356,6 +356,17 @@
     (setenv "GOPATH" (concat (getenv "HOME") "/go"))
     (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports"))))
 
+;; COBOL programming:
+(use-package cobol-mode
+  :ensure t
+  :config
+  (setq auto-mode-alist
+        (append
+         '(("\\.cob\\'" . cobol-mode)
+           ("\\.cbl\\'" . cobol-mode)
+           ("\\.cpy\\'" . cobol-mode))
+         auto-mode-alist)))
+
 ;; Rust programming:
 (use-package rustic
   :ensure t
