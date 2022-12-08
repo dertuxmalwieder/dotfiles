@@ -447,6 +447,12 @@
   (add-hook 'perl-mode-hook #'smartparens-mode)
   (add-hook 'go-mode-hook #'smartparens-mode))
 
+;; Clickable links everywhere:
+(use-package orglink
+  :ensure t
+  :config
+  (global-orglink-mode))
+
 ;; vterm instead of Emacs's terminal:
 (use-package vterm
   ;; Update the module automatically:
