@@ -16,13 +16,7 @@
   ;; Let's disable the right "Alt" key so I can still
   ;; use my German keyboard for entering German letters
   ;; on a Mac.
-  (setq ns-right-alternate-modifier nil)
-
-  ;; Enable right-clicks for Flyspell:
-  (eval-after-load "flyspell"
-    '(progn
-       (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
-       (define-key flyspell-mouse-map [mouse-3] #'undefined))))
+  (setq ns-right-alternate-modifier nil))
 
 ;; Remember where we are:
 (desktop-save-mode t)
@@ -284,6 +278,12 @@
   (setq guess-language-languages '(de en))
   (setq guess-language-min-paragraph-length 50))
 
+;; Enable right-clicks for Flyspell:
+(eval-after-load "flyspell"
+  '(progn
+     (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
+     (define-key flyspell-mouse-map [mouse-3] #'undefined)))
+
 ;; Project-related functionalities:
 (use-package projectile
   :ensure t
@@ -475,38 +475,9 @@
   (add-to-list 'vc-handled-backends 'Fossil t))
 
 ;; Use ligatures if possible:
-(let ((ligatures `((?-  ,(regexp-opt '("-|" "-~" "---" "-<<" "-<" "--" "->" "->>" "-->")))
-                   (?/  ,(regexp-opt '("/**" "/*" "///" "/=" "/==" "/>" "//")))
-                   (?*  ,(regexp-opt '("*>" "***" "*/")))
-                   (?<  ,(regexp-opt '("<-" "<<-" "<=>" "<=" "<|" "<||" "<|||" "<|>" "<:" "<>" "<-<"
-                                       "<<<" "<==" "<<=" "<=<" "<==>" "<-|" "<<" "<~>" "<=|" "<~~" "<~"
-                                       "<$>" "<$" "<+>" "<+" "</>" "</" "<*" "<*>" "<->" "<!--")))
-                   (?:  ,(regexp-opt '(":>" ":<" ":::" "::" ":?" ":?>" ":=" "::=")))
-                   (?=  ,(regexp-opt '("=>>" "==>" "=/=" "=!=" "=>" "===" "=:=" "==")))
-                   (?!  ,(regexp-opt '("!==" "!!" "!=")))
-                   (?>  ,(regexp-opt '(">]" ">:" ">>-" ">>=" ">=>" ">>>" ">-" ">=")))
-                   (?&  ,(regexp-opt '("&&&" "&&")))
-                   (?|  ,(regexp-opt '("|||>" "||>" "|>" "|]" "|}" "|=>" "|->" "|=" "||-" "|-" "||=" "||")))
-                   (?.  ,(regexp-opt '(".." ".?" ".=" ".-" "..<" "...")))
-                   (?+  ,(regexp-opt '("+++" "+>" "++")))
-                   (?\[ ,(regexp-opt '("[||]" "[<" "[|")))
-                   (?\{ ,(regexp-opt '("{|")))
-                   (?\? ,(regexp-opt '("??" "?." "?=" "?:")))
-                   (?#  ,(regexp-opt '("####" "###" "#[" "#{" "#=" "#!" "#:" "#_(" "#_" "#?" "#(" "##")))
-                   (?\; ,(regexp-opt '(";;")))
-                   (?_  ,(regexp-opt '("_|_" "__")))
-                   (?\\ ,(regexp-opt '("\\" "\\/")))
-                   (?~  ,(regexp-opt '("~~" "~~>" "~>" "~=" "~-" "~@")))
-                   (?$  ,(regexp-opt '("$>")))
-                   (?^  ,(regexp-opt '("^=")))
-                   (?\] ,(regexp-opt '("]#"))))))
-  (dolist (char-regexp ligatures)
-    (apply (lambda (char regexp) (set-char-table-range
-                                  composition-function-table
-                                  char `([,regexp 0 font-shape-gstring])))
-           char-regexp))
-  ;; Nicer font that actually uses the ligatures:
-  (set-face-attribute 'default nil :family "Fira Code"))
+(use-package fira-code-mode
+  :ensure t
+  :hook prog-mode)
 
 
 ;; Nicer theme:
