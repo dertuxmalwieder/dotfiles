@@ -11,6 +11,9 @@ if (Test-Path($ChocolateyProfile)) {
 	Import-Module "$ChocolateyProfile"
 }
 
+# Scoop (requires `scoop install sfsu`):
+Invoke-Expression (&sfsu hook)
+
 # posh-git:
 Import-Module posh-git
 
