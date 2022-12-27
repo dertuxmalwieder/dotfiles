@@ -477,7 +477,7 @@
   :config
   (add-to-list 'vc-handled-backends 'Fossil t))
 
-;; Use ligatures if possible:
+;; Use ligatures if possible (requires the Fira Code Symbol font):
 (use-package fira-code-mode
   :ensure t
   :hook prog-mode)
