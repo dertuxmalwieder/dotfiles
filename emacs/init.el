@@ -160,8 +160,7 @@
 (use-package emojify
   :ensure t
   :commands emojify-mode
-  :config
-  (add-hook 'erc-mode-hook 'emojify-mode))
+  :hook (after-init . global-emojify-mode))
 
 ;; Undo/redo:
 (use-package undo-fu
