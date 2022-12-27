@@ -36,6 +36,9 @@
 (setq blink-matching-paren nil)
 (add-hook 'prog-mode-hook (lambda () (setq-local blink-matching-paren t)))
 
+;; Nicer font:
+(set-default-font "Hack 10" nil t)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; PACKAGE PREPARATION:
