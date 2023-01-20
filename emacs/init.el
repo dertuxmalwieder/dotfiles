@@ -39,7 +39,7 @@
 ;; Nicer font:
 (if (fboundp 'set-default-font)
     (set-default-font "Hack 10" nil t)
-    (set-face-attribute 'default t :font "Hack-10"))
+    (set-face-attribute 'default nil :family "Hack"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
