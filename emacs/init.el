@@ -34,44 +34,51 @@
 ;; Don't warn about parenthesis mismatch in non-
 ;; programming modes:
 (setq blink-matching-paren nil)
-(add-hook 'prog-mode-hook (lambda () (setq-local blink-matching-paren t)))
+(add-hook 'prog-mode-hook '(lambda () (setq-local blink-matching-paren t)))
 
 ;; Nicer font:
 (if (fboundp 'set-default-font)
     (set-default-font "Hack 10" nil t)
-    (set-face-attribute 'default nil :family "Hack"))
+  (set-face-attribute 'default nil :family "Hack"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; PACKAGE PREPARATION:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Use straight.el instead of Emacs's default package.el for
+;; Use elpaca instead of Emacs's default package.el for
 ;; managing installed packages. This might or might not be a
 ;; good idea.
-(defvar bootstrap-version)
-
-;; Enable ":ensure t"-like behavior:
-(setq straight-use-package-by-default t)
-
-;; Use the "develop" branch:
-(setq straight-repository-branch "develop")
-
-;; Load (or download) straight.el:
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-;; Install use-package:
-(straight-use-package 'use-package)
+(defvar elpaca-installer-version 0.1)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil
+                              :files (:defaults (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(when-let ((repo  (expand-file-name "repos/elpaca/" elpaca-directory))
+           (build (expand-file-name "elpaca/" elpaca-builds-directory))
+           (order (cdr elpaca-order))
+           ((add-to-list 'load-path (if (file-exists-p build) build repo)))
+           ((not (file-exists-p repo))))
+  (condition-case-unless-debug err
+      (if-let ((buffer (pop-to-buffer-same-window "*elpaca-installer*"))
+               ((zerop (call-process "git" nil buffer t "clone"
+                                     (plist-get order :repo) repo)))
+               (default-directory repo)
+               ((zerop (call-process "git" nil buffer t "checkout"
+                                     (or (plist-get order :ref) "--"))))
+               (emacs (concat invocation-directory invocation-name))
+               ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                     "--eval" "(byte-recompile-directory \".\" 0 'force)"))))
+          (progn (require 'elpaca)
+                 (elpaca-generate-autoloads "elpaca" repo)
+                 (kill-buffer buffer))
+        (error "%s" (with-current-buffer buffer (buffer-string))))
+    ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+(require 'elpaca-autoloads)
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -84,23 +91,20 @@
 
 ;; IRC:
 (use-package erc
-  :straight (:type built-in)
   :config
   (add-to-list 'desktop-modes-not-to-save 'erc-mode)
   ;; Keep the log-in data out of the public eye:
-  (load-file "~/.emacs.d/erc-config.el"))
+  (load "~/.emacs.d/erc-config"))
 
 ;; Gnus preparation: Make it faster and nicer looking.
 ;; (Let's keep the account configuration in .gnus.el though.)
 (use-package gnus
-  :straight (:type built-in)
   :config
   (setq gnus-always-read-dribble-file t)
   (setq gnus-read-active-file t)
   (gnus-add-configuration '(article (vertical 1.0 (summary .35 point) (article 1.0)))))
 
 (use-package gnus-async
-  :straight (:type built-in)
   :after gnus
   :config
   (setq gnus-asynchronous t)
@@ -109,7 +113,6 @@
 ;; LSP (requires Emacs 29, eglot is NOT in older versions!):
 (use-package eglot
   :unless (version< emacs-version "29.1")
-  :straight (:type built-in)
   :hook ((js-mode-hook . eglot-ensure)
          (typescript-mode-hook . eglot-ensure)
          (python-mode-hook . eglot-ensure)
@@ -118,12 +121,11 @@
          (c-mode-hook . eglot-ensure))
   :custom
   (eglot-autoshutdown t))
-  
+
 ;; org-mode improvements:
 ;; Hint: We use the upstream version instead of Emacs's own one
 ;;       so addins from Git won't fail us.
-(use-package org
-  :config
+(elpaca org
   ;; Better HTML export.
   (setq org-html-coding-system 'utf-8-unix)
   
@@ -141,39 +143,30 @@
 
 ;; Some platforms (cough) don't update Emacs's path.
 ;; Make them.
-(use-package exec-path-from-shell
+(elpaca exec-path-from-shell
   :if (eq system-type 'darwin)
-  :config
   (setq exec-path-from-shell-check-startup-files nil)
   (exec-path-from-shell-initialize))
 
 ;; Multiple cursors:
-(use-package multiple-cursors
-  :ensure t
-  :config
+(elpaca multiple-cursors
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines))
 
 ;; Asynchronous Emacs:
-(use-package async
-  :ensure t)
+(elpaca async)
 
 ;; Emojis:
-(use-package emojify
-  :ensure t
-  :commands emojify-mode
-  :hook (after-init . global-emojify-mode))
+(elpaca emojify
+  (add-hook 'elpaca-after-init-hook '(global-emojify-mode)))
 
 ;; Undo/redo:
-(use-package undo-fu
-  :config
+(elpaca undo-fu
   (global-unset-key (kbd "C-z"))
   (global-set-key (kbd "C-z")   'undo-fu-only-undo)
   (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
 
 ;; Switch and split windows visually:
-(use-package switch-window
-  :ensure t
-  :config
+(elpaca switch-window
   (global-set-key (kbd "C-x o") 'switch-window)
   (global-set-key (kbd "C-x 1") 'switch-window-then-maximize)
   (global-set-key (kbd "C-x 2") 'switch-window-then-split-below)
@@ -191,93 +184,65 @@
   (global-set-key (kbd "C-x 4 0") 'switch-window-then-kill-buffer))
 
 ;; Support org-mode import from a website:
-(use-package org-web-tools
-  :ensure t)
+(elpaca org-web-tools)
 
 ;; Support my blog as well:
-(use-package org2blog
-  :ensure t
-  :config
+(elpaca org2blog
   (setq org2blog/wp-show-post-in-browser t)
   (setq org2blog/wp-image-upload t)
   ;; Keep the log-in data out of the public eye:
-  (load-file "~/.emacs.d/org2blog-config.el"))
+  (load "~/.emacs.d/org2blog-config"))
 
 ;; Mastodon:
-(use-package mastodon
-  :ensure t
-  :config
+(elpaca mastodon
   (setq mastodon-toot--enable-custom-instance-emoji t)
   ;; Keep the log-in data out of the public eye:
-  (load-file "~/.emacs.d/mastodon-config.el"))
+  (load "~/.emacs.d/mastodon-config"))
 
 ;; Preview HTML:
-(use-package org-preview-html
-  :ensure t
-  :after org
-  :config
-  (add-hook 'org-mode-hook #'org-preview-html-mode))
+(elpaca org-preview-html (add-hook 'org-mode-hook #'org-preview-html-mode))
 
 ;; Web development:
-(use-package web-mode
-  :ensure t
-  :config
+(elpaca web-mode
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode)))
 
 ;; A less shitty modeline:
-(use-package doom-modeline
-  :ensure t
-  :config
+(elpaca doom-modeline
   (doom-modeline-mode 1)
   (when (daemonp)
     (setq doom-modeline-icon t))
   (setq doom-modeline-minor-modes t))
 
 ;; ... with less minor mode cruft:
-(use-package minions
-  :ensure t
-  :config
+(elpaca minions
   (minions-mode 1))
 
 ;; Markdown support:
-(use-package markdown-mode
+(elpaca markdown-mode
   :if (executable-find "multimarkdown")
-  :ensure t
-  :commands (markdown-mode gfm-mode)
-  :config
   (setq markdown-command "multimarkdown")
   (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-;; Writing mode:
-(use-package olivetti
-  :ensure t
-  :after markdown-mode
-  :config
-  (add-hook 'markdown-mode-hook 'olivetti-mode))
+  ;; Writing mode, depends on Markdown-Mode:
+  (elpaca olivetti
+    (add-hook 'markdown-mode-hook 'olivetti-mode)))
 
 ;; Use ripgrep instead of grep (if applicable):
-(use-package rg
+(elpaca rg
   :if (executable-find "rg")
-  :ensure t
-  :config
   (rg-enable-default-bindings))
 
 ;; Paste online:
-(use-package dpaste
-  :ensure t
-  :config
+(elpaca dpaste
   (setq dpaste-poster "tux0r")
   ;; Paste with C-c p:
   (global-set-key (kbd "C-c p") 'dpaste-region-or-buffer))
 
 ;; Spell checking:
-(use-package guess-language
-  :ensure t
-  :if (executable-find "ispell")
-  :config
-  (add-hook 'text-mode-hook (lambda () (flyspell-mode 1)))
+(elpaca guess-language
+  (add-hook 'text-mode-hook '(lambda () (flyspell-mode 1)))
   (setq guess-language-languages '(de en))
   (setq guess-language-min-paragraph-length 50))
 
@@ -288,81 +253,59 @@
      (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 
 ;; Project-related functionalities:
-(use-package projectile
-  :ensure t
-  :config
+(elpaca projectile
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 ;; Enable some icons throughout Emacs:
-(use-package all-the-icons
-  :ensure t)
+(elpaca all-the-icons)
 
-(use-package all-the-icons-dired
-  :after all-the-icons
-  :config
+(elpaca all-the-icons-dired
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
-(use-package all-the-icons-gnus
-  :after all-the-icons
-  :config
+(elpaca all-the-icons-gnus
   (all-the-icons-gnus-setup))
 
 ;; Better regexp search&replace:
-(use-package visual-regexp
-  :ensure t)
-
-(use-package visual-regexp-steroids
-  :ensure t
-  :after visual-regexp
-  :config
+(elpaca visual-regexp)
+(elpaca visual-regexp-steroids
   (define-key global-map (kbd "C-c r") 'vr/replace)
   (define-key global-map (kbd "C-c q") 'vr/query-replace)
   (define-key global-map (kbd "C-c m") 'vr/mc-mark))
 
 ;; Expand selections:
-(use-package expand-region
-  :ensure t
-  :config
+(elpaca expand-region
   (global-set-key (kbd "C-=") 'er/expand-region))
 
 ;; Lisp programming:
 ;; Use SLIME as a CL subsystem.
-(use-package slime
-  :ensure t
-  :config
+(elpaca slime
   (require 'slime-autoloads)
-  (slime-setup '(slime-fancy))
-  (eval-after-load "auto-complete"
-    '(add-to-list 'ac-modes 'slime-repl-mode))
-  (eval-after-load "auto-complete"
-    '(add-to-list 'ac-modes 'slime-repl-mode))
-  (if (executable-find "ros")
-      (setq inferior-lisp-program "ros -Q run")
-    (when (eq system-type 'darwin)
-      (setq inferior-lisp-program "/opt/pkg/bin/sbcl"))))
+  (add-hook 'elpaca-after-init-hook '(lambda ()
+                                       (slime-setup '(slime-fancy))
+                                       (eval-after-load "auto-complete"
+                                         '(add-to-list 'ac-modes 'slime-repl-mode))
+                                       (eval-after-load "auto-complete"
+                                         '(add-to-list 'ac-modes 'slime-repl-mode))
+                                       (if (executable-find "ros")
+                                           (setq inferior-lisp-program "ros -Q run")
+                                         (when (eq system-type 'darwin)
+                                           (setq inferior-lisp-program "/opt/pkg/bin/sbcl"))))))
 
 ;; JS programming:
 ;; Use a less bad JavaScript mode.
-(use-package js2-mode
-  :ensure t
-  :config
+(elpaca js2-mode
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 ;; Go programming:
 ;; Install and set up the Go mode.
-(use-package go-mode
-  :ensure t
-  :config
-  (progn
-    (setenv "GOPATH" (concat (getenv "HOME") "/go"))
-    (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports"))))
+(elpaca go-mode
+  (setenv "GOPATH" (concat (getenv "HOME") "/go"))
+  (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports")))
 
 ;; COBOL programming:
-(use-package cobol-mode
-  :ensure t
-  :config
+(elpaca cobol-mode
   (setq auto-mode-alist
         (append
          '(("\\.cob\\'" . cobol-mode)
@@ -371,149 +314,110 @@
          auto-mode-alist)))
 
 ;; Rust programming:
-(use-package rustic
-  :ensure t
-  :config
+(elpaca rustic
   (setq rustic-lsp-client 'eglot)
   (setq rustic-format-on-save t)
   (remove-hook 'rustic-mode-hook 'flycheck-mode))
-  
+
 ;; Corfu auto-completion for code:
-(use-package corfu
-  :ensure t
-  :custom
-  (corfu-auto t)
-  (corfu-separator ?\s)
-  :hook ((prog-mode . corfu-mode)))
+(elpaca corfu
+  (add-hook 'elpaca-after-init-hook '(lambda ()
+                                       (corfu-auto t)
+                                       (corfu-separator ?\s)))
+  (add-hook 'prog-mode-hook 'corfu-mode))
 
 ;; Gopher:
-(use-package elpher
-  :ensure t)
+(elpaca elpher)
 
 ;; Vertico for most interactive stuff:
-(use-package vertico
-  :ensure t
-  :bind (:map vertico-map
-         ("C-j" . vertico-next)
-         ("C-k" . vertico-previous)
-         ("C-f" . vertico-exit)
-         :map minibuffer-local-map
-         ("M-h" . backward-kill-word))
-  :custom
-  (vertico-cycle t)
-  :init
+(elpaca vertico
+  (setq vertico-cycle t)
   (vertico-mode))
 
 ;; Icons for the minibuffer:
-(use-package all-the-icons-completion
-  :after vertico
-  :ensure t)
+(elpaca all-the-icons-completion
 
-;; Minibuffer improvements:
-(use-package marginalia
-  :after all-the-icons-completion
-  :ensure t
-  :custom
-  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-  :init
-  (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
-  (marginalia-mode))
+  ;; Minibuffer improvements:
+  (elpaca marginalia
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
+    (marginalia-mode)))
 
 ;; Orderless search:
-(use-package orderless
-  :after vertico
-  :ensure t)
+(elpaca orderless
 
-;; Completion via consult:
-(use-package consult
-  :after orderless
-  :ensure t
-  :config
-  (define-key global-map (kbd "C-s") 'consult-line)
-  (setq completion-styles '(orderless flex))
-  (setq completion-category-defaults nil)
-  (setq completion-category-overrides '((eglot (styles . (orderless flex)))))
-  (add-hook 'vertico-mode-hook (lambda ()
-                                 (setq completion-in-region-function
-                                       (if vertico-mode
-                                           #'consult-completion-in-region
-                                         #'completion--in-region))))
-  (advice-add #'completing-read-multiple
-              :override #'consult-completing-read-multiple))
+  ;; Completion via consult:
+  (elpaca consult
+    (define-key global-map (kbd "C-s") 'consult-line)
+    (setq completion-styles '(orderless flex))
+    (setq completion-category-defaults nil)
+    (setq completion-category-overrides '((eglot (styles . (orderless flex)))))
+    (add-hook 'vertico-mode-hook '(lambda ()
+                                    (setq completion-in-region-function
+                                          (if vertico-mode
+                                              #'consult-completion-in-region
+                                            #'completion--in-region))))
+    (advice-add #'completing-read-multiple
+                :override #'consult-completing-read-multiple)))
 
 ;; Smart parentheses:
-(use-package smartparens
-  :ensure t
-  :config
+(elpaca smartparens
   (require 'smartparens-config)
   (add-hook 'js-mode-hook #'smartparens-mode)
   (add-hook 'perl-mode-hook #'smartparens-mode)
   (add-hook 'go-mode-hook #'smartparens-mode))
 
 ;; Clickable links everywhere:
-(use-package orglink
-  :ensure t
-  :config
+(elpaca orglink
   (global-orglink-mode))
 
 ;; vterm instead of Emacs's terminal:
-(use-package vterm
+(elpaca vterm
   ;; Update the module automatically:
   :unless (eq system-type 'windows-nt)
-  :straight (:post-build ((unless (eq system-type 'windows-nt)
-                            (let ((vterm-always-compile-module t))
-                              (require 'vterm)))))
-  :config
+  :post-build (progn
+                (when (ne system-type 'windows-nt)
+                  (setq vterm-always-compile-module t)
+                  (require 'vterm)))
   ;; Disable the highlighting of the current line
   ;; for the virtual terminal:
-  (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil))))
+  (add-hook 'vterm-mode-hook '(lambda () (setq-local global-hl-line-mode nil))))
 
-;; Version Control enhancements:
-;;(use-package darcsum
-;;  :ensure t)
-
-(use-package vc-fossil
-  :straight (:host github :branch "trunk")
-  :config
+(elpaca vc-fossil
   (add-to-list 'vc-handled-backends 'Fossil t))
 
 ;; Use ligatures if possible (requires the Fira Code Symbol font)
 ;; for programming:
-(use-package fira-code-mode
-  :ensure t
-  :hook prog-mode)
+(elpaca fira-code-mode
+  (add-hook 'prog-mode-hook 'fira-code-mode-hook)
 
-;; Use a variable width font for prose and make
-;; it align well:
-(use-package spaceship-mode
-  :ensure t
-  :straight (:host github :repo "tenbillionwords/spaceship-mode")
-  :init
-  ;; always use tabble-mode with spaceship-mode
-  (require 'tabble-mode)
-  (add-hook 'spaceship-mode-hook '(lambda () (tabble-mode 1)))
+  ;; Use a variable width font for prose and make
+  ;; it align well:
+  (elpaca spaceship-mode
+    :host github
+    :repo "tenbillionwords/spaceship-mode"
+    ;; always use tabble-mode with spaceship-mode
+    (require 'tabble-mode)
+    (add-hook 'spaceship-mode-hook '(lambda () (tabble-mode 1)))
 
-  ;; We use Helvetica Neue...
-  (defface spaceship-face
-    '((t :height 140 :family "Helvetica Neue"))
-    "sans serif (should be variable-width)")
-	
-  ;; we will make text-mode always use spaceship-mode, with some tweaks to prevent
-  ;; emacs from clobbering the space/tabs conventions
-  (add-hook
-   'text-mode-hook
-   '(lambda ()
-      (face-remap-add-relative 'default 'spaceship-face)
-      (spaceship-mode 1)
-      (setq-local indent-line-function 'spaceship-simple-indent-line-function)
-      (setq electric-indent-inhibit t)
-      (local-set-key [C-backspace] 'spaceship-delete-indentation-or-word)
-      (local-set-key [tab] '(lambda () (interactive) (insert "\t"))))))
+    ;; We use Helvetica Neue...
+    (defface spaceship-face
+      '((t :height 140 :family "Helvetica Neue"))
+      "sans serif (should be variable-width)")
+    
+    ;; we will make text-mode always use spaceship-mode, with some tweaks to prevent
+    ;; emacs from clobbering the space/tabs conventions
+    (add-hook 'text-mode-hook '(lambda ()
+                                 (face-remap-add-relative 'default 'spaceship-face)
+                                 (spaceship-mode 1)
+                                 (setq-local indent-line-function 'spaceship-simple-indent-line-function)
+                                 (setq electric-indent-inhibit t)
+                                 (local-set-key [C-backspace] 'spaceship-delete-indentation-or-word)
+                                 (local-set-key [tab] '(lambda () (interactive) (insert "\t")))))))
 
 ;; Nicer theme:
-(use-package nofrils-acme-theme
-  :ensure t
-  :init
+(elpaca nofrils-acme-theme
   (load-theme 'nofrils-acme t))
 
 
