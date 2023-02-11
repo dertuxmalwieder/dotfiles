@@ -390,31 +390,31 @@
 ;; Use ligatures if possible (requires the Fira Code Symbol font)
 ;; for programming:
 (elpaca fira-code-mode
-  (add-hook 'prog-mode-hook 'fira-code-mode)
+  (add-hook 'prog-mode-hook 'fira-code-mode))
 
-  ;; Use a variable width font for prose and make
-  ;; it align well:
-  (elpaca spaceship-mode
-    :host github
-    :repo "tenbillionwords/spaceship-mode"
-    ;; always use tabble-mode with spaceship-mode
-    (require 'tabble-mode)
-    (add-hook 'spaceship-mode-hook '(lambda () (tabble-mode 1)))
+;; Use a variable width font for prose and make
+;; it align well:
+(elpaca spaceship-mode
+  :host github
+  :repo "tenbillionwords/spaceship-mode"
+  ;; always use tabble-mode with spaceship-mode
+  (require 'tabble-mode)
+  (add-hook 'spaceship-mode-hook '(lambda () (tabble-mode 1)))
 
-    ;; We use Helvetica Neue...
-    (defface spaceship-face
-      '((t :height 140 :family "Helvetica Neue"))
-      "sans serif (should be variable-width)")
-    
-    ;; we will make text-mode always use spaceship-mode, with some tweaks to prevent
-    ;; emacs from clobbering the space/tabs conventions
-    (add-hook 'text-mode-hook '(lambda ()
-                                 (face-remap-add-relative 'default 'spaceship-face)
-                                 (spaceship-mode 1)
-                                 (setq-local indent-line-function 'spaceship-simple-indent-line-function)
-                                 (setq electric-indent-inhibit t)
-                                 (local-set-key [C-backspace] 'spaceship-delete-indentation-or-word)
-                                 (local-set-key [tab] '(lambda () (interactive) (insert "\t")))))))
+  ;; We use Helvetica Neue...
+  (defface spaceship-face
+    '((t :height 140 :family "Helvetica Neue"))
+    "sans serif (should be variable-width)")
+  
+  ;; we will make text-mode always use spaceship-mode, with some tweaks to prevent
+  ;; emacs from clobbering the space/tabs conventions
+  (add-hook 'text-mode-hook '(lambda ()
+                               (face-remap-add-relative 'default 'spaceship-face)
+                               (spaceship-mode 1)
+                               (setq-local indent-line-function 'spaceship-simple-indent-line-function)
+                               (setq electric-indent-inhibit t)
+                               (local-set-key [C-backspace] 'spaceship-delete-indentation-or-word)
+                               (local-set-key [tab] '(lambda () (interactive) (insert "\t"))))))
 
 ;; Nicer theme:
 (elpaca nofrils-acme-theme
