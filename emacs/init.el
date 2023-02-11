@@ -84,7 +84,7 @@
 
 ;; IRC:
 (use-package erc
-  :straight nil
+  :straight (:type built-in)
   :config
   (add-to-list 'desktop-modes-not-to-save 'erc-mode)
   ;; Keep the log-in data out of the public eye:
@@ -93,14 +93,14 @@
 ;; Gnus preparation: Make it faster and nicer looking.
 ;; (Let's keep the account configuration in .gnus.el though.)
 (use-package gnus
-  :straight nil
+  :straight (:type built-in)
   :config
   (setq gnus-always-read-dribble-file t)
   (setq gnus-read-active-file t)
   (gnus-add-configuration '(article (vertical 1.0 (summary .35 point) (article 1.0)))))
 
 (use-package gnus-async
-  :straight nil
+  :straight (:type built-in)
   :after gnus
   :config
   (setq gnus-asynchronous t)
@@ -109,7 +109,7 @@
 ;; LSP (requires Emacs 29, eglot is NOT in older versions!):
 (use-package eglot
   :unless (version< emacs-version "29.1")
-  :straight nil
+  :straight (:type built-in)
   :hook ((js-mode-hook . eglot-ensure)
          (typescript-mode-hook . eglot-ensure)
          (python-mode-hook . eglot-ensure)
@@ -123,7 +123,6 @@
 ;; Hint: We use the upstream version instead of Emacs's own one
 ;;       so addins from Git won't fail us.
 (use-package org
-  ;; :straight nil
   :config
   ;; Better HTML export.
   (setq org-html-coding-system 'utf-8-unix)
