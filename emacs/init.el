@@ -153,7 +153,7 @@
 
 ;; Emojis:
 (elpaca emojify
-  (add-hook 'elpaca-after-init-hook '(global-emojify-mode)))
+  (global-emojify-mode))
 
 ;; Undo/redo:
 (elpaca undo-fu
@@ -242,7 +242,8 @@
 
 ;; Spell checking:
 (elpaca guess-language
-  (add-hook 'text-mode-hook '(lambda () (flyspell-mode 1)))
+  (when (executable-find "ispell")
+    (add-hook 'text-mode-hook '(lambda () (flyspell-mode 1))))
   (setq guess-language-languages '(de en))
   (setq guess-language-min-paragraph-length 50))
 
@@ -289,9 +290,9 @@
 ;; Lisp programming:
 ;; Use SLIME as a CL subsystem.
 (elpaca slime
-  (require 'slime-autoloads)
   (add-hook 'elpaca-after-init-hook
-            '(lambda ()
+            (lambda ()
+               (require 'slime-autoloads)
                (slime-setup '(slime-fancy))
                (eval-after-load "auto-complete"
                  '(add-to-list 'ac-modes 'slime-repl-mode))
@@ -330,10 +331,11 @@
 
 ;; Corfu auto-completion for code:
 (elpaca corfu
-  (add-hook 'elpaca-after-init-hook '(lambda ()
-                                       (corfu-auto t)
-                                       (corfu-separator ?\s)))
-  (add-hook 'prog-mode-hook 'corfu-mode))
+  (add-hook 'elpaca-after-init-hook
+            (lambda ()
+              (setq corfu-auto t)
+              (setq corfu-separator ?\s)
+              (add-hook 'prog-mode-hook 'corfu-mode))))
 
 ;; Avoid "too many open files":
 (when (eq system-type 'windows-nt)
@@ -348,29 +350,32 @@
   (vertico-mode))
 
 ;; Icons for the minibuffer:
-(elpaca all-the-icons-completion
-  ;; Minibuffer improvements:
-  (elpaca marginalia
-    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    (add-hook 'elpaca-after-init-hook '(lambda ()
-                                         (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
-                                         (marginalia-mode)))))
+(elpaca all-the-icons-completion)
+
+;; Minibuffer improvements:
+(elpaca marginalia
+  (add-hook 'elpaca-after-init-hook
+            (lambda ()
+              (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))                               
+              (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
+              (marginalia-mode))))
 
 ;; Orderless search:
-(elpaca orderless
-  ;; Completion via consult:
-  (elpaca consult
-    (define-key global-map (kbd "C-s") 'consult-line)
-    (setq completion-styles '(orderless flex))
-    (setq completion-category-defaults nil)
-    (setq completion-category-overrides '((eglot (styles . (orderless flex)))))
-    (add-hook 'vertico-mode-hook '(lambda ()
-                                    (setq completion-in-region-function
-                                          (if vertico-mode
-                                              #'consult-completion-in-region
-                                            #'completion--in-region))))
-    (advice-add #'completing-read-multiple
-                :override #'consult-completing-read-multiple)))
+(elpaca orderless)
+
+;; Completion via consult:
+(elpaca consult
+  (define-key global-map (kbd "C-s") 'consult-line)
+  (setq completion-styles '(orderless flex))
+  (setq completion-category-defaults nil)
+  (setq completion-category-overrides '((eglot (styles . (orderless flex)))))
+  (add-hook 'vertico-mode-hook '(lambda ()
+                                  (setq completion-in-region-function
+                                        (if vertico-mode
+                                            #'consult-completion-in-region
+                                          #'completion--in-region))))
+  (advice-add #'completing-read-multiple
+              :override #'consult-completing-read-multiple))
 
 ;; Smart parentheses:
 (elpaca smartparens
@@ -392,7 +397,7 @@
                   (require 'vterm))
     ;; Disable the highlighting of the current line
     ;; for the virtual terminal:
-    (add-hook 'vterm-mode-hook '(lambda () (setq-local global-hl-line-mode nil)))))
+    (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil)))))
 
 (elpaca vc-fossil
   (add-to-list 'vc-handled-backends 'Fossil t))
@@ -422,13 +427,13 @@
   
   ;; we will make text-mode always use spaceship-mode, with some tweaks to prevent
   ;; emacs from clobbering the space/tabs conventions
-  (add-hook 'text-mode-hook '(lambda ()
-                               (face-remap-add-relative 'default 'spaceship-face)
-                               (spaceship-mode 1)
-                               (setq-local indent-line-function 'spaceship-simple-indent-line-function)
-                               (setq electric-indent-inhibit t)
-                               (local-set-key [C-backspace] 'spaceship-delete-indentation-or-word)
-                               (local-set-key [tab] '(lambda () (interactive) (insert "\t"))))))
+  (add-hook 'text-mode-hook (lambda ()
+                              (face-remap-add-relative 'default 'spaceship-face)
+                              (spaceship-mode 1)
+                              (setq-local indent-line-function 'spaceship-simple-indent-line-function)
+                              (setq electric-indent-inhibit t)
+                              (local-set-key [C-backspace] 'spaceship-delete-indentation-or-word)
+                              (local-set-key [tab] '(lambda () (interactive) (insert "\t"))))))
 
 ;; Nicer theme:
 (elpaca nofrils-acme-theme
