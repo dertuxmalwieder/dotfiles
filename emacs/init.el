@@ -199,6 +199,7 @@
 (elpaca org-preview-html (add-hook 'org-mode-hook #'org-preview-html-mode))
 
 ;; Avoid "too many open files":
+;; TODO Replace when Elpaca supports throttling.
 (when (eq system-type 'windows-nt)
   (elpaca-wait))
 
@@ -248,6 +249,7 @@
   (setq guess-language-min-paragraph-length 50))
 
 ;; Avoid "too many open files":
+;; TODO Replace when Elpaca supports throttling.
 (when (eq system-type 'windows-nt)
   (elpaca-wait))
 
@@ -280,6 +282,7 @@
   (define-key global-map (kbd "C-c m") 'vr/mc-mark))
 
 ;; Avoid "too many open files":
+;; TODO Replace when Elpaca supports throttling.
 (when (eq system-type 'windows-nt)
   (elpaca-wait))
 
@@ -338,6 +341,7 @@
               (add-hook 'prog-mode-hook 'corfu-mode))))
 
 ;; Avoid "too many open files":
+;; TODO Replace when Elpaca supports throttling.
 (when (eq system-type 'windows-nt)
   (elpaca-wait))
 
@@ -408,6 +412,7 @@
   (add-hook 'prog-mode-hook 'fira-code-mode))
 
 ;; Avoid "too many open files":
+;; TODO Replace when Elpaca supports throttling.
 (when (eq system-type 'windows-nt)
   (elpaca-wait))
 
