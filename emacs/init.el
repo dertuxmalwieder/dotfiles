@@ -333,17 +333,15 @@
 
 ;; Icons for the minibuffer:
 (elpaca all-the-icons-completion
-
   ;; Minibuffer improvements:
   (elpaca marginalia
     (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    :init
-    (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
-    (marginalia-mode)))
+    (add-hook 'elpaca-after-init-hook '(lambda ()
+                                         (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
+                                         (marginalia-mode)))))
 
 ;; Orderless search:
 (elpaca orderless
-
   ;; Completion via consult:
   (elpaca consult
     (define-key global-map (kbd "C-s") 'consult-line)
