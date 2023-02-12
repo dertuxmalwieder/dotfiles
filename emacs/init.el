@@ -282,16 +282,17 @@
 ;; Use SLIME as a CL subsystem.
 (elpaca slime
   (require 'slime-autoloads)
-  (add-hook 'elpaca-after-init-hook '(lambda ()
-                                       (slime-setup '(slime-fancy))
-                                       (eval-after-load "auto-complete"
-                                         '(add-to-list 'ac-modes 'slime-repl-mode))
-                                       (eval-after-load "auto-complete"
-                                         '(add-to-list 'ac-modes 'slime-repl-mode))
-                                       (if (executable-find "ros")
-                                           (setq inferior-lisp-program "ros -Q run")
-                                         (when (eq system-type 'darwin)
-                                           (setq inferior-lisp-program "/opt/pkg/bin/sbcl"))))))
+  (add-hook 'elpaca-after-init-hook
+            '(lambda ()
+               (slime-setup '(slime-fancy))
+               (eval-after-load "auto-complete"
+                 '(add-to-list 'ac-modes 'slime-repl-mode))
+               (eval-after-load "auto-complete"
+                 '(add-to-list 'ac-modes 'slime-repl-mode))
+               (if (executable-find "ros")
+                   (setq inferior-lisp-program "ros -Q run")
+                 (when (eq system-type 'darwin)
+                   (setq inferior-lisp-program "/opt/pkg/bin/sbcl"))))))
 
 ;; JS programming:
 ;; Use a less bad JavaScript mode.
