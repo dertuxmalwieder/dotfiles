@@ -3,10 +3,14 @@ TERM=(xterm-256color)
 path=(/bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /opt/local/bin $home/bin)
 
 EDITOR=(ed)
-if (test -x `(which nvim)) {
-	VISUAL=(nvim)
+if (test -x `(which acme)) {
+	VISUAL=(acme)
 } else {
-	VISUAL=(vim)
+	if (test -x `(which nvim)) {
+		VISUAL=(nvim)
+	} else {
+		VISUAL=(vi)
+	}
 }
 
 ## Define the $prompt
