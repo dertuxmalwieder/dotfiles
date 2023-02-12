@@ -198,6 +198,10 @@
 ;; Preview HTML:
 (elpaca org-preview-html (add-hook 'org-mode-hook #'org-preview-html-mode))
 
+;; Avoid "too many open files":
+(when (eq system-type 'windows-nt)
+  (elpaca-wait))
+
 ;; Web development:
 (elpaca web-mode
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
@@ -242,6 +246,10 @@
   (setq guess-language-languages '(de en))
   (setq guess-language-min-paragraph-length 50))
 
+;; Avoid "too many open files":
+(when (eq system-type 'windows-nt)
+  (elpaca-wait))
+
 ;; Enable right-clicks for Flyspell:
 (eval-after-load "flyspell"
   '(progn
@@ -269,6 +277,10 @@
   (define-key global-map (kbd "C-c r") 'vr/replace)
   (define-key global-map (kbd "C-c q") 'vr/query-replace)
   (define-key global-map (kbd "C-c m") 'vr/mc-mark))
+
+;; Avoid "too many open files":
+(when (eq system-type 'windows-nt)
+  (elpaca-wait))
 
 ;; Expand selections:
 (elpaca expand-region
@@ -322,6 +334,10 @@
                                        (corfu-auto t)
                                        (corfu-separator ?\s)))
   (add-hook 'prog-mode-hook 'corfu-mode))
+
+;; Avoid "too many open files":
+(when (eq system-type 'windows-nt)
+  (elpaca-wait))
 
 ;; Gopher:
 (elpaca elpher)
@@ -385,6 +401,10 @@
 ;; for programming:
 (elpaca fira-code-mode
   (add-hook 'prog-mode-hook 'fira-code-mode))
+
+;; Avoid "too many open files":
+(when (eq system-type 'windows-nt)
+  (elpaca-wait))
 
 ;; Use a variable width font for prose and make
 ;; it align well:
