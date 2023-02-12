@@ -378,7 +378,7 @@
   ;; Update the module automatically:
   :unless (eq system-type 'windows-nt)
   :post-build (progn
-                (when (ne system-type 'windows-nt)
+                (unless (eq system-type 'windows-nt)
                   (setq vterm-always-compile-module t)
                   (require 'vterm)))
   ;; Disable the highlighting of the current line
@@ -395,9 +395,9 @@
 
 ;; Use a variable width font for prose and make
 ;; it align well:
-(elpaca spaceship-mode
-  :host github
-  :repo "tenbillionwords/spaceship-mode"
+(elpaca (spaceship-mode
+         :host github
+         :repo "tenbillionwords/spaceship-mode")
   ;; always use tabble-mode with spaceship-mode
   (require 'tabble-mode)
   (add-hook 'spaceship-mode-hook '(lambda () (tabble-mode 1)))
