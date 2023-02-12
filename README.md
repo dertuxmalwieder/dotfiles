@@ -7,3 +7,4 @@ Collected dotfiles.
 - `powershell/`: Configuration files for the Windows PowerShell.
 - `rc/`: Configuration files for the [rc](https://github.com/rakitzis/rc) shell.
 - `tcsh/`: Configuration files for the [TCSH](https://www.tcsh.org) shell.
+- `wezterm/`: Configuration files for the [WezTerm](https://wezfurlong.org/wezterm/) terminal emulator.
