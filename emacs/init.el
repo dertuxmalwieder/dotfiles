@@ -80,7 +80,6 @@
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; BUILT-IN PACKAGES:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -143,17 +142,14 @@
 
 ;; Some platforms (cough) don't update Emacs's path.
 ;; Make them.
-(elpaca exec-path-from-shell
-  :if (eq system-type 'darwin)
-  (setq exec-path-from-shell-check-startup-files nil)
-  (exec-path-from-shell-initialize))
+(when (eq system-type 'darwin)
+  (elpaca exec-path-from-shell
+    (setq exec-path-from-shell-check-startup-files nil)
+    (exec-path-from-shell-initialize)))
 
 ;; Multiple cursors:
 (elpaca multiple-cursors
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines))
-
-;; Asynchronous Emacs:
-(elpaca async)
 
 ;; Emojis:
 (elpaca emojify
@@ -219,20 +215,20 @@
   (minions-mode 1))
 
 ;; Markdown support:
-(elpaca markdown-mode
-  :if (executable-find "multimarkdown")
-  (setq markdown-command "multimarkdown")
-  (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(when (executable-find "multimarkdown")
+  (elpaca markdown-mode
+    (setq markdown-command "multimarkdown")
+    (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+    (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
   ;; Writing mode, depends on Markdown-Mode:
   (elpaca olivetti
     (add-hook 'markdown-mode-hook 'olivetti-mode)))
 
 ;; Use ripgrep instead of grep (if applicable):
-(elpaca rg
-  :if (executable-find "rg")
-  (rg-enable-default-bindings))
+(when (executable-find "rg")
+  (elpaca rg
+    (rg-enable-default-bindings)))
 
 ;; Paste online:
 (elpaca dpaste
@@ -374,16 +370,15 @@
   (global-orglink-mode))
 
 ;; vterm instead of Emacs's terminal:
-(elpaca vterm
-  ;; Update the module automatically:
-  :unless (eq system-type 'windows-nt)
-  :post-build (progn
-                (unless (eq system-type 'windows-nt)
-                  (setq vterm-always-compile-module t)
-                  (require 'vterm)))
-  ;; Disable the highlighting of the current line
-  ;; for the virtual terminal:
-  (add-hook 'vterm-mode-hook '(lambda () (setq-local global-hl-line-mode nil))))
+(unless (eq system-type 'windows-nt)
+  (elpaca vterm
+    ;; Update the module automatically:
+    :post-build (progn
+                  (setq-local vterm-always-compile-module t)
+                  (require 'vterm))
+    ;; Disable the highlighting of the current line
+    ;; for the virtual terminal:
+    (add-hook 'vterm-mode-hook '(lambda () (setq-local global-hl-line-mode nil)))))
 
 (elpaca vc-fossil
   (add-to-list 'vc-handled-backends 'Fossil t))
