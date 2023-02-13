@@ -295,7 +295,7 @@
 (elpaca slime
   (add-hook 'elpaca-after-init-hook
             (lambda ()
-               (require 'slime-autoloads)
+               (require 'slime)
                (slime-setup '(slime-fancy))
                (eval-after-load "auto-complete"
                  '(add-to-list 'ac-modes 'slime-repl-mode))
