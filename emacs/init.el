@@ -53,7 +53,7 @@
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil
+                              :ref "fix/proclimit"
                               :files (:defaults (:exclude "extensions"))
                               :build (:not elpaca--activate-package)))
 (when-let ((repo  (expand-file-name "repos/elpaca/" elpaca-directory))
@@ -79,6 +79,9 @@
 (require 'elpaca-autoloads)
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
+
+(setq elpaca-queue-limit 12) ;; to avoid "too many open files" errors
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; BUILT-IN PACKAGES:
@@ -198,11 +201,6 @@
 ;; Preview HTML:
 (elpaca org-preview-html (add-hook 'org-mode-hook #'org-preview-html-mode))
 
-;; Avoid "too many open files":
-;; TODO Replace when Elpaca supports throttling.
-(when (eq system-type 'windows-nt)
-  (elpaca-wait))
-
 ;; Web development:
 (elpaca web-mode
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
@@ -248,11 +246,6 @@
   (setq guess-language-languages '(de en))
   (setq guess-language-min-paragraph-length 50))
 
-;; Avoid "too many open files":
-;; TODO Replace when Elpaca supports throttling.
-(when (eq system-type 'windows-nt)
-  (elpaca-wait))
-
 ;; Enable right-clicks for Flyspell:
 (eval-after-load "flyspell"
   '(progn
@@ -280,11 +273,6 @@
   (define-key global-map (kbd "C-c r") 'vr/replace)
   (define-key global-map (kbd "C-c q") 'vr/query-replace)
   (define-key global-map (kbd "C-c m") 'vr/mc-mark))
-
-;; Avoid "too many open files":
-;; TODO Replace when Elpaca supports throttling.
-(when (eq system-type 'windows-nt)
-  (elpaca-wait))
 
 ;; Expand selections:
 (elpaca expand-region
@@ -339,11 +327,6 @@
               (setq corfu-auto t)
               (setq corfu-separator ?\s)
               (add-hook 'prog-mode-hook 'corfu-mode))))
-
-;; Avoid "too many open files":
-;; TODO Replace when Elpaca supports throttling.
-(when (eq system-type 'windows-nt)
-  (elpaca-wait))
 
 ;; Gopher:
 (elpaca elpher)
@@ -411,11 +394,6 @@
 (elpaca fira-code-mode
   (add-hook 'prog-mode-hook 'fira-code-mode))
 
-;; Avoid "too many open files":
-;; TODO Replace when Elpaca supports throttling.
-(when (eq system-type 'windows-nt)
-  (elpaca-wait))
-
 ;; Use a variable width font for prose and make
 ;; it align well:
 (elpaca (spaceship-mode
@@ -425,9 +403,10 @@
   (require 'tabble-mode)
   (add-hook 'spaceship-mode-hook '(lambda () (tabble-mode 1)))
 
-  ;; We use Helvetica Neue...
+  ;; We use a sans-serif font here.
+  ;; !! Make sure it is actually installed .. !!
   (defface spaceship-face
-    '((t :height 140 :family "Helvetica Neue"))
+    '((t :height 140 :family "Roboto"))
     "sans serif (should be variable-width)")
   
   ;; we will make text-mode always use spaceship-mode, with some tweaks to prevent
