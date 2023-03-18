@@ -393,6 +393,7 @@
 ;; Use ligatures if possible (requires the Fira Code Symbol font)
 ;; for programming:
 (elpaca fira-code-mode
+  (fira-code-mode-set-font)
   (add-hook 'prog-mode-hook 'fira-code-mode))
 
 ;; Use a variable width font for prose and make
