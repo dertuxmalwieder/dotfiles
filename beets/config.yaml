@@ -2,7 +2,7 @@ directory: \\Datengrab\Musik
 
 # Required Python modules (pip install):
 # pyacoustid python3-discogs-client requests
-plugins: embedart fetchart ftintitle chroma discogs zero importadded inline rewrite spotify deezer lyrics
+plugins: embedart fetchart ftintitle chroma discogs zero importadded inline rewrite spotify deezer
 threaded: yes
 
 # Clean up: We won't need READMEs, cover files et cetera anymore.
@@ -31,7 +31,7 @@ embedart:
 
 zero:
   # Clean the tags from nonsense cruft
-  fields: month day genre comments
+  fields: month day genre comments lyrics
   comments: [EAC, LAME, from.+collection, 'ripped by', 'bandcamp.com']
   update_database: true
 
