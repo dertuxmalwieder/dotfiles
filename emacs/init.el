@@ -49,34 +49,39 @@
 ;; Use elpaca instead of Emacs's default package.el for
 ;; managing installed packages. This might or might not be a
 ;; good idea.
-(defvar elpaca-installer-version 0.1)
+(defvar elpaca-installer-version 0.3)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
                               :ref nil
                               :files (:defaults (:exclude "extensions"))
                               :build (:not elpaca--activate-package)))
-(when-let ((repo  (expand-file-name "repos/elpaca/" elpaca-directory))
-           (build (expand-file-name "elpaca/" elpaca-builds-directory))
-           (order (cdr elpaca-order))
-           ((add-to-list 'load-path (if (file-exists-p build) build repo)))
-           ((not (file-exists-p repo))))
-  (condition-case-unless-debug err
-      (if-let ((buffer (pop-to-buffer-same-window "*elpaca-installer*"))
-               ((zerop (call-process "git" nil buffer t "clone"
-                                     (plist-get order :repo) repo)))
-               (default-directory repo)
-               ((zerop (call-process "git" nil buffer t "checkout"
-                                     (or (plist-get order :ref) "--"))))
-               (emacs (concat invocation-directory invocation-name))
-               ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-                                     "--eval" "(byte-recompile-directory \".\" 0 'force)"))))
-          (progn (require 'elpaca)
-                 (elpaca-generate-autoloads "elpaca" repo)
-                 (kill-buffer buffer))
-        (error "%s" (with-current-buffer buffer (buffer-string))))
-    ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-(require 'elpaca-autoloads)
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (condition-case-unless-debug err
+        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                 ((zerop (call-process "git" nil buffer t "clone"
+                                       (plist-get order :repo) repo)))
+                 ((zerop (call-process "git" nil buffer t "checkout"
+                                       (or (plist-get order :ref) "--"))))
+                 (emacs (concat invocation-directory invocation-name))
+                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                 ((require 'elpaca))
+                 ((elpaca-generate-autoloads "elpaca" repo)))
+            (kill-buffer buffer)
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
 
@@ -376,16 +381,11 @@
 (elpaca orglink
   (global-orglink-mode))
 
-;; vterm instead of Emacs's terminal:
-(unless (eq system-type 'windows-nt)
-  (elpaca vterm
-    ;; Update the module automatically:
-    :post-build (progn
-                  (setq-local vterm-always-compile-module t)
-                  (require 'vterm))
-    ;; Disable the highlighting of the current line
-    ;; for the virtual terminal:
-    (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil)))))
+;; EAT instead of Emacs's terminal:
+(elpaca eat
+  ;; Integrate with eshell:
+  (add-hook 'eshell-load-hook #'eat-eshell-mode)
+  (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode))
 
 (elpaca vc-fossil
   (add-to-list 'vc-handled-backends 'Fossil t))
