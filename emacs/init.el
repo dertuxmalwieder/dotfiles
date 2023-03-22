@@ -414,12 +414,13 @@
   ;; we will make text-mode always use spaceship-mode, with some tweaks to prevent
   ;; emacs from clobbering the space/tabs conventions
   (add-hook 'text-mode-hook (lambda ()
-                              (face-remap-add-relative 'default 'spaceship-face)
-                              (spaceship-mode 1)
-                              (setq-local indent-line-function 'spaceship-simple-indent-line-function)
-                              (setq electric-indent-inhibit t)
-                              (local-set-key [C-backspace] 'spaceship-delete-indentation-or-word)
-                              (local-set-key [tab] '(lambda () (interactive) (insert "\t"))))))
+			      (unless (bound-and-true-p mastodon-mode)
+                                (face-remap-add-relative 'default 'spaceship-face)
+                                (spaceship-mode 1)
+                                (setq-local indent-line-function 'spaceship-simple-indent-line-function)
+                                (setq electric-indent-inhibit t)
+                                (local-set-key [C-backspace] 'spaceship-delete-indentation-or-word)
+                                (local-set-key [tab] '(lambda () (interactive) (insert "\t")))))))
 
 ;; Nicer theme:
 (elpaca nofrils-acme-theme
