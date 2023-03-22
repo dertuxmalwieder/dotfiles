@@ -1,7 +1,7 @@
-directory: \\Datengrab\Musik
+directory: /Volumes/Musik
 
-# Required Python modules (pip install):
-# pyacoustid python3-discogs-client requests
+# Required Python modules (pip install): pyacoustid python3-discogs-client requests
+# Required software: chromaprint (with fpcalc)
 plugins: embedart fetchart ftintitle chroma discogs zero importadded inline rewrite spotify deezer
 threaded: yes
 
