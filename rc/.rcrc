@@ -1,6 +1,6 @@
 LANG=(de_DE.UTF-8)
 TERM=(xterm-256color)
-path=(/bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /opt/local/bin $home/bin)
+path=(/bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /opt/schily/bin /opt/homebrew/bin /Users/tux0r/git/plan9port/bin $home/bin)
 
 EDITOR=(ed)
 if (test -x `(which acme)) {
@@ -15,7 +15,7 @@ if (test -x `(which acme)) {
 
 ## Define the $prompt
 prompt=('
-'$USER'@'`hostname':'`pwd'
+'$USER':'`pwd'
 ; ' '')
 
 ## Function definitions
