@@ -204,6 +204,9 @@
   ;; Keep the log-in data out of the public eye:
   (load "~/.emacs.d/mastodon-config"))
 
+;; Matrix:
+(elpaca ement)
+
 ;; Preview HTML:
 (elpaca org-preview-html (add-hook 'org-mode-hook #'org-preview-html-mode))
 
@@ -389,6 +392,10 @@
 
 (elpaca vc-fossil
   (add-to-list 'vc-handled-backends 'Fossil t))
+
+;; GhostText support:
+(elpaca atomic-chrome
+  (atomic-chrome-start-server))
 
 ;; Use ligatures if possible (requires the Fira Code Symbol font)
 ;; for programming:
