@@ -301,7 +301,7 @@
                (if (executable-find "ros")
                    (setq inferior-lisp-program "ros -Q run")
                  (when (eq system-type 'darwin)
-                   (setq inferior-lisp-program "/opt/pkg/bin/sbcl"))))))
+                   (setq inferior-lisp-program "/opt/homebrew/bin/sbcl"))))))
 
 ;; JS programming:
 ;; Use a less bad JavaScript mode.
