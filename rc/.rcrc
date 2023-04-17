@@ -1,6 +1,6 @@
 LANG=(de_DE.UTF-8)
 TERM=(xterm-256color)
-path=(/bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /opt/schily/bin /opt/homebrew/bin /Users/tux0r/git/plan9port/bin $home/bin)
+path=(/bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /opt/schily/bin /opt/homebrew/bin $home/git/plan9port/bin $home/bin $home/.roswell/bin .home/.cargo/bin)
 
 EDITOR=(ed)
 if (test -x `(which acme)) {
