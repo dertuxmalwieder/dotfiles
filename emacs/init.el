@@ -153,6 +153,9 @@
 ;; Make them.
 (when (eq system-type 'darwin)
   (elpaca exec-path-from-shell
+    ;; Hack: I *always* use non-standard shells ... use
+    ;; one that exec-path-from-shell actually knows.
+    (setq exec-path-from-shell-shell-name "zsh")
     (setq exec-path-from-shell-check-startup-files nil)
     (exec-path-from-shell-initialize)))
 
