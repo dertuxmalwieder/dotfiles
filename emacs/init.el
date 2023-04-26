@@ -254,7 +254,10 @@
 ;; Spell checking:
 (elpaca guess-language
   (when (executable-find "ispell")
-    (add-hook 'text-mode-hook '(lambda () (flyspell-mode 1))))
+    (add-hook 'text-mode-hook
+              '(progn
+                 (guess-language-mode 1)
+                 (flyspell-mode 1))))
   (setq guess-language-languages '(de en))
   (setq guess-language-min-paragraph-length 50))
 
