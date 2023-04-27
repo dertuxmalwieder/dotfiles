@@ -173,6 +173,10 @@
   (global-set-key (kbd "C-z")   'undo-fu-only-undo)
   (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
 
+;; Better diff view:
+(elpaca diffview
+  (add-hook 'diff-mode-hook 'diffview-current))
+
 ;; Switch and split windows visually:
 (elpaca switch-window
   (global-set-key (kbd "C-x o") 'switch-window)
@@ -255,7 +259,7 @@
 (elpaca guess-language
   (when (executable-find "ispell")
     (add-hook 'text-mode-hook
-              '(progn
+              '(lambda ()
                  (guess-language-mode 1)
                  (flyspell-mode 1))))
   (setq guess-language-languages '(de en))
