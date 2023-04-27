@@ -257,7 +257,12 @@
 
 ;; Spell checking:
 (elpaca guess-language
-  (when (executable-find "ispell")
+  ;; ... with aspell, not ispell:
+  (setq ispell-program-name "aspell")
+  (setq ispell-list-command "--list")
+  
+  (when (executable-find "aspell")
+    ;; Automatically enable smart spell checking:
     (add-hook 'text-mode-hook
               '(lambda ()
                  (guess-language-mode 1)
