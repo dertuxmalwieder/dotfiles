@@ -21,6 +21,13 @@
 ;; Add completion when tab'ing:
 (setq tab-always-indent 'complete)
 
+;; Fix native-comp.
+;; This basically sets the LIBRARY_PATH to wherever libgccjit
+;; is installed. Note that this MIGHT require adjustments on
+;; some systems. This path has been written on a M2 Mac.
+(when (eq system-type 'darwin)
+  (setenv "LIBRARY_PATH" "/opt/homebrew/opt/gcc/lib/gcc/13:/opt/homebrew/opt/libgccjit/lib/gcc/13:/opt/homebrew/opt/gcc/lib/gcc/13/gcc/aarch64-apple-darwin22/13"))
+
 ;; Hide "invalid" commands in M-x:
 (setq read-extended-command-predicate
       #'command-completion-default-include-p)

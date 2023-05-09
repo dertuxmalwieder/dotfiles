@@ -245,11 +245,6 @@
   (elpaca olivetti
     (add-hook 'markdown-mode-hook 'olivetti-mode)))
 
-;; Use ripgrep instead of grep (if applicable):
-(when (executable-find "rg")
-  (elpaca rg
-    (rg-enable-default-bindings)))
-
 ;; Paste online:
 (elpaca dpaste
   (setq dpaste-poster "tux0r")
