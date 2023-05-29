@@ -186,7 +186,7 @@
 
 ;; Move lines/regions:
 (elpaca move-text
-  (move-text-default-bindings)
+  (move-text-default-bindings))
 
 ;; Mastodon:
 (elpaca mastodon
