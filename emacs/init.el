@@ -362,9 +362,7 @@
 ;; Smart parentheses:
 (elpaca smartparens
   (require 'smartparens-config)
-  (add-hook 'js-mode-hook #'smartparens-mode)
-  (add-hook 'perl-mode-hook #'smartparens-mode)
-  (add-hook 'go-mode-hook #'smartparens-mode))
+  (add-hook 'prog-mode-hook #'smartparens-mode))
 
 ;; Clickable links everywhere:
 (elpaca orglink
