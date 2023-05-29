@@ -184,6 +184,10 @@
 
   (global-set-key (kbd "C-x 4 0") 'switch-window-then-kill-buffer))
 
+;; Move lines/regions:
+(elpaca move-text
+  (move-text-default-bindings)
+
 ;; Mastodon:
 (elpaca mastodon
   (setq mastodon-toot--enable-custom-instance-emoji t)
