@@ -98,11 +98,7 @@
 (defalias 'perl-mode 'cperl-mode)
 
 ;; IRC:
-(use-package erc
-  :config
-  (add-to-list 'desktop-modes-not-to-save 'erc-mode)
-  ;; Keep the log-in data out of the public eye:
-  (load "~/.emacs.d/erc-config"))
+(load "~/.emacs.d/init-erc")
 
 ;; Gnus preparation: Make it faster and nicer looking.
 ;; (Let's keep the account configuration in .gnus.el though.)
@@ -147,6 +143,10 @@
     (setq exec-path-from-shell-shell-name "zsh")
     (setq exec-path-from-shell-check-startup-files nil)
     (exec-path-from-shell-initialize)))
+
+;; ERC improvement:
+(elpaca erc-terminal-notifier
+  (erc-notifications-mode 1))
 
 ;; Multiple cursors:
 (elpaca multiple-cursors
@@ -282,16 +282,16 @@
 (elpaca slime
   (add-hook 'elpaca-after-init-hook
             (lambda ()
-               (require 'slime)
-               (slime-setup '(slime-fancy))
-               (eval-after-load "auto-complete"
-                 '(add-to-list 'ac-modes 'slime-repl-mode))
-               (eval-after-load "auto-complete"
-                 '(add-to-list 'ac-modes 'slime-repl-mode))
-               (if (executable-find "ros")
-                   (setq inferior-lisp-program "ros -Q run")
-                 (when (eq system-type 'darwin)
-                   (setq inferior-lisp-program "/opt/homebrew/bin/sbcl"))))))
+              (require 'slime)
+              (slime-setup '(slime-fancy))
+              (eval-after-load "auto-complete"
+                '(add-to-list 'ac-modes 'slime-repl-mode))
+              (eval-after-load "auto-complete"
+                '(add-to-list 'ac-modes 'slime-repl-mode))
+              (if (executable-find "ros")
+                  (setq inferior-lisp-program "ros -Q run")
+                (when (eq system-type 'darwin)
+                  (setq inferior-lisp-program "/opt/homebrew/bin/sbcl"))))))
 
 ;; JS programming:
 ;; Use a less bad JavaScript mode.

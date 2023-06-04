@@ -33,4 +33,3 @@
 (elpaca org-preview-html (add-hook 'org-mode-hook #'org-preview-html-mode))
 
 ;; init-org.el ends here
-
