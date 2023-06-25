@@ -2,7 +2,7 @@ directory: /Volumes/Musik
 
 # Required Python modules (pip install): pyacoustid python3-discogs-client requests
 # Required software: chromaprint (with fpcalc)
-plugins: embedart fetchart ftintitle chroma discogs zero importadded inline rewrite spotify deezer
+plugins: embedart fetchart ftintitle chroma discogs zero importadded inline rewrite deezer
 threaded: yes
 
 # Clean up: We won't need READMEs, cover files et cetera anymore.
