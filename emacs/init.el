@@ -88,10 +88,12 @@
 
 (setq elpaca-queue-limit 12) ;; to avoid "too many open files" errors
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; BUILT-IN PACKAGES:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; org-mode:
+(load "~/.emacs.d/init-org")
 
 ;; Perl programming:
 ;; Use the C Perl mode (may be better than the default one).
@@ -127,9 +129,6 @@
   :custom
   (eglot-autoshutdown t))
 
-;; org-mode:
-(load "~/.emacs.d/init-org")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; 3rd PARTY PACKAGES:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -147,6 +146,26 @@
 ;; ERC improvement:
 (elpaca erc-terminal-notifier
   (erc-notifications-mode 1))
+
+;; E-mail:
+(add-to-list 'load-path "/opt/homebrew/share/emacs/site-lisp/mu/mu4e")
+(use-package mu4e
+  :config
+  (require 'smtpmail)
+  (setq mu4e-mu-binary (executable-find "mu")
+        mu4e-maildir "~/.maildir"
+        mu4e-get-mail-command (concat (executable-find "mbsync") " -a")
+        mu4e-update-interval 300
+        mu4e-attachment-dir "~/Downloads"
+        mu4e-org-support t
+        mu4e-change-filenames-when-moving t
+        sendmail-program "/opt/homebrew/bin/msmtp"
+        send-mail-function 'smtpmail-send-it
+        message-sendmail-f-is-evil t
+        message-sendmail-extra-arguments '("--read-envelope-from")
+        message-send-mail-function 'message-send-mail-with-sendmail)
+
+  (load "~/.emacs.d/mu4e-addresses")) ;; keep them out of the public eye
 
 ;; Multiple cursors:
 (elpaca multiple-cursors
