@@ -150,12 +150,15 @@
 ;; E-mail:
 (add-to-list 'load-path "/opt/homebrew/share/emacs/site-lisp/mu/mu4e")
 (use-package mu4e
-  :config
+  :init
+  (require 'mu4e)
   (require 'smtpmail)
+  :config
   (setq mu4e-mu-binary (executable-find "mu")
         mu4e-maildir "~/.maildir"
         mu4e-get-mail-command (concat (executable-find "mbsync") " -a")
         mu4e-update-interval 300
+        mu4e-index-cleanup t
         mu4e-attachment-dir "~/Downloads"
         mu4e-org-support t
         mu4e-change-filenames-when-moving t
