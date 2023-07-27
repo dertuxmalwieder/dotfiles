@@ -19,6 +19,9 @@
   ;; Enable Markdown export.
   (require 'ox-md))
 
+;; Load the org package *NOW* to avoid conflics.
+(elpaca-process-queues)
+
 ;; Support org-mode import from a website:
 (elpaca org-web-tools)
 
