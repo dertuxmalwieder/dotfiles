@@ -120,12 +120,18 @@
 (use-package eglot
   :unless (version< emacs-version "29.1")
   :hook ((js-mode-hook . eglot-ensure)
+         (js-ts-mode-hook . eglot-ensure)
          (typescript-mode-hook . eglot-ensure)
          (python-mode-hook . eglot-ensure)
+         (python-ts-mode-hook . eglot-ensure)
          (rust-mode-hook . eglot-ensure)
+         (rust-ts-mode-hook . eglot-ensure)
          (go-mode-hook . eglot-ensure)
+         (go-ts-mode-hook . eglot-ensure)
          (cperl-mode-hook . eglot-ensure)
-         (c-mode-hook . eglot-ensure))
+         (perl-ts-mode-hook . eglot-ensure)
+         (c-mode-hook . eglot-ensure)
+         (c-ts-mode-hook . eglot-ensure))
   :custom
   (eglot-autoshutdown t))
 
@@ -319,11 +325,6 @@
                 (when (eq system-type 'darwin)
                   (setq inferior-lisp-program "/opt/homebrew/bin/sbcl"))))))
 
-;; JS programming:
-;; Use a less bad JavaScript mode.
-(elpaca js2-mode
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
-
 ;; Go programming:
 ;; Install and set up the Go mode.
 (elpaca go-mode
@@ -406,6 +407,15 @@
 
 (elpaca vc-fossil
   (add-to-list 'vc-handled-backends 'Fossil t))
+
+;; Tree-sitter remappings (!!! REQUIRES the grammars):
+(unless (version< emacs-version "29.1")
+  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(js-mode . js-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(rust-mode . rust-ts-mode)))
 
 ;; GhostText support:
 (elpaca atomic-chrome
