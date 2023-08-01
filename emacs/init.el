@@ -21,6 +21,9 @@
 ;; Remember where we are:
 (desktop-save-mode t)
 
+;; Overwrite by typing:
+(delete-selection-mode 1)
+
 ;; Stop chatting:
 (defalias 'yes-or-no-p 'y-or-n-p)
 
