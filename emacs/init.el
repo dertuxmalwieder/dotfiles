@@ -158,6 +158,7 @@
       (define-advice notifications-notify
           (:override (&rest params) using-alert)
         (alert (plist-get params :body)
+               :style 'osx-notifier
                :title (plist-get params :title))))))
 
 ;; E-mail:
