@@ -27,6 +27,7 @@
   (erc-timestamp-mode nil)
   (erc-services-mode 1)
   (erc-spelling-mode 1)
+  (erc-notifications-mode 1)
   (erc-update-modules)
 
   ;; Keep the log-in data out of the public eye:

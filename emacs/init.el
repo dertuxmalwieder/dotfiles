@@ -145,16 +145,20 @@
 ;; Some platforms (cough) don't update Emacs's path.
 ;; Make them.
 (when (eq system-type 'darwin)
-  (elpaca exec-path-from-shell
-    ;; Hack: I *always* use non-standard shells ... use
-    ;; one that exec-path-from-shell actually knows.
-    (setq exec-path-from-shell-shell-name "zsh")
-    (setq exec-path-from-shell-check-startup-files nil)
-    (exec-path-from-shell-initialize)))
+  (lambda ()
+    (elpaca exec-path-from-shell
+      ;; Hack: I *always* use non-standard shells ... use
+      ;; one that exec-path-from-shell actually knows.
+      (setq exec-path-from-shell-shell-name "zsh")
+      (setq exec-path-from-shell-check-startup-files nil)
+      (exec-path-from-shell-initialize))
 
-;; ERC improvement:
-(elpaca erc-terminal-notifier
-  (erc-notifications-mode 1))
+    (elpaca alert
+      ;; Actually working notifications on macOS without dbus
+      (define-advice notifications-notify
+          (:override (&rest params) using-alert)
+        (alert (plist-get params :body)
+               :title (plist-get params :title))))))
 
 ;; E-mail:
 (add-to-list 'load-path "/opt/homebrew/share/emacs/site-lisp/mu/mu4e")
@@ -237,7 +241,7 @@
 (elpaca telega
   ;; Note: REQUIRES TDLIB!
   (setq telega-server-libs-prefix "/opt/homebrew/"))
-    
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Web development:
