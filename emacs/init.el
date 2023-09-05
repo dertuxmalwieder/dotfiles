@@ -235,6 +235,7 @@
 
 ;; Telegram:
 (elpaca telega
+  ;; Note: REQUIRES TDLIB!
   (setq telega-server-libs-prefix "/opt/homebrew/"))
     
 ;;;;;;;;;;;;;;;;;;;;;;;;;
