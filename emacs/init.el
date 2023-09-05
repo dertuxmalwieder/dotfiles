@@ -223,6 +223,7 @@
 (elpaca move-text
   (move-text-default-bindings))
 
+;;;;;;; Messaging ;;;;;;;
 ;; Mastodon:
 (elpaca mastodon
   (setq mastodon-toot--enable-custom-instance-emoji t)
@@ -231,6 +232,12 @@
 
 ;; Matrix:
 (elpaca ement)
+
+;; Telegram:
+(elpaca telega
+  (setq telega-server-libs-prefix "/opt/homebrew/"))
+    
+;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Web development:
 (elpaca web-mode
