@@ -19,7 +19,10 @@
   (setq ns-right-alternate-modifier nil))
 
 ;; Remember where we are:
-(desktop-save-mode t)
+;; (desktop-save-mode t)
+
+;; Automatically reload changed files:
+(auto-revert-mode 1)
 
 ;; Overwrite by typing:
 (delete-selection-mode 1)
@@ -29,10 +32,6 @@
 
 ;; Show the current line:
 (global-hl-line-mode t)
-
-;; Make window resizes undoable:
-(when (fboundp 'winner-mode)
-  (winner-mode 1))
 
 ;; Don't warn about parenthesis mismatch in non-
 ;; programming modes:
