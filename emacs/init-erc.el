@@ -8,7 +8,7 @@
 
 (use-package erc
   :config
-  (add-to-list 'desktop-modes-not-to-save 'erc-mode)
+  ;; (add-to-list 'desktop-modes-not-to-save 'erc-mode)
 
   ;; Config:
   (setq erc-track-exclude-types '("JOIN" "KICK" "NICK" "PART" "QUIT" "MODE" "333" "353"))
