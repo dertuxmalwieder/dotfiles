@@ -143,7 +143,7 @@
 
 ;; Some platforms (cough) don't update Emacs's path.
 ;; Make them.
-(when (eq system-type 'darwin)
+(when (or (eq system-type 'darwin) (daemonp))
   (lambda ()
     (elpaca exec-path-from-shell
       ;; Hack: I *always* use non-standard shells ... use
