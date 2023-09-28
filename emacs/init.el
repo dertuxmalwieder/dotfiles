@@ -144,21 +144,20 @@
 ;; Some platforms (cough) don't update Emacs's path.
 ;; Make them.
 (when (or (eq system-type 'darwin) (daemonp))
-  (lambda ()
-    (elpaca exec-path-from-shell
-      ;; Hack: I *always* use non-standard shells ... use
-      ;; one that exec-path-from-shell actually knows.
-      (setq exec-path-from-shell-shell-name "zsh")
-      (setq exec-path-from-shell-check-startup-files nil)
-      (exec-path-from-shell-initialize))
+  (elpaca exec-path-from-shell
+    ;; Hack: I *always* use non-standard shells ... use
+    ;; one that exec-path-from-shell actually knows.
+    (setq exec-path-from-shell-shell-name "zsh")
+    (setq exec-path-from-shell-check-startup-files nil)
+    (exec-path-from-shell-initialize))
 
-    (elpaca alert
-      ;; Actually working notifications on macOS without dbus
-      (define-advice notifications-notify
-          (:override (&rest params) using-alert)
-        (alert (plist-get params :body)
-               :style 'osx-notifier
-               :title (plist-get params :title))))))
+  (elpaca alert
+    ;; Actually working notifications on macOS without dbus
+    (define-advice notifications-notify
+        (:override (&rest params) using-alert)
+      (alert (plist-get params :body)
+             :style 'osx-notifier
+             :title (plist-get params :title)))))
 
 ;; E-mail:
 (add-to-list 'load-path "/opt/homebrew/share/emacs/site-lisp/mu/mu4e")
