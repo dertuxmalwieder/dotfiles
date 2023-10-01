@@ -19,6 +19,9 @@ if (test -x `(which sam)) {
 	}
 }
 
+## I usually use light themes. Most tools do not.
+NO_COLOR=(1)
+
 ## Define the $prompt.
 ## Grab `pwd` and convert the resulting list into a string:
 pwd_list = `pwd
