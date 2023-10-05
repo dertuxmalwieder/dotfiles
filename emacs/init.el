@@ -43,6 +43,9 @@
     (set-default-font "Hack 10" nil t)
   (set-face-attribute 'default nil :family "Hack"))
 
+;; Utility functions:
+(load "~/.emacs.d/utilities")
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; PACKAGE PREPARATION:
