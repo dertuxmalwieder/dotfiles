@@ -165,6 +165,7 @@
   :init
   (require 'mu4e)
   (require 'smtpmail)
+  (require 'mu4e-speedbar)
   :config
   (setq mu4e-mu-binary (executable-find "mu")
         mu4e-maildir "~/.maildir"
