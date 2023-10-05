@@ -157,7 +157,9 @@
         (:override (&rest params) using-alert)
       (alert (plist-get params :body)
              :style 'osx-notifier
-             :title (plist-get params :title)))))
+             :title (plist-get params :title))))
+
+  (elpaca-process-queues))
 
 ;; E-mail:
 (add-to-list 'load-path "/opt/homebrew/share/emacs/site-lisp/mu/mu4e")
