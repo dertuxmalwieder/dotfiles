@@ -4,7 +4,6 @@
   (require 'mu4e)
   (require 'smtpmail)
   (require 'mu4e-speedbar)
-  (require 'bbdb-loaddefs)
   :config
   (setq mu4e-mu-binary (executable-find "mu")
         mu4e-maildir "~/.maildir"
@@ -21,12 +20,13 @@
         message-send-mail-function 'message-send-mail-with-sendmail)
 
   ;; Integrate BBDB:
-  (setq bbdb-mail-user-agent 'mu4e-user-agent)
-  (setq mu4e-view-rendered-hook 'bbdb-mua-auto-update)
-  (setq mu4e-compose-complete-addresses nil)
-  (setq bbdb-mua-pop-up t)
-  (setq bbdb-mua-pop-up-window-size 5)
-  (setq mu4e-view-show-addresses t)
+  ;; Currently disabled.
+  ;;; (setq bbdb-mail-user-agent 'mu4e-user-agent)
+  ;;; (setq mu4e-view-rendered-hook 'bbdb-mua-auto-update)
+  ;;; (setq mu4e-compose-complete-addresses nil)
+  ;;; (setq bbdb-mua-pop-up t)
+  ;;; (setq bbdb-mua-pop-up-window-size 5)
+  ;;; (setq mu4e-view-show-addresses t)
 
   ;; Enable notifications:
   (elpaca mu4e-alert
