@@ -180,7 +180,7 @@
         mu4e-attachment-dir "~/Downloads"
         mu4e-org-support t
         mu4e-change-filenames-when-moving t
-        sendmail-program "/opt/homebrew/bin/msmtp"
+        sendmail-program (executable-find "msmtp")
         send-mail-function 'smtpmail-send-it
         message-sendmail-f-is-evil t
         message-sendmail-extra-arguments '("--read-envelope-from")
