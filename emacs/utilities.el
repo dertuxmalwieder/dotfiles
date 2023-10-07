@@ -6,7 +6,7 @@
   (interactive)
   (let ((has-whiskybase-item nil))
     (if (numberp (number-at-point))
-        ;; We'll need to browse to the sentence (that is the Whiskybase number, as a string)
+        ;; We'll need to browse to the Whiskybase number, as a string.
         (progn ()
                (browse-url (concat "https://www.whiskybase.com/whiskies/whisky/" (number-to-string (number-at-point))))
                (setq has-whiskybase-item t))
