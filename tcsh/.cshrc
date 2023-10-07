@@ -43,7 +43,7 @@ endif
 # Starship:
 # (Requires starship.)
 if (`where starship` != "") then
-  eval "`starship init tcsh`"
+  eval `starship init tcsh`
 endif
 
 # zoxide:

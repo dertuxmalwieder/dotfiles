@@ -1,4 +1,5 @@
 ;; Various functions, written for my own amusement.
+
 (require 'url)
 
 (defun whiskybase-open-url ()
