@@ -1,7 +1,13 @@
+## Set the path variable.
+## On most systems, this will need to be changed.
+path=(/bin /sbin /usr/bin /usr/sbin /usr/local/bin /opt/schily/bin /opt/homebrew/bin $home/.local/bin $home/.cargo/bin $home/git/plan9port/bin $home/go/bin)
+
 LANG=(de_DE.UTF-8)
 TERM=(xterm-256color)
-path=(/bin /sbin /usr/bin /usr/sbin /usr/local/bin /opt/schily/bin /opt/homebrew/bin $home/.local/bin $home/.cargo/bin $home/git/plan9port/bin)
 history=($home/.rchist)
+
+## Default font for p9p applications.
+## Will need to be able to be found by fontsrv.
 font=(/mnt/font/Hack-Regular/13a/font)
 
 CFLAGS=(-I/opt/homebrew/include)
@@ -12,6 +18,7 @@ EDITOR=(ed)
 if (test -x `(which sam)) {
 	VISUAL=(sam)
 } else {
+	## Fallback to either NeoVim or "a vi".
 	if (test -x `(which nvim)) {
 		VISUAL=(nvim)
 	} else {
