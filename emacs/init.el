@@ -152,7 +152,7 @@
     ;; one that exec-path-from-shell actually knows.
     (setq exec-path-from-shell-shell-name "zsh")
     (setq exec-path-from-shell-check-startup-files nil)
-    (add-hook 'elpaca-after-init-hook (lambda () (exec-path-from-shell-initialize))))
+    (add-hook 'elpaca-after-init-hook 'exec-path-from-shell-initialize))
 
   (elpaca alert
     ;; Actually working notifications on macOS without dbus
