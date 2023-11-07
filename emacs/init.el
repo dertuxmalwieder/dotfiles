@@ -54,13 +54,13 @@
 ;; Use elpaca instead of Emacs's default package.el for
 ;; managing installed packages. This might or might not be a
 ;; good idea.
-(defvar elpaca-installer-version 0.5)
+(defvar elpaca-installer-version 0.6)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
                               :ref nil
-                              :files (:defaults (:exclude "extensions"))
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
                               :build (:not elpaca--activate-package)))
 (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
        (build (expand-file-name "elpaca/" elpaca-builds-directory))
@@ -151,9 +151,9 @@
     ;; Hack: I *always* use non-standard shells ... use
     ;; one that exec-path-from-shell actually knows.
     (setq exec-path-from-shell-shell-name "zsh")
-    (setq exec-path-from-shell-check-startup-files nil)
-    (add-hook 'elpaca-after-init-hook 'exec-path-from-shell-initialize))
-
+    (setq exec-path-from-shell-check-startup-files nil))
+  (add-hook 'elpaca-after-init-hook (lambda () (exec-path-from-shell-initialize)))
+  
   (elpaca alert
     ;; Actually working notifications on macOS without dbus
     (define-advice notifications-notify
