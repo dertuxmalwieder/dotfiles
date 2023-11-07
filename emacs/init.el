@@ -152,7 +152,6 @@
     ;; one that exec-path-from-shell actually knows.
     (setq exec-path-from-shell-shell-name "zsh")
     (setq exec-path-from-shell-check-startup-files nil))
-  (add-hook 'elpaca-after-init-hook (lambda () (exec-path-from-shell-initialize)))
   
   (elpaca alert
     ;; Actually working notifications on macOS without dbus
@@ -162,7 +161,8 @@
              :style 'osx-notifier
              :title (plist-get params :title))))
 
-  (elpaca-process-queues))
+  (elpaca-process-queues)
+  (exec-path-from-shell-initialize))
 
 ;; E-mail:
 (load "~/.emacs.d/mu4e-config.el")
@@ -342,8 +342,7 @@
                 '(add-to-list 'ac-modes 'slime-repl-mode))
               (if (executable-find "ros")
                   (setq inferior-lisp-program "ros -Q run")
-                (when (eq system-type 'darwin)
-                  (setq inferior-lisp-program "/opt/homebrew/bin/sbcl"))))))
+                (setq inferior-lisp-program (executable-find "sbcl"))))))
 
 ;; Go programming:
 ;; Install and set up the Go mode.
@@ -368,11 +367,9 @@
 
 ;; Corfu auto-completion for code:
 (elpaca corfu
-  (add-hook 'elpaca-after-init-hook
-            (lambda ()
-              (setq corfu-auto t)
-              (setq corfu-separator ?\s)
-              (add-hook 'prog-mode-hook 'corfu-mode))))
+  (setq corfu-auto t)
+  (setq corfu-separator ?\s)
+  (add-hook 'prog-mode-hook 'corfu-mode))
 
 ;; Gopher:
 (elpaca elpher)
