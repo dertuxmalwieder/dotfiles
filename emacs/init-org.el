@@ -1,4 +1,4 @@
-;;; init-org.el --- Emacs org-mode configuration
+;;; init-org.el --- Emacs org-mode configuration  -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -18,9 +18,6 @@
 
   ;; Enable Markdown export.
   (require 'ox-md))
-
-;; Load the org package *NOW* to avoid conflics.
-(elpaca-process-queues)
 
 ;; Support org-mode import from a website:
 (elpaca org-web-tools)
