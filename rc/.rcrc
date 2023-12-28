@@ -1,6 +1,6 @@
 ## Set the path variable.
 ## On most systems, this will need to be changed.
-path=(/bin /sbin /usr/bin /usr/sbin /usr/local/bin /opt/schily/bin /opt/homebrew/bin $home/.local/bin $home/.cargo/bin $home/git/plan9port/bin $home/go/bin)
+path=(/bin /sbin /opt/homebrew/bin /opt/homebrew/sbin /usr/bin /usr/sbin /usr/local/bin /opt/schily/bin $home/.local/bin $home/.cargo/bin $home/git/plan9port/bin $home/go/bin)
 
 LANG=(de_DE.UTF-8)
 TERM=(xterm-256color)
@@ -10,9 +10,9 @@ history=($home/.rchist)
 ## Will need to be able to be found by fontsrv.
 font=(/mnt/font/Hack-Regular/13a/font)
 
-CFLAGS=(-I/opt/homebrew/include)
-CPPFLAGS=(-I/opt/homebrew/include)
-LDFLAGS=(-L/opt/homebrew/lib)
+CFLAGS=(-I/opt/homebrew/include -I/opt/homebrew/opt/ncurses/include)
+CPPFLAGS=(-I/opt/homebrew/include -I/opt/homebrew/opt/ncurses/include)
+LDFLAGS=(-L/opt/homebrew/lib -L/opt/homebrew/opt/ncurses/lib)
 
 EDITOR=(ed)
 if (test -x `(which sam)) {
