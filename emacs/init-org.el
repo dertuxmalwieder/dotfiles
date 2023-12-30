@@ -16,6 +16,9 @@
   (setq org-src-fontify-natively t)
   (setq org-src-tab-acts-natively t)
 
+  ;; More width for export.
+  (setq org-ascii-text-width 400)
+
   ;; Enable Markdown export.
   (require 'ox-md))
 
@@ -30,6 +33,6 @@
   (load "~/.emacs.d/org2blog-config"))
 
 ;; Preview HTML:
-(elpaca org-preview-html (add-hook 'org-mode-hook #'org-preview-html-mode))
+;; (elpaca org-preview-html (add-hook 'org-mode-hook #'org-preview-html-mode))
 
 ;; init-org.el ends here
