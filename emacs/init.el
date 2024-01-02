@@ -425,14 +425,9 @@
 (elpaca vc-fossil
   (add-to-list 'vc-handled-backends 'Fossil t))
 
-;; Tree-sitter remappings (!!! REQUIRES the grammars):
+;; Tree-sitter configuration:
 (unless (version< emacs-version "29.1")
-  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(js-mode . js-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(rust-mode . rust-ts-mode)))
+  (load "~/.emacs.d/init-treesitter"))
 
 ;; GhostText support:
 (elpaca atomic-chrome
@@ -457,17 +452,7 @@
   ;; !! Make sure it is actually installed .. !!
   (defface spaceship-face
     '((t :height 140 :family "Roboto"))
-    "sans serif (should be variable-width)")
-  
-  ;; we will make text-mode always use spaceship-mode, with some tweaks to prevent
-  ;; emacs from clobbering the space/tabs conventions
-  (add-hook 'text-mode-hook (lambda ()
-                              (face-remap-add-relative 'default 'spaceship-face)
-                              (spaceship-mode 1)
-                              (setq-local indent-line-function 'spaceship-simple-indent-line-function)
-                              (setq electric-indent-inhibit t)
-                              (local-set-key [C-backspace] 'spaceship-delete-indentation-or-word)
-                              (local-set-key [tab] '(lambda () (interactive) (insert "\t"))))))
+    "sans serif (should be variable-width)"))
 
 ;; Nicer theme:
 (elpaca nofrils-acme-theme
