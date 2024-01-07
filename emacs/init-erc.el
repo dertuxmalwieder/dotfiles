@@ -11,7 +11,7 @@
   ;; (add-to-list 'desktop-modes-not-to-save 'erc-mode)
 
   ;; Config:
-  (setq erc-track-exclude-types '("JOIN" "KICK" "NICK" "PART" "QUIT" "MODE" "333" "353"))
+  (setq erc-track-exclude-types '("JOIN" "KICK" "NICK" "PART" "QUIT" "MODE" "324" "329" "332" "333" "353" "477"))
   (setq erc-fill-function 'erc-fill-static)
   (setq erc-fill-static-center 20)
   (setq erc-fill-column 120)
