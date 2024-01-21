@@ -107,19 +107,8 @@
 ;; IRC:
 (load "~/.emacs.d/init-erc")
 
-;; Gnus preparation: Make it faster and nicer looking.
-;; (Let's keep the account configuration in .gnus.el though.)
-(use-package gnus
-  :config
-  (setq gnus-always-read-dribble-file t)
-  (setq gnus-read-active-file t)
-  (gnus-add-configuration '(article (vertical 1.0 (summary .35 point) (article 1.0)))))
-
-(use-package gnus-async
-  :after gnus
-  :config
-  (setq gnus-asynchronous t)
-  (setq gnus-use-article-prefetch 15))
+;; Usenet:
+(load "~/.emacs.d/init-gnus")
 
 ;; LSP (requires Emacs 29, eglot is NOT in older versions!):
 (use-package eglot
