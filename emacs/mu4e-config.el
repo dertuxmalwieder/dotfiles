@@ -32,6 +32,4 @@
   (elpaca mu4e-alert
     (mu4e-alert-set-default-style 'notifier)  ;; requires terminal-notifier
     (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
-    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
-
-  (load "~/.emacs.d/mu4e-addresses")) ;; keep login data out of the public eye
+    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)))

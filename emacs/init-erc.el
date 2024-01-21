@@ -28,9 +28,6 @@
   (erc-services-mode 1)
   (erc-spelling-mode 1)
   (erc-notifications-mode 1)
-  (erc-update-modules)
-
-  ;; Keep the log-in data out of the public eye:
-  (load "~/.emacs.d/erc-config"))
+  (erc-update-modules))
 
 ;; init-erc.el ends here

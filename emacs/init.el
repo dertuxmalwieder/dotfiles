@@ -97,6 +97,9 @@
 ;;;; BUILT-IN PACKAGES:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Load private user data first:
+(load "~/.emacs.d/private-settings") ;; !!! you might want to delete this.
+
 ;; org-mode:
 (load "~/.emacs.d/init-org")
 
@@ -177,8 +180,7 @@
   (setq elfeed-protocol-enabled-protocols '(newsblur))
   (elfeed-protocol-enable)
   (setq elfeed-curl-extra-arguments '("--cookie-jar" "/tmp/newsblur-cookie"
-                                      "--cookie" "/tmp/newsblur-cookie"))
-  (load "~/.emacs.d/elfeed-config.el")) ;; private login data
+                                      "--cookie" "/tmp/newsblur-cookie")))
 
 ;; Rearrange the window:
 (elpaca elfeed-goodies
@@ -224,9 +226,7 @@
 ;;;;;;; Messaging ;;;;;;;
 ;; Mastodon:
 (elpaca mastodon
-  (setq mastodon-toot--enable-custom-instance-emoji t)
-  ;; Keep the log-in data out of the public eye:
-  (load "~/.emacs.d/mastodon-config"))
+  (setq mastodon-toot--enable-custom-instance-emoji t))
 
 ;; Matrix:
 (elpaca ement)

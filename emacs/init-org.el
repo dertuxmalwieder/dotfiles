@@ -28,9 +28,7 @@
 ;; Support my blog as well:
 (elpaca org2blog
   (setq org2blog/wp-show-post-in-browser t)
-  (setq org2blog/wp-image-upload t)
-  ;; Keep the log-in data out of the public eye:
-  (load "~/.emacs.d/org2blog-config"))
+  (setq org2blog/wp-image-upload t))
 
 ;; Preview HTML:
 ;; (elpaca org-preview-html (add-hook 'org-mode-hook #'org-preview-html-mode))
