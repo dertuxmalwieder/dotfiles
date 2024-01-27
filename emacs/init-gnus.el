@@ -1,4 +1,4 @@
-;;; init-erc.el --- Emacs Gnus configuration
+;;; init-gnus.el --- Emacs Gnus configuration
 
 ;;; Commentary:
 

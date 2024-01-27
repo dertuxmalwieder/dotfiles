@@ -428,21 +428,6 @@
   (fira-code-mode-set-font)
   (add-hook 'prog-mode-hook 'fira-code-mode))
 
-;; Use a variable width font for prose and make
-;; it align well:
-(elpaca (spaceship-mode
-         :host github
-         :repo "tenbillionwords/spaceship-mode")
-  ;; always use tabble-mode with spaceship-mode
-  (require 'tabble-mode)
-  (add-hook 'spaceship-mode-hook '(lambda () (tabble-mode 1)))
-
-  ;; We use a sans-serif font here.
-  ;; !! Make sure it is actually installed .. !!
-  (defface spaceship-face
-    '((t :height 140 :family "Roboto"))
-    "sans serif (should be variable-width)"))
-
 ;; Nicer theme:
 (elpaca nofrils-acme-theme
   (load-theme 'nofrils-acme t))
