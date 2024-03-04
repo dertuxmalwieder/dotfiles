@@ -43,6 +43,13 @@
     (set-default-font "Hack 10" nil t)
   (set-face-attribute 'default nil :family "Hack"))
 
+;; (join-lines) should respect comments:
+;; Source: https://tony-zorman.com/posts/join-lines-comments.html
+(advice-add 'delete-indentation :around
+  (lambda (old-fun &optional arg beg end)
+    (let ((fill-prefix comment-start))
+      (funcall old-fun arg beg end))))
+
 ;; Utility functions:
 (load "~/.emacs.d/utilities")
 
