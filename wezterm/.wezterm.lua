@@ -6,9 +6,10 @@ if wezterm.config_builder then
 end
 
 config.color_scheme = 'Atelier Dune Light (base16)'
+config.default_prog = { 'pwsh' }
 config.font = wezterm.font { family = 'Hack' }
 config.font_size = 11.0
-config.use_fance_tab_bar = false
+config.use_fancy_tab_bar = false
 config.window_close_confirmation = 'NeverPrompt'
 
 config.window_frame = {
