@@ -265,6 +265,8 @@
 (when (executable-find "multimarkdown")
   (elpaca markdown-mode
     (setq markdown-command "multimarkdown")
+    (setq markdown-asymmetric-header t)
+    (setq markdown-header-scaling t)
     (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
     (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
