@@ -5,10 +5,10 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
-config.color_scheme = 'Novel'
-config.use_fancy_tab_bar = true
+config.color_scheme = 'Atelier Dune Light (base16)'
 config.font = wezterm.font { family = 'Hack' }
 config.font_size = 11.0
+config.use_fance_tab_bar = false
 config.window_close_confirmation = 'NeverPrompt'
 
 config.window_frame = {
