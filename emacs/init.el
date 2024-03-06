@@ -21,9 +21,6 @@
 ;; Remember where we are:
 ;; (desktop-save-mode t)
 
-;; Automatically reload changed files:
-(auto-revert-mode 1)
-
 ;; Overwrite by typing:
 (delete-selection-mode 1)
 

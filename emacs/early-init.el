@@ -51,8 +51,7 @@
 (setq create-lockfiles nil)
 
 ;; Automatically reload files edited elsewhere:
-;; (Commented out for battery reduction.)
-;; (setq global-auto-revert-mode t)
+(setq global-auto-revert-mode t)
 
 (setq gc-cons-threshold 100000000)
 
