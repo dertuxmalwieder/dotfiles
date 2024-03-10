@@ -171,29 +171,13 @@
 (elpaca emojify
   (global-emojify-mode))
 
-;;;;;;; elfeed ;;;;;;;;;;
-(elpaca elfeed
-  (setq elfeed-use-curl t))
+;; elfeed for RSS:
+(load "~/.emacs.d/init-elfeed.el")
 
-;; Show a dashboard:
-(elpaca elfeed-summary)
-
-;; Enable Newsblur:
-(elpaca elfeed-protocol
-  (setq elfeed-protocol-newsblur-maxpages 20)
-  (setq elfeed-protocol-enabled-protocols '(newsblur))
-  (elfeed-protocol-enable)
-  (setq elfeed-curl-extra-arguments '("--cookie-jar" "/tmp/newsblur-cookie"
-                                      "--cookie" "/tmp/newsblur-cookie")))
-
-;; Rearrange the window:
-(elpaca elfeed-goodies
-  (elfeed-goodies/setup))
-
-;; Better YouTube feeds:
-(elpaca elfeed-tube)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Better web browsing:
+(when (executable-find "w3m")
+  (elpaca emacs-w3m
+    (setq browse-url-browser-function 'w3m-browse-url)))
 
 ;; Undo/redo:
 (elpaca undo-fu
