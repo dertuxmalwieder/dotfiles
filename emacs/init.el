@@ -176,7 +176,7 @@
 
 ;; Better web browsing:
 (when (executable-find "w3m")
-  (elpaca emacs-w3m
+  (elpaca w3m
     (setq browse-url-browser-function 'w3m-browse-url)))
 
 ;; Undo/redo:
