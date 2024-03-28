@@ -233,6 +233,14 @@
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode)))
 
+(elpaca web-beautify
+  (add-hook 'js2-mode-hook
+            (lambda () (add-hook 'before-save-hook 'web-beautify-js-buffer t t)))
+  (add-hook 'html-mode-hook
+            (lambda () (add-hook 'before-save-hook 'web-beautify-html-buffer t t)))
+  (add-hook 'css-mode-hook
+            (lambda () (add-hook 'before-save-hook 'web-beautify-css-buffer t t))))
+
 ;; A less shitty modeline:
 (elpaca doom-modeline
   (doom-modeline-mode 1)
@@ -419,6 +427,9 @@
 (elpaca fira-code-mode
   (fira-code-mode-set-font)
   (add-hook 'prog-mode-hook 'fira-code-mode))
+
+;; Bookmarks (test):
+(elpaca ebuku)
 
 ;; Nicer theme:
 (elpaca nofrils-acme-theme
