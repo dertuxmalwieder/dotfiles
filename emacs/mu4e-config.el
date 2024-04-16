@@ -13,6 +13,7 @@
         mu4e-attachment-dir "~/Downloads"
         mu4e-org-support t
         mu4e-change-filenames-when-moving t
+        mu4e-html2text-command (concat (executable-find "textutil") " -stdin -format html -convert txt -stdout")
         sendmail-program (executable-find "msmtp")
         send-mail-function 'smtpmail-send-it
         message-sendmail-f-is-evil t
