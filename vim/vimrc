@@ -1,0 +1,49 @@
+syntax off
+set guioptions -=m    " menubar
+set guioptions -=T    " toolbar
+set guioptions -=r    " scrollbar
+set autochdir         " automatically cd to $filepath
+set termguicolors     " enable true colors support
+set clipboard=unnamedplus  " use the system clipboard
+
+" Enlarge GVim by default:
+if has("gui_running")
+  set lines=50 columns=170
+endif
+
+" Load minpac.
+" Requires minpac in the runtime path:
+" https://github.com/k-takata/minpac
+packadd minpac
+if exists('g:loaded_minpac')
+  call minpac#init()
+
+  " Plugins:
+  call minpac#add('vim-airline/vim-airline')    " airline
+  call minpac#add('tpope/vim-commentary')       " commentary
+  call minpac#add('ctrlpvim/ctrlp.vim')         " CtrlP
+  call minpac#add('tpope/vim-fugitive')         " fugitive
+  call minpac#add('preservim/nerdtree')         " NERDTree
+  call minpac#add('yorickpeterse/vim-paper')    " paper theme
+  call minpac#add('tpope/vim-sensible')         " sensible defaults
+  call minpac#add('tpope/vim-sleuth')           " sleuth -> buffer options
+
+  " Load plugins:
+  packloadall
+
+  " Utility:
+  command! PackUpdate call minpac#update()     " :PackUpdate fetches all plugins...
+
+  " CtrlP cfg:
+  let g:ctrlp_custom_ignore = 'tmp$\|\.git$\|\.hg$\|\.svn$\|.bundle$\|vendor'
+  let g:ctrlp_clear_cache_on_exit=0
+  let g:ctrlp_follow_symlinks=1
+
+  " NERDTree cfg:
+  nnoremap <C-t> :NERDTreeToggle<CR>
+
+  " paper theme:
+  colorscheme paper
+endif
+
+cd ~

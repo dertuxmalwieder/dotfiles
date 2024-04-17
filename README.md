@@ -7,4 +7,5 @@ Collected dotfiles.
 - `rc/`: Configuration files for the [rc](https://github.com/rakitzis/rc) shell.
 - `readline/`: Configuration files for software that uses the `readline` library (incl. `rc`).
 - `tcsh/`: Configuration files for the [TCSH](https://www.tcsh.org) shell.
+- `vim/`: Configuration files for [my Vim builds](https://tuxproject.de/projects/vim) (Windows-only).
 - `wezterm/`: Configuration files for the [WezTerm](https://wezfurlong.org/wezterm/) terminal emulator.
