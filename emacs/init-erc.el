@@ -7,19 +7,20 @@
 ;;; Code:
 
 (use-package erc
-  :config
+  :custom
   ;; (add-to-list 'desktop-modes-not-to-save 'erc-mode)
 
   ;; Config:
-  (setq erc-track-exclude-types '("JOIN" "KICK" "NICK" "PART" "QUIT" "MODE" "324" "329" "332" "333" "353" "477"))
-  (setq erc-fill-function 'erc-fill-static)
-  (setq erc-fill-static-center 20)
-  (setq erc-fill-column 120)
-  (setq erc-interpret-mirc-color t)
-  (setq erc-track-shorten-function nil)
-  (setq erc-hide-timestamps t)
-  (setq erc-prompt-for-nickserv-password nil)
+  (erc-track-exclude-types '("JOIN" "KICK" "NICK" "PART" "QUIT" "MODE" "324" "329" "332" "333" "353" "477"))
+  (erc-fill-function 'erc-fill-static)
+  (erc-fill-static-center 20)
+  (erc-fill-column 120)
+  (erc-interpret-mirc-color t)
+  (erc-track-shorten-function nil)
+  (erc-hide-timestamps t)
+  (erc-prompt-for-nickserv-password nil)
 
+  :config
   ;; (add-to-list 'erc-modules 'notifications)
   (add-to-list 'erc-modules 'nickserv)
   (add-to-list 'erc-modules 'spelling)
