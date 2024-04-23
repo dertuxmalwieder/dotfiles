@@ -418,10 +418,6 @@
 (unless (version< emacs-version "29.1")
   (load "~/.emacs.d/init-treesitter"))
 
-;; GhostText support:
-(elpaca atomic-chrome
-  (atomic-chrome-start-server))
-
 ;; Use ligatures if possible (requires the Fira Code Symbol font)
 ;; for programming:
 (elpaca fira-code-mode
