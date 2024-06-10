@@ -37,8 +37,8 @@
 
 ;; Nicer font (UI and prog-mode):
 (if (fboundp 'set-default-font)
-    (set-default-font "Hack 10" nil t)
-  (set-face-attribute 'default nil :family "Hack"))
+    (set-default-font "Source Code Pro 10" nil t)
+  (set-face-attribute 'default nil :family "Source Code Pro"))
 
 ;; (join-lines) should respect comments:
 ;; Source: https://tony-zorman.com/posts/join-lines-comments.html
