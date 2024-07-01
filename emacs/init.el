@@ -43,9 +43,9 @@
 ;; (join-lines) should respect comments:
 ;; Source: https://tony-zorman.com/posts/join-lines-comments.html
 (advice-add 'delete-indentation :around
-  (lambda (old-fun &optional arg beg end)
-    (let ((fill-prefix comment-start))
-      (funcall old-fun arg beg end))))
+            (lambda (old-fun &optional arg beg end)
+              (let ((fill-prefix comment-start))
+                (funcall old-fun arg beg end))))
 
 ;; Utility functions:
 (load "~/.emacs.d/utilities")
@@ -177,9 +177,13 @@
 (load "~/.emacs.d/init-elfeed.el")
 
 ;; Better web browsing:
-(when (executable-find "w3m")
-  (elpaca w3m
-    (setq browse-url-browser-function 'w3m-browse-url)))
+(if (fboundp 'xwidget-webkit-browse-url)
+    ;; If this Emacs was compiled with --with-xwidgets, use one for browsing.
+    (setq browse-url-browser-function 'xwidget-webkit-browse-url)
+  ;; Else, use w3m.
+  (when (executable-find "w3m")
+    (elpaca w3m
+      (setq browse-url-browser-function 'w3m-browse-url))))
 
 ;; Undo/redo:
 (elpaca undo-fu
@@ -336,8 +340,7 @@
 ;; Go programming:
 ;; Install and set up the Go mode.
 (elpaca go-mode
-  (setenv "GOPATH" (concat (getenv "HOME") "/go"))
-  (setq gofmt-command (concat (getenv "GOPATH") "/bin/goimports")))
+  (setenv "GOPATH" (concat (getenv "HOME") "/go")))
 
 ;; COBOL programming:
 (elpaca cobol-mode
@@ -423,9 +426,6 @@
 (elpaca fira-code-mode
   (fira-code-mode-set-font)
   (add-hook 'prog-mode-hook 'fira-code-mode))
-
-;; Bookmarks (test):
-(elpaca ebuku)
 
 ;; Nicer theme:
 (elpaca nofrils-acme-theme
