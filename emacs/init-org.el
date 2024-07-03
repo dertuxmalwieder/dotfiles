@@ -8,7 +8,8 @@
 
 ;; Hint: We use the upstream version instead of Emacs's own one
 ;;       so addins from Git won't fail us.
-(elpaca org
+(use-package org
+  :config
   ;; Better HTML export.
   (setq org-html-coding-system 'utf-8-unix)
   
@@ -22,15 +23,17 @@
   ;; Enable Markdown export.
   (require 'ox-md))
 
+(elpaca-wait)
 ;; Support org-mode import from a website:
-(elpaca org-web-tools)
+(use-package org-web-tools)
 
 ;; Support my blog as well:
-(elpaca org2blog
+(use-package org2blog
+  :init
   (setq org2blog/wp-show-post-in-browser t)
   (setq org2blog/wp-image-upload t))
 
 ;; Preview HTML:
-;; (elpaca org-preview-html (add-hook 'org-mode-hook #'org-preview-html-mode))
+;; (use-package org-preview-html :init (add-hook 'org-mode-hook #'org-preview-html-mode))
 
 ;; init-org.el ends here

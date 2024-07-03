@@ -1,5 +1,6 @@
 (add-to-list 'load-path "/opt/homebrew/share/emacs/site-lisp/mu/mu4e")
 (use-package mu4e
+  :ensure nil
   :init
   (require 'mu4e)
   (require 'smtpmail)
@@ -30,7 +31,9 @@
   ;;; (setq mu4e-view-show-addresses t)
 
   ;; Enable notifications:
-  (elpaca mu4e-alert
+  (use-package mu4e-alert
+    :after mu4e
+    :config
     (mu4e-alert-set-default-style 'notifier)  ;; requires terminal-notifier
     (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
     (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)))

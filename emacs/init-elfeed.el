@@ -6,14 +6,18 @@
 
 ;;; Code:
 
-(elpaca elfeed
+(use-package elfeed
+  :config
   (setq elfeed-use-curl t))
 
 ;; Show a dashboard:
-(elpaca elfeed-summary)
+(use-package elfeed-summary
+  :after elfeed)
 
 ;; Enable Newsblur:
-(elpaca elfeed-protocol
+(use-package elfeed-protocol
+  :after elfeed
+  :config
   (setq elfeed-protocol-newsblur-maxpages 20)
   (setq elfeed-protocol-enabled-protocols '(newsblur))
   (elfeed-protocol-enable)
@@ -21,9 +25,12 @@
                                       "--cookie" "/tmp/newsblur-cookie")))
 
 ;; Rearrange the window:
-(elpaca elfeed-goodies
+(use-package elfeed-goodies
+  :after elfeed
+  :config
   (elfeed-goodies/setup))
 
 ;; Better YouTube feeds:
-(elpaca elfeed-tube)
+(use-package elfeed-tube
+  :after elfeed)
 ;; init-elfeed.el ends here

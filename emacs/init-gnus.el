@@ -8,12 +8,14 @@
 
 ;; Make it faster and nicer looking.
 (use-package gnus
+  :ensure nil
   :config
   (setq gnus-always-read-dribble-file t)
   (setq gnus-read-active-file t)
   (gnus-add-configuration '(article (vertical 1.0 (summary .35 point) (article 1.0)))))
 
 (use-package gnus-async
+  :ensure nil
   :after gnus
   :config
   (setq gnus-asynchronous t)

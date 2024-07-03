@@ -99,6 +99,13 @@
 
 (setq elpaca-queue-limit 12) ;; to avoid "too many open files" errors
 
+;; Enable use-package integration:
+(elpaca elpaca-use-package
+  (elpaca-use-package-mode)
+  (setq elpaca-use-package-by-default t))
+
+(elpaca-wait)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; BUILT-IN PACKAGES:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -121,6 +128,7 @@
 
 ;; LSP (requires Emacs 29, eglot is NOT in older versions!):
 (use-package eglot
+  :ensure nil
   :unless (version< emacs-version "29.1")
   :hook ((js-mode-hook . eglot-ensure)
          (js-ts-mode-hook . eglot-ensure)
@@ -145,32 +153,34 @@
 ;; Some platforms (cough) don't update Emacs's path.
 ;; Make them.
 (when (or (eq system-type 'darwin) (daemonp))
-  (elpaca exec-path-from-shell
+  (use-package exec-path-from-shell
     ;; Hack: I *always* use non-standard shells ... use
     ;; one that exec-path-from-shell actually knows.
+    :init
     (setq exec-path-from-shell-shell-name "zsh")
-    (setq exec-path-from-shell-check-startup-files nil))
+    (setq exec-path-from-shell-check-startup-files nil)
+    :config
+    (exec-path-from-shell-initialize))
   
-  (elpaca alert
+  (use-package alert
     ;; Actually working notifications on macOS without dbus
     (define-advice notifications-notify
         (:override (&rest params) using-alert)
       (alert (plist-get params :body)
              :style 'osx-notifier
-             :title (plist-get params :title))))
-
-  (elpaca-process-queues)
-  (exec-path-from-shell-initialize))
+             :title (plist-get params :title)))))
 
 ;; E-mail:
 (load "~/.emacs.d/mu4e-config.el")
 
 ;; Multiple cursors:
-(elpaca multiple-cursors
+(use-package multiple-cursors
+  :config
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines))
 
 ;; Emojis:
-(elpaca emojify
+(use-package emojify
+  :config
   (global-emojify-mode))
 
 ;; elfeed for RSS:
@@ -182,21 +192,25 @@
     (setq browse-url-browser-function 'xwidget-webkit-browse-url)
   ;; Else, use w3m.
   (when (executable-find "w3m")
-    (elpaca w3m
+    (use-package w3m
+      :init
       (setq browse-url-browser-function 'w3m-browse-url))))
 
 ;; Undo/redo:
-(elpaca undo-fu
+(use-package undo-fu
+  :config
   (global-unset-key (kbd "C-z"))
   (global-set-key (kbd "C-z")   'undo-fu-only-undo)
   (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
 
 ;; Better diff view:
-(elpaca diffview
+(use-package diffview
+  :config
   (add-hook 'diff-mode-hook 'diffview-current))
 
 ;; Switch and split windows visually:
-(elpaca switch-window
+(use-package switch-window
+  :init
   (global-set-key (kbd "C-x o") 'switch-window)
   (global-set-key (kbd "C-x 1") 'switch-window-then-maximize)
   (global-set-key (kbd "C-x 2") 'switch-window-then-split-below)
@@ -214,30 +228,35 @@
   (global-set-key (kbd "C-x 4 0") 'switch-window-then-kill-buffer))
 
 ;; Move lines/regions:
-(elpaca move-text
+(use-package move-text
+  :config
   (move-text-default-bindings))
 
 ;;;;;;; Messaging ;;;;;;;
 ;; Mastodon:
-(elpaca mastodon
+(use-package mastodon
+  :config
   (setq mastodon-toot--enable-custom-instance-emoji t))
 
 ;; Matrix:
-(elpaca ement)
+(use-package ement)
 
 ;; Telegram:
-(elpaca telega
+(use-package telega
   ;; Note: REQUIRES TDLIB!
+  :config
   (setq telega-server-libs-prefix "/opt/homebrew/"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Web development:
-(elpaca web-mode
+(use-package web-mode
+  :config
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode)))
 
-(elpaca web-beautify
+(use-package web-beautify
+  :config
   (add-hook 'js2-mode-hook
             (lambda () (add-hook 'before-save-hook 'web-beautify-js-buffer t t)))
   (add-hook 'html-mode-hook
@@ -246,19 +265,22 @@
             (lambda () (add-hook 'before-save-hook 'web-beautify-css-buffer t t))))
 
 ;; A less shitty modeline:
-(elpaca doom-modeline
+(use-package doom-modeline
+  :config
   (doom-modeline-mode 1)
   (when (daemonp)
     (setq doom-modeline-icon t))
   (setq doom-modeline-minor-modes t))
 
 ;; ... with less minor mode cruft:
-(elpaca minions
+(use-package minions
+  :config
   (minions-mode 1))
 
 ;; Markdown support:
 (when (executable-find "multimarkdown")
-  (elpaca markdown-mode
+  (use-package markdown-mode
+    :init
     (setq markdown-command "multimarkdown")
     (setq markdown-asymmetric-header t)
     (setq markdown-header-scaling t)
@@ -266,17 +288,13 @@
     (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
   ;; Writing mode, depends on Markdown-Mode:
-  (elpaca olivetti
+  (use-package olivetti
+    :config
     (add-hook 'markdown-mode-hook 'olivetti-mode)))
 
-;; Paste online:
-(elpaca dpaste
-  (setq dpaste-poster "tux0r")
-  ;; Paste with C-c p:
-  (global-set-key (kbd "C-c p") 'dpaste-region-or-buffer))
-
 ;; Spell checking:
-(elpaca guess-language
+(use-package guess-language
+  :config
   ;; ... with aspell, not ispell:
   (setq ispell-program-name "aspell")
   (setq ispell-list-command "--list")
@@ -297,34 +315,40 @@
      (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 
 ;; Project-related functionalities:
-(elpaca projectile
+(use-package projectile
+  :config
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 ;; Enable some icons throughout Emacs:
-(elpaca all-the-icons)
+(use-package all-the-icons)
 
-(elpaca all-the-icons-dired
+(use-package all-the-icons-dired
+  :config
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
-(elpaca all-the-icons-gnus
+(use-package all-the-icons-gnus
+  :config
   (all-the-icons-gnus-setup))
 
 ;; Better regexp search&replace:
-(elpaca visual-regexp)
-(elpaca visual-regexp-steroids
+(use-package visual-regexp)
+(use-package visual-regexp-steroids
+  :config
   (define-key global-map (kbd "C-c r") 'vr/replace)
   (define-key global-map (kbd "C-c q") 'vr/query-replace)
   (define-key global-map (kbd "C-c m") 'vr/mc-mark))
 
 ;; Expand selections:
-(elpaca expand-region
+(use-package expand-region
+  :init
   (global-set-key (kbd "C-=") 'er/expand-region))
 
 ;; Lisp programming:
 ;; Use SLIME as a CL subsystem.
-(elpaca slime
+(use-package slime
+  :config
   (add-hook 'elpaca-after-init-hook
             (lambda ()
               (require 'slime)
@@ -339,11 +363,13 @@
 
 ;; Go programming:
 ;; Install and set up the Go mode.
-(elpaca go-mode
+(use-package go-mode
+  :init
   (setenv "GOPATH" (concat (getenv "HOME") "/go")))
 
 ;; COBOL programming:
-(elpaca cobol-mode
+(use-package cobol-mode
+  :init
   (setq auto-mode-alist
         (append
          '(("\\.cob\\'" . cobol-mode)
@@ -352,30 +378,34 @@
          auto-mode-alist)))
 
 ;; Rust programming:
-(elpaca rustic
+(use-package rustic
+  :config
   (setq rustic-lsp-client 'eglot)
   (setq rustic-format-on-save t)
   (remove-hook 'rustic-mode-hook 'flycheck-mode))
 
 ;; Corfu auto-completion for code:
-(elpaca corfu
+(use-package corfu
+  :init
   (setq corfu-auto t)
   (setq corfu-separator ?\s)
   (add-hook 'prog-mode-hook 'corfu-mode))
 
 ;; Gopher:
-(elpaca elpher)
+(use-package elpher)
 
 ;; Vertico for most interactive stuff:
-(elpaca vertico
+(use-package vertico
+  :config
   (setq vertico-cycle t)
   (vertico-mode))
 
 ;; Icons for the minibuffer:
-(elpaca all-the-icons-completion)
+(use-package all-the-icons-completion)
 
 ;; Minibuffer improvements:
-(elpaca marginalia
+(use-package marginalia
+  :init
   (add-hook 'elpaca-after-init-hook
             (lambda ()
               (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))                               
@@ -383,10 +413,11 @@
               (marginalia-mode))))
 
 ;; Orderless search:
-(elpaca orderless)
+(use-package orderless)
 
 ;; Completion via consult:
-(elpaca consult
+(use-package consult
+  :config
   (define-key global-map (kbd "C-s") 'consult-line)
   (setq completion-styles '(orderless flex))
   (setq completion-category-defaults nil)
@@ -400,22 +431,32 @@
               :override #'consult-completing-read-multiple))
 
 ;; Smart parentheses:
-(elpaca smartparens
+(use-package smartparens
+  :init
   (require 'smartparens-config)
   (add-hook 'prog-mode-hook #'smartparens-mode))
 
 ;; Clickable links everywhere:
-(elpaca orglink
+(use-package orglink
+  :config
   (global-orglink-mode))
 
 ;; EAT instead of Emacs's terminal:
-(elpaca eat
+(use-package eat
   ;; Integrate with eshell:
+  :init
   (add-hook 'eshell-load-hook #'eat-eshell-mode)
   (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode))
 
-(elpaca vc-fossil
+(use-package vc-fossil
+  :init
   (add-to-list 'vc-handled-backends 'Fossil t))
+
+;; PostgreSQL stuff:
+(use-package pg)
+(use-package pgmacs
+  :ensure (pgmacs :host github :repo "emarsden/pgmacs")
+  :after pg)
 
 ;; Tree-sitter configuration:
 (unless (version< emacs-version "29.1")
@@ -423,12 +464,14 @@
 
 ;; Use ligatures if possible (requires the Fira Code Symbol font)
 ;; for programming:
-(elpaca fira-code-mode
+(use-package fira-code-mode
+  :config
   (fira-code-mode-set-font)
   (add-hook 'prog-mode-hook 'fira-code-mode))
 
 ;; Nicer theme:
-(elpaca nofrils-acme-theme
+(use-package nofrils-acme-theme
+  :config
   (load-theme 'nofrils-acme t))
 
 
