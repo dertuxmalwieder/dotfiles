@@ -23,7 +23,9 @@
   ;; Enable Markdown export.
   (require 'ox-md))
 
+;; Wait for org to load before we can load the add-ins:
 (elpaca-wait)
+
 ;; Support org-mode import from a website:
 (use-package org-web-tools)
 
