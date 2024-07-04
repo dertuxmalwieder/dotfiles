@@ -208,6 +208,12 @@
   :config
   (add-hook 'diff-mode-hook 'diffview-current))
 
+;; Better CSV editing:
+(use-package csv-mode
+  :config
+  (add-hook 'csv-mode-hook 'csv-align-mode)
+  (add-hook 'csv-mode-hook '(lambda () (interactive) (toggle-truncate-lines nil)))))
+
 ;; Switch and split windows visually:
 (use-package switch-window
   :init
