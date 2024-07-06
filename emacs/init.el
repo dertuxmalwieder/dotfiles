@@ -212,7 +212,7 @@
 (use-package csv-mode
   :config
   (add-hook 'csv-mode-hook 'csv-align-mode)
-  (add-hook 'csv-mode-hook '(lambda () (interactive) (toggle-truncate-lines nil)))))
+  (add-hook 'csv-mode-hook '(lambda () (interactive) (toggle-truncate-lines nil))))
 
 ;; Switch and split windows visually:
 (use-package switch-window
