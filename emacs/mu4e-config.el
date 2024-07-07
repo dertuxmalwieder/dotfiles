@@ -1,7 +1,7 @@
 (add-to-list 'load-path "/opt/homebrew/share/emacs/site-lisp/mu/mu4e")
 (use-package mu4e
   :ensure nil
-  :init
+  :config
   (require 'mu4e)
   (require 'smtpmail)
   (require 'mu4e-speedbar)
