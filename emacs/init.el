@@ -320,13 +320,6 @@
      (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
      (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 
-;; Project-related functionalities:
-(use-package projectile
-  :config
-  (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-
 ;; Enable some icons throughout Emacs:
 (use-package all-the-icons)
 
