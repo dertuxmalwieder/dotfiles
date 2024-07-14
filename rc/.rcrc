@@ -50,3 +50,8 @@ fn cd {
 	builtin cd $*
 	&& reload
 }
+
+## bandcamp-dl has no config file, so here's a wrapper:
+fn bcdl {
+	bandcamp-dl --base-dir=$home/Downloads --template='%{artist} - %{date} - %{album}/%{track}. %{title}' $*
+}
