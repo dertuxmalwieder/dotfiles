@@ -164,6 +164,7 @@
   
   (use-package alert
     ;; Actually working notifications on macOS without dbus
+    :config
     (define-advice notifications-notify
         (:override (&rest params) using-alert)
       (alert (plist-get params :body)
