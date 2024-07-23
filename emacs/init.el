@@ -142,7 +142,8 @@
          (cperl-mode-hook . eglot-ensure)
          (perl-ts-mode-hook . eglot-ensure)
          (c-mode-hook . eglot-ensure)
-         (c-ts-mode-hook . eglot-ensure))
+         (c-ts-mode-hook . eglot-ensure)
+         (markdown-mode-hook . eglot-ensure))
   :custom
   (eglot-autoshutdown t))
 
@@ -432,7 +433,7 @@
 
 ;; Smart parentheses:
 (use-package smartparens
-  :init
+  :config
   (require 'smartparens-config)
   (add-hook 'prog-mode-hook #'smartparens-mode))
 
