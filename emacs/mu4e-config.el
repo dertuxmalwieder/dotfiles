@@ -1,14 +1,7 @@
+;; This REQUIRES mu to have been installed via Homebrew.
+;; If it is installed elsewhere, the load-path will need to be adjusted.
 (use-package mu4e
-  :ensure `(mu4e :host github :files ("mu4e/*.el" "build/mu4e/mu4e-meta.el" "build/mu4e/mu4e-config.el" "build/mu4e/mu4e.info") :repo "djcb/mu"
-                 :main "mu4e/mu4e.el"
-                 :pre-build (("./autogen.sh" "-Dtests=disabled")
-                             ("ninja" "-C" "build")
-                             (make-symbolic-link (expand-file-name "./build/mu/mu")
-                                                 (expand-file-name "~/.local/bin/mu") 'ok-if-exists))
-                 :build (:not elpaca--compile-info)
-                 :post-build (("mu" "init" "--quiet" "--maildir" ,(concat (getenv "HOME") "/.maildir")
-                               "--my-address=" ,user-mail-address)
-                              ("mu" "index" "--quiet")))
+  :load-path "/opt/homebrew/share/emacs/site-lisp/mu/mu4e/"
   :commands (mu4e mu4e-update-index)
   :config
   (require 'smtpmail)

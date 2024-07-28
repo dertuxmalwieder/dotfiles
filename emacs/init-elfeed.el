@@ -20,6 +20,7 @@
   :config
   (setq elfeed-protocol-newsblur-maxpages 20)
   (setq elfeed-protocol-enabled-protocols '(newsblur))
+  (setq elfeed-protocol-newsblur-sub-category-separator "/")
   (elfeed-protocol-enable)
   (setq elfeed-curl-extra-arguments '("--cookie-jar" "/tmp/newsblur-cookie"
                                       "--cookie" "/tmp/newsblur-cookie")))
@@ -33,4 +34,5 @@
 ;; Better YouTube feeds:
 (use-package elfeed-tube
   :after elfeed)
+
 ;; init-elfeed.el ends here

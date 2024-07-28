@@ -9,6 +9,7 @@
 ;; Hint: We use the upstream version instead of Emacs's own one
 ;;       so addins from Git won't fail us.
 (use-package org
+  :ensure nil
   :config
   ;; Better HTML export.
   (setq org-html-coding-system 'utf-8-unix)
@@ -22,9 +23,6 @@
 
   ;; Enable Markdown export.
   (require 'ox-md))
-
-;; Wait for org to load before we can load the add-ins:
-(elpaca-wait)
 
 ;; Support org-mode import from a website:
 (use-package org-web-tools)

@@ -55,56 +55,16 @@
 ;;;; PACKAGE PREPARATION:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Use elpaca instead of Emacs's default package.el for
-;; managing installed packages. This might or might not be a
-;; good idea.
-(defvar elpaca-installer-version 0.7)
-(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil :depth 1
-                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-       (build (expand-file-name "elpaca/" elpaca-builds-directory))
-       (order (cdr elpaca-order))
-       (default-directory repo))
-  (add-to-list 'load-path (if (file-exists-p build) build repo))
-  (unless (file-exists-p repo)
-    (make-directory repo t)
-    (when (< emacs-major-version 28) (require 'subr-x))
-    (condition-case-unless-debug err
-        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-                 ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
-                                                 ,@(when-let ((depth (plist-get order :depth)))
-                                                     (list (format "--depth=%d" depth) "--no-single-branch"))
-                                                 ,(plist-get order :repo) ,repo))))
-                 ((zerop (call-process "git" nil buffer t "checkout"
-                                       (or (plist-get order :ref) "--"))))
-                 (emacs (concat invocation-directory invocation-name))
-                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-                 ((require 'elpaca))
-                 ((elpaca-generate-autoloads "elpaca" repo)))
-            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-          (error "%s" (with-current-buffer buffer (buffer-string))))
-      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-  (unless (require 'elpaca-autoloads nil t)
-    (require 'elpaca)
-    (elpaca-generate-autoloads "elpaca" repo)
-    (load "./elpaca-autoloads")))
-(add-hook 'after-init-hook #'elpaca-process-queues)
-(elpaca `(,@elpaca-order))
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
 
-(setq elpaca-queue-limit 12) ;; to avoid "too many open files" errors
-
-;; Enable use-package integration:
-(elpaca elpaca-use-package
-  (elpaca-use-package-mode)
-  (setq elpaca-use-package-by-default t))
-
-(elpaca-wait)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(eval-and-compile
+  (setq use-package-always-ensure t
+        use-package-expand-minimally t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; BUILT-IN PACKAGES:
@@ -350,17 +310,15 @@
 ;; Use SLIME as a CL subsystem.
 (use-package slime
   :config
-  (add-hook 'elpaca-after-init-hook
-            (lambda ()
-              (require 'slime)
-              (slime-setup '(slime-fancy))
-              (eval-after-load "auto-complete"
-                '(add-to-list 'ac-modes 'slime-repl-mode))
-              (eval-after-load "auto-complete"
-                '(add-to-list 'ac-modes 'slime-repl-mode))
-              (if (executable-find "ros")
-                  (setq inferior-lisp-program "ros -Q run")
-                (setq inferior-lisp-program (executable-find "sbcl"))))))
+  (require 'slime)
+  (slime-setup '(slime-fancy))
+  (eval-after-load "auto-complete"
+    '(add-to-list 'ac-modes 'slime-repl-mode))
+  (eval-after-load "auto-complete"
+    '(add-to-list 'ac-modes 'slime-repl-mode))
+  (if (executable-find "ros")
+      (setq inferior-lisp-program "ros -Q run")
+    (setq inferior-lisp-program (executable-find "sbcl"))))
 
 ;; Go programming:
 ;; Install and set up the Go mode.
@@ -406,12 +364,10 @@
 
 ;; Minibuffer improvements:
 (use-package marginalia
-  :init
-  (add-hook 'elpaca-after-init-hook
-            (lambda ()
-              (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))                               
-              (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
-              (marginalia-mode))))
+  :config
+  (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))                               
+  (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
+  (marginalia-mode))
 
 ;; Orderless search:
 (use-package orderless)
@@ -456,7 +412,8 @@
 ;; PostgreSQL stuff:
 (use-package pg)
 (use-package pgmacs
-  :ensure (pgmacs :host github :repo "emarsden/pgmacs")
+  :ensure t
+  :vc (:url "https://github.com/emarsden/pgmacs")
   :after pg)
 
 ;; Tree-sitter configuration:
@@ -482,7 +439,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(package-selected-packages nil)
+ '(package-vc-selected-packages '((pgmacs :url "https://github.com/emarsden/pgmacs"))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

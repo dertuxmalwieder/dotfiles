@@ -32,9 +32,6 @@
 (setq read-extended-command-predicate
       #'command-completion-default-include-p)
 
-;; Disable package.el initialization:
-(setq package-enable-at-startup nil)
-
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-screen t)
 (setq initial-scratch-message nil)
