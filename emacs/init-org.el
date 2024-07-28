@@ -9,7 +9,7 @@
 ;; Hint: We use the upstream version instead of Emacs's own one
 ;;       so addins from Git won't fail us.
 (use-package org
-  :ensure nil
+  :ensure t
   :config
   ;; Better HTML export.
   (setq org-html-coding-system 'utf-8-unix)
@@ -17,6 +17,9 @@
   ;; Better inline code blocks.
   (setq org-src-fontify-natively t)
   (setq org-src-tab-acts-natively t)
+
+  ;; Better layout.
+  (setq org-startup-indented t)
 
   ;; More width for export.
   (setq org-ascii-text-width 400)

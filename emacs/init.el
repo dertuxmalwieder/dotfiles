@@ -439,7 +439,17 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(alert all-the-icons-completion all-the-icons-dired
+           all-the-icons-gnus cobol-mode consult corfu csv-mode
+           diffview doom-modeline eat elfeed-goodies elfeed-protocol
+           elfeed-summary elfeed-tube elpher ement emojify
+           exec-path-from-shell expand-region fira-code-mode go-mode
+           guess-language marginalia mastodon minions move-text
+           multiple-cursors nofrils-acme-theme olivetti orderless
+           org-web-tools org2blog orglink pgmacs rustic slime
+           smartparens switch-window telega undo-fu vc-fossil vertico
+           visual-regexp-steroids web-beautify web-mode znc))
  '(package-vc-selected-packages '((pgmacs :url "https://github.com/emarsden/pgmacs"))))
 
 (custom-set-faces
