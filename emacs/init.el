@@ -111,6 +111,13 @@
 ;;;; 3rd PARTY PACKAGES:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Asynchronous package management (etc.):
+(use-package async
+  :init
+  (setq async-bytecomp-allowed-packages '(all))
+  :config
+  (async-bytecomp-package-mode 1))
+
 ;; Some platforms (cough) don't update Emacs's path.
 ;; Make them.
 (when (or (eq system-type 'darwin) (daemonp))
@@ -441,7 +448,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(alert all-the-icons-completion all-the-icons-dired
-           all-the-icons-gnus cobol-mode consult corfu csv-mode
+           all-the-icons-gnus async cobol-mode consult corfu csv-mode
            diffview doom-modeline eat elfeed-goodies elfeed-protocol
            elfeed-summary elfeed-tube elpher ement emojify
            exec-path-from-shell expand-region fira-code-mode go-mode
