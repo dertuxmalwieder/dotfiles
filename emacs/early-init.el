@@ -15,6 +15,9 @@
 (setq indent-tabs-mode nil)
 (setq-default indent-tabs-mode nil)
 
+;; Unlitter init.el with custom-*:
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+
 ;; Default to utf-8:
 (set-language-environment "UTF-8")
 
