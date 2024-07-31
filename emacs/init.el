@@ -165,10 +165,6 @@
       :init
       (setq browse-url-browser-function 'w3m-browse-url))))
 
-;; AI (testing...)
-(use-package ellama
-  :if (executable-find "ollama"))
-
 ;; Undo/redo:
 (use-package undo-fu
   :config
