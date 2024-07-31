@@ -167,8 +167,7 @@
 
 ;; AI (testing...)
 (use-package ellama
-  :if (executable-find "ollama")
-  :ensure (executable-find "ollama"))
+  :if (executable-find "ollama"))
 
 ;; Undo/redo:
 (use-package undo-fu
@@ -361,7 +360,7 @@
 
 ;; With icons:
 (use-package nerd-icons-corfu
-  :after nerd-icons
+  :after corfu
   :init
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
