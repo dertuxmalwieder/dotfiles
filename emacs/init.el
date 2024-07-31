@@ -165,6 +165,11 @@
       :init
       (setq browse-url-browser-function 'w3m-browse-url))))
 
+;; AI (testing...)
+(use-package ellama
+  :if (executable-find "ollama")
+  :ensure (executable-find "ollama"))
+
 ;; Undo/redo:
 (use-package undo-fu
   :config
@@ -290,15 +295,11 @@
      (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 
 ;; Enable some icons throughout Emacs:
-(use-package all-the-icons)
-
-(use-package all-the-icons-dired
-  :config
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
-
-(use-package all-the-icons-gnus
-  :config
-  (all-the-icons-gnus-setup))
+(use-package nerd-icons)
+(use-package nerd-icons-dired
+  :after nerd-icons
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 
 ;; Better regexp search&replace:
 (use-package visual-regexp)
@@ -355,7 +356,14 @@
   :init
   (setq corfu-auto t)
   (setq corfu-separator ?\s)
-  (add-hook 'prog-mode-hook 'corfu-mode))
+  :hook
+  (prog-mode . corfu-mode))
+
+;; With icons:
+(use-package nerd-icons-corfu
+  :after nerd-icons
+  :init
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 ;; Gopher:
 (use-package elpher)
@@ -367,13 +375,17 @@
   (vertico-mode))
 
 ;; Icons for the minibuffer:
-(use-package all-the-icons-completion)
+(use-package nerd-icons-completion
+  :after nerd-icons
+  :config
+  (nerd-icons-completion-mode))
 
 ;; Minibuffer improvements:
 (use-package marginalia
+  :after nerd-icons-completion
   :config
   (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))                               
-  (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
   (marginalia-mode))
 
 ;; Orderless search:
@@ -398,7 +410,8 @@
 (use-package smartparens
   :config
   (require 'smartparens-config)
-  (add-hook 'prog-mode-hook #'smartparens-mode))
+  :hook
+  (prog-mode . smartparens-mode))
 
 ;; Clickable links everywhere:
 (use-package orglink
@@ -432,7 +445,8 @@
 (use-package fira-code-mode
   :config
   (fira-code-mode-set-font)
-  (add-hook 'prog-mode-hook 'fira-code-mode))
+  :hook
+  (prog-mode . fira-code-mode))
 
 ;; Nicer theme:
 (use-package nofrils-acme-theme
