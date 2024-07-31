@@ -35,8 +35,8 @@
     (variable-pitch-mode))
   (add-hook 'mu4e-view-mode-hook #'+mu4e-view-settings))
 
-  ;; Integrate BBDB:
-  ;; Currently disabled.
+;; Integrate BBDB:
+;; Currently disabled.
   ;;; (setq bbdb-mail-user-agent 'mu4e-user-agent)
   ;;; (setq mu4e-view-rendered-hook 'bbdb-mua-auto-update)
   ;;; (setq mu4e-compose-complete-addresses nil)
@@ -44,10 +44,10 @@
   ;;; (setq bbdb-mua-pop-up-window-size 5)
   ;;; (setq mu4e-view-show-addresses t)
 
-  ;; Enable notifications:
-  ;; (use-package mu4e-alert
-  ;;   :after mu4e
-  ;;   :config
-  ;;   (mu4e-alert-set-default-style 'notifier)  ;; requires terminal-notifier
-  ;;   (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
-  ;;   (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)))
+;; Enable notifications:
+;; (use-package mu4e-alert
+;;   :after mu4e
+;;   :config
+;;   (mu4e-alert-set-default-style 'notifier)  ;; requires terminal-notifier
+;;   (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
+;;   (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))

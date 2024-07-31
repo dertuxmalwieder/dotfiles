@@ -207,6 +207,13 @@
   :config
   (move-text-default-bindings))
 
+;; Toggleable sidebar with no extra windows:
+(use-package sr-speedbar
+  :config
+  (global-set-key (kbd "<f4>") 'sr-speedbar-toggle)
+  (setq sr-speedbar-show-unknown-files t)
+  (setq sr-speedbar-right-side nil))
+
 ;;;;;;; Messaging ;;;;;;;
 ;; Mastodon:
 (use-package mastodon
@@ -345,6 +352,13 @@
   (setq rustic-lsp-client 'eglot)
   (setq rustic-format-on-save t)
   (remove-hook 'rustic-mode-hook 'flycheck-mode))
+
+;; Fancy compilation:
+(use-package fancy-compilation
+  :commands (fancy-compilation-mode))
+
+(with-eval-after-load 'compile
+  (fancy-compilation-mode))
 
 ;; Corfu auto-completion for code:
 (use-package corfu
