@@ -147,6 +147,9 @@
   :config
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines))
 
+;; AI:
+(use-package ellama)
+
 ;; Emojis:
 (use-package emojify
   :config
