@@ -9,7 +9,7 @@
 ;; Make it faster and nicer looking.
 (use-package gnus
   :ensure nil
-  :config
+  :init
   (setq gnus-always-read-dribble-file t)
   (setq gnus-read-active-file t)
   (gnus-add-configuration '(article (vertical 1.0 (summary .35 point) (article 1.0)))))
@@ -22,11 +22,6 @@
   (setq gnus-use-article-prefetch 15))
 
 ;; Use eternal-september.
-(setq gnus-select-method '(nntp "news.eternal-september.org"
-                                (nntp-open-connection-function
-                                 nntp-open-tls-stream)
-                                (nntp-port-number 563)
-                                (nntp-address
-                                 "news.eternal-september.org")))
+(setq gnus-select-method '(nntp "news.eternal-september.org"))
 
 ;; init-gnus.el ends here
