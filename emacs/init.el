@@ -91,18 +91,12 @@
   :ensure nil
   :unless (version< emacs-version "29.1")
   :hook ((js-mode-hook . eglot-ensure)
-         (js-ts-mode-hook . eglot-ensure)
          (typescript-mode-hook . eglot-ensure)
          (python-mode-hook . eglot-ensure)
-         (python-ts-mode-hook . eglot-ensure)
          (rust-mode-hook . eglot-ensure)
-         (rust-ts-mode-hook . eglot-ensure)
          (go-mode-hook . eglot-ensure)
-         (go-ts-mode-hook . eglot-ensure)
          (cperl-mode-hook . eglot-ensure)
-         (perl-ts-mode-hook . eglot-ensure)
          (c-mode-hook . eglot-ensure)
-         (c-ts-mode-hook . eglot-ensure)
          (markdown-mode-hook . eglot-ensure))
   :custom
   (eglot-autoshutdown t))

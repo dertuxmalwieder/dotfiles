@@ -2,7 +2,7 @@ directory: /Volumes/Musik
 
 # Required Python modules (pip install): pyacoustid python3-discogs-client requests beetcamp
 # Required software: chromaprint (with fpcalc)
-plugins: embedart fetchart ftintitle chroma discogs zero importadded inline rewrite deezer bandcamp
+plugins: embedart fetchart ftintitle chroma discogs zero importadded inline rewrite bandcamp
 threaded: yes
 
 # Clean up: We won't need READMEs, cover files et cetera anymore.
