@@ -1,6 +1,6 @@
 ## Set the path variable.
 ## On most systems, this will need to be changed.
-path=(/opt/homebrew/bin /opt/homebrew/sbin /opt/schily/bin $home/.local/bin $home/.cargo/bin $home/git/plan9port/bin $home/go/bin /opt/homebrew/opt/ruby/bin /bin /sbin /usr/bin /usr/sbin /usr/local/bin)
+path=(/bin /sbin /opt/homebrew/bin /opt/homebrew/sbin /opt/schily/bin $home/.local/bin $home/.cargo/bin $home/git/plan9port/bin $home/go/bin /opt/homebrew/opt/ruby/bin /usr/bin /usr/sbin /usr/local/bin)
 
 LANG=(de_DE.UTF-8)
 TERM=(xterm-256color)
